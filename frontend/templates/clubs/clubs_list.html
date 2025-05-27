@@ -1,0 +1,904 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'clubs/css/clubs_list.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Clubs list {% endblock %}
+
+{% block page_title %} Clubs list {% endblock %}
+
+{% block content %}
+
+<div class="school_part_container">
+    <div class="main_title_info_block">
+        <h1>Dashboard</h1>
+        <div class="create_new_club" id="createNewClub" onclick="createNewClubFunc()">Create New</div>
+    </div>
+    <div class="main_club_information_container">
+        <div class="top_clubs_block_stats">
+            <div class="title_block_top_clubs">
+                <div class="main_title_block_top_clubs">
+                    <h1>TOP Blog Posts</h1>
+                    <p>{{ count_blogs }} total blogs</p>
+                </div>
+                <i>
+                    <svg width="25" height="25" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M2.25 0C1.00736 0 0 1.00736 0 2.25V4.75C0 5.99264 1.00736 7 2.25 7H4.75C5.99264 7 7 5.99264 7 4.75V2.25C7 1.00736 5.99264 0 4.75 0H2.25ZM2.25 9C1.00736 9 0 10.0074 0 11.25V13.75C0 14.9926 1.00736 16 2.25 16H4.75C5.99264 16 7 14.9926 7 13.75V11.25C7 10.0074 5.99264 9 4.75 9H2.25ZM11.25 0C10.0074 0 9 1.00736 9 2.25V4.75C9 5.99264 10.0074 7 11.25 7H13.75C14.9926 7 16 5.99264 16 4.75V2.25C16 1.00736 14.9926 0 13.75 0H11.25ZM11.25 9C10.0074 9 9 10.0074 9 11.25V13.75C9 14.9926 10.0074 16 11.25 16H13.75C14.9926 16 16 14.9926 16 13.75V11.25C16 10.0074 14.9926 9 13.75 9H11.25Z"
+                              fill="#0F172A"/>
+                    </svg>
+                </i>
+            </div>
+            <div class="main_content_block_top_clubs">
+                {% for blog in blogs %}
+
+                <a href="" class="main_club_information">
+                    <div class="author_main_club_information">
+                        <div class="image_block_main_club_information"
+                             style="background-image: url('{{ blog.image.url }}')"></div>
+                        <div class="name_block_main_club_information">
+                            <h1>{{ blog.title }}</h1>
+                            <p>{{ blog.author.full_name }}</p>
+                        </div>
+                    </div>
+                    <div class="count_club_members_main_club_information">
+                        <h1>{{ blog.count_of_comments }}</h1>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="main_club_info_block">
+            <div class="main_club_info_stats_block">
+                <div class="first_content_main_club">
+                    <div class="stats_club_card membership_of_clubs">
+                        <i>
+                            <svg width="25" height="25" viewBox="0 0 18 18" fill="#FFF"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.75 3C0.75 1.75736 1.75736 0.75 3 0.75H5.25C6.49264 0.75 7.5 1.75736 7.5 3V5.25C7.5 6.49264 6.49264 7.5 5.25 7.5H3C1.75736 7.5 0.75 6.49264 0.75 5.25V3Z"
+                                      stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M0.75 12.75C0.75 11.5074 1.75736 10.5 3 10.5H5.25C6.49264 10.5 7.5 11.5074 7.5 12.75V15C7.5 16.2426 6.49264 17.25 5.25 17.25H3C1.75736 17.25 0.75 16.2426 0.75 15V12.75Z"
+                                      stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10.5 3C10.5 1.75736 11.5074 0.75 12.75 0.75H15C16.2426 0.75 17.25 1.75736 17.25 3V5.25C17.25 6.49264 16.2426 7.5 15 7.5H12.75C11.5074 7.5 10.5 6.49264 10.5 5.25V3Z"
+                                      stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10.5 12.75C10.5 11.5074 11.5074 10.5 12.75 10.5H15C16.2426 10.5 17.25 11.5074 17.25 12.75V15C17.25 16.2426 16.2426 17.25 15 17.25H12.75C11.5074 17.25 10.5 16.2426 10.5 15V12.75Z"
+                                      stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                        <h1>31</h1>
+                        <p>Users count</p>
+                    </div>
+                    <div class="stats_club_card">
+                        <p>Pregnant count</p>
+                        <h1>23</h1>
+                        <div class="range_bar">
+                            <div class="positive_range"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="second_content_main_club">
+                    <a href="" class="stats_club_card posts_stats_club"
+                       style="background-image: url('https://preview.keenthemes.com/metronic8/demo16/assets/media/stock/600x600/img-1.jpg')">
+                        <h1>Posts</h1>
+                    </a>
+                    <div class="stats_club_card success_rate_card">
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#FFF"
+                                 class="bi bi-circle-half" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/>
+                            </svg>
+                        </i>
+                        <h1>{{ pregnancy_progress }}%</h1>
+                        <p>Your pregnancy progress</p>
+                    </div>
+                </div>
+                <div class="stats_club_card_longer">
+                    <div class="title_stats_club_card">
+                        <h1>30% Off Themes</h1>
+                        <p>
+                            Get your discounted themes of the month. No hassle, no worries, no fuss instant rewards,
+                            everyday.
+                        </p>
+                    </div>
+                    <img src="https://preview.keenthemes.com/metronic8/demo16/assets/media/svg/humans/custom-1.svg"
+                         alt="">
+                </div>
+            </div>
+        </div>
+        <div class="create_new_club_block">
+            <h1>Create Post</h1>
+            <p>
+                Create a new club and start your journey with like-minded individuals. Share experiences, tips, and
+                support each other through the ups and downs of pregnancy.
+            </p>
+            <a href="">Create Post</a>
+            <img src="https://preview.keenthemes.com/metronic8/demo16/assets/media/svg/general/rhone.svg" alt="">
+        </div>
+    </div>
+</div>
+
+<!-- Header Banner -->
+<div class="header-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>University Clubs</h1>
+                <p class="lead">Discover, join, or create clubs that match your interests and passions</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main_container">
+    <!-- Featured Clubs Carousel -->
+    {% if featured_clubs %}
+    <div class="featured-clubs">
+        <h2 class="mb-4">Featured Clubs</h2>
+        <div id="featuredClubsCarousel" class="carousel slide featured-carousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                {% for club in featured_clubs %}
+                <button type="button" data-bs-target="#featuredClubsCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                        {% if forloop.first %}class="active" {% endif %} aria-current="true"
+                        aria-label="Slide {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for club in featured_clubs %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    {% if club.banner_image %}
+                    <img src="{{ club.banner_image.url }}" class="d-block w-100" alt="{{ club.name }}">
+                    {% else %}
+                    <img src="{% static 'img/default-banner.jpg' %}" class="d-block w-100" alt="{{ club.name }}">
+                    {% endif %}
+                    <div class="carousel-caption">
+                        <span class="club-category">{{ club.category.name }}</span>
+                        <h3>{{ club.name }}</h3>
+                        <p>{{ club.short_description }}</p>
+                        <a href="{% url 'clubs:club_detail' club.slug %}" class="btn btn-accent">Learn More</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#featuredClubsCarousel"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#featuredClubsCarousel"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Special Features (Quiz and Create Club) -->
+        <div class="col-md-12 mb-4">
+            <div class="row">
+                <!-- Find Your Perfect Club Quiz Card -->
+                {% if active_quiz %}
+                <div class="col-md-6 mb-4">
+                    <div class="quiz-card">
+                        <h3>Find Your Perfect Club</h3>
+                        <p>Not sure which club to join? Take our interactive quiz to discover clubs that match your
+                            interests and personality.</p>
+                        <a href="{% url 'clubs:quiz_start' %}" class="btn btn-accent">Take the Quiz</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Create New Club Card -->
+                <div class="col-md-6 mb-4">
+                    <div class="create-club-card">
+                        <div class="icon-container mb-3">
+                            <i class="fas fa-plus-circle fa-3x" style="color: var(--accent-color);"></i>
+                        </div>
+                        <h3>Start Your Own Club</h3>
+                        <p>Have a passion that's not represented? Start a new club and build a community around your
+                            interests.</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#createClubModal">Create a Club
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Sidebar (Filters) -->
+        <div class="col-md-3">
+            <div class="filter-sidebar">
+                <h3>Filter Clubs</h3>
+
+                <form id="clubFilterForm" method="get" action="{% url 'clubs_list' %}">
+                    <!-- Search Box -->
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" name="search" placeholder="Search clubs..." value="{{ search_query }}">
+                    </div>
+
+                    <!-- Categories Filter -->
+                    <div class="filter-group">
+                        <h4>Categories</h4>
+                        {% for category in categories %}
+                        <div class="custom-checkbox">
+                            <label>
+                                <input type="radio" name="category" value="{{ category.id }}"
+                                    {% if selected_category|stringformat:'s' == category.id|stringformat:'s' %}
+                                        checked
+                                    {% endif %}>
+                                    {{ category.name }}
+                                />
+                            </label>
+                        </div>
+                        {% endfor %}
+                        <div class="custom-checkbox">
+                            <label>
+                                <input type="radio" name="category" value=""
+                                       {% if not selected_category %}checked{% endif %}>
+                                All Categories
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Faculties Filter -->
+                    <div class="filter-group">
+                        <h4>Faculties</h4>
+                        {% for faculty in faculties %}
+                        <div class="custom-checkbox">
+                            <label>
+                                <input type="radio" name="faculty" value="{{ faculty.id }}"
+                                    {% if selected_faculty|stringformat:'s' == faculty.id|stringformat:'s' %}
+                                        checked
+                                    {% endif %}>
+                                    {{ faculty.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        <div class="custom-checkbox">
+                            <label>
+                                <input type="radio" name="faculty" value=""
+                                       {% if not selected_faculty %}checked{% endif %}>
+                                All Faculties
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sorting Options -->
+                    <div class="filter-group">
+                        <h4>Sort By</h4>
+                        <select name="sort" id="sortSelect" class="form-select">
+                            <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>Most Popular</option>
+                            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+                            <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest First</option>
+                            <option value="alphabetical" {% if sort_by == 'alphabetical' %}selected{% endif %}>A-Z</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+
+                    {% if selected_category or selected_faculty or search_query %}
+                    <a href="{% url 'clubs:clubs_list' %}" class="btn btn-outline-secondary w-100 mt-2">Clear
+                        Filters</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content (Club Cards) -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>All Clubs</h2>
+                <div class="results-count" id="resultsCount">
+                    Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}
+                    results
+                </div>
+            </div>
+
+            <div id="clubListings">
+                {% if page_obj %}
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for club in page_obj %}
+                    <div class="col">
+                        <div class="club-card card">
+                            {% if club.logo %}
+                            <img src="{{ club.logo.url }}" class="card-img-top" alt="{{ club.name }}">
+                            {% else %}
+                            <img src="{% static 'img/default-club.jpg' %}" class="card-img-top" alt="{{ club.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <span class="club-category">{{ club.category.name }}</span>
+                                <h5 class="club-title">{{ club.name }}</h5>
+                                <p class="card-text">{{ club.short_description }}</p>
+                                <div class="club-stats">
+                                    <div><i class="fas fa-users me-1"></i> {{ club.members_count }} members</div>
+                                    <div><i class="fas fa-calendar-alt me-1"></i> Est. {{
+                                        club.establishment_date|date:"Y" }}
+                                    </div>
+                                </div>
+                                <a href="{% url 'clubs:club_detail' club.slug %}" class="btn btn-primary w-100 mt-3">View
+                                    Club</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4" id="clubPagination">
+                    {% if page_obj.paginator.num_pages > 1 %}
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_faculty %}&faculty={{ selected_faculty }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}"
+                               aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_faculty %}&faculty={{ selected_faculty }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_faculty %}&faculty={{ selected_faculty }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{
+                                num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_faculty %}&faculty={{ selected_faculty }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_faculty %}&faculty={{ selected_faculty }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}"
+                               aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+                </nav>
+                {% else %}
+                <!-- Empty State when no clubs match filters -->
+                <div class="empty-state">
+                    <img src="{% static 'img/empty-state.svg' %}" alt="No clubs found">
+                    <h3>No Clubs Found</h3>
+                    <p>We couldn't find any clubs matching your search criteria. Try adjusting your filters or create
+                        your own club!</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#createClubModal">Create a Club
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Club Modal -->
+<div class="modal fade" id="createClubModal" tabindex="-1" aria-labelledby="createClubModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createClubModalLabel">Create a New Club</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="steps-indicator">
+                    <div class="step-circle active" id="step-circle-1">1</div>
+                    <div class="step-circle" id="step-circle-2">2</div>
+                    <div class="step-circle" id="step-circle-3">3</div>
+                </div>
+
+                <form id="createClubForm" method="post" action="{% url 'create_club' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Step 1: Basic Club Information -->
+                    <div class="modal-step active" id="step-1">
+                        <h4 class="mb-3">Basic Club Information</h4>
+
+                        <div class="mb-3">
+                            <label for="club-name" class="form-label">Club Name*</label>
+                            <input type="text" class="form-control" id="club-name" name="name" required>
+                            <div class="error-message" id="name-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club-category" class="form-label">Club Category*</label>
+                            <select class="form-select" id="club-category" name="category" required>
+                                <option value="">Select a category</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="error-message" id="category-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club-description" class="form-label">Club Description*</label>
+                            <textarea class="form-control" id="club-description" name="description" rows="4"
+                                      required></textarea>
+                            <div class="error-message" id="description-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club-goals" class="form-label">Goals and Objectives*</label>
+                            <textarea class="form-control" id="club-goals" name="goals" rows="3" required></textarea>
+                            <div class="error-message" id="goals-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club-activities" class="form-label">Planned Activities*</label>
+                            <textarea class="form-control" id="club-activities" name="activities" rows="3"
+                                      required></textarea>
+                            <div class="error-message" id="activities-error"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary" id="next-to-step-2">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Founder Information -->
+                    <div class="modal-step" id="step-2">
+                        <h4 class="mb-3">Founder Information</h4>
+
+                        <div class="mb-3">
+                            <label for="founder-faculty" class="form-label">Your Faculty*</label>
+                            <select class="form-select" id="founder-faculty" name="founder_faculty" required>
+                                <option value="">Select your faculty</option>
+                                {% for faculty in faculties %}
+                                <option value="{{ faculty.id }}">{{ faculty.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="error-message" id="founder_faculty-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="founder-year" class="form-label">Year of Study*</label>
+                            <input type="number" class="form-control" id="founder-year" name="founder_year" min="1"
+                                   max="6" required>
+                            <div class="error-message" id="founder_year-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="founder-motivation" class="form-label">Your Motivation*</label>
+                            <textarea class="form-control" id="founder-motivation" name="founder_motivation" rows="3"
+                                      required></textarea>
+                            <small class="form-text text-muted">Why do you want to create this club?</small>
+                            <div class="error-message" id="founder_motivation-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="meeting-frequency" class="form-label">Meeting Frequency*</label>
+                            <input type="text" class="form-control" id="meeting-frequency" name="meeting_frequency"
+                                   placeholder="e.g., 'Weekly on Thursdays'" required>
+                            <div class="error-message" id="meeting_frequency-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="faculty-advisor" class="form-label">Faculty Advisor (if any)</label>
+                            <input type="text" class="form-control" id="faculty-advisor" name="faculty_advisor">
+                            <small class="form-text text-muted">Name of a faculty member supporting your club
+                                (optional)</small>
+                            <div class="error-message" id="faculty_advisor-error"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" id="back-to-step-1">Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" id="next-to-step-3">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Supporting Information -->
+                    <div class="modal-step" id="step-3">
+                        <h4 class="mb-3">Supporting Information</h4>
+
+                        <div class="mb-3">
+                            <label for="min-members" class="form-label">Minimum Members*</label>
+                            <input type="number" class="form-control" id="min-members" name="min_members" min="3"
+                                   value="5" required>
+                            <small class="form-text text-muted">Minimum number of members required to start the
+                                club</small>
+                            <div class="error-message" id="min_members-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club-logo" class="form-label">Club Logo</label>
+                            <input type="file" class="form-control" id="club-logo" name="logo" accept="image/*">
+                            <small class="form-text text-muted">Upload a logo for your club (optional)</small>
+                            <div class="error-message" id="logo-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="supporting-document" class="form-label">Supporting Document</label>
+                            <input type="file" class="form-control" id="supporting-document" name="supporting_document"
+                                   accept=".pdf,.doc,.docx">
+                            <small class="form-text text-muted">Upload any supporting documents like a club
+                                constitution, proposal, etc. (optional)</small>
+                            <div class="error-message" id="supporting_document-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms-checkbox" required>
+                                <label class="form-check-label" for="terms-checkbox">
+                                    I agree to follow university policies for club formation and operation
+                                </label>
+                            </div>
+                            <div class="error-message" id="terms-error"></div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Your application will be reviewed by the Student
+                            Affairs Office. You'll receive a response within 5-7 business days.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" id="back-to-step-2">Previous
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submit-application">Submit Application
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // clubs.js - JavaScript functionality for the clubs module
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Club creation modal steps
+        initializeModalSteps();
+
+        // Filter form functionality
+        initializeFilterForm();
+    });
+
+    /**
+     * Initialize modal steps for club creation
+     */
+    function initializeModalSteps() {
+        // Step navigation
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step3 = document.getElementById('step-3');
+
+        const stepCircle1 = document.getElementById('step-circle-1');
+        const stepCircle2 = document.getElementById('step-circle-2');
+        const stepCircle3 = document.getElementById('step-circle-3');
+
+        const nextToStep2Btn = document.getElementById('next-to-step-2');
+        const backToStep1Btn = document.getElementById('back-to-step-1');
+        const nextToStep3Btn = document.getElementById('next-to-step-3');
+        const backToStep2Btn = document.getElementById('back-to-step-2');
+
+        if (!nextToStep2Btn) return; // Exit if elements don't exist
+
+        // Step 1 validation function
+        function validateStep1() {
+            let isValid = true;
+
+            // Club name validation
+            const clubName = document.getElementById('club-name').value.trim();
+            if (!clubName) {
+                document.getElementById('name-error').textContent = 'Club name is required';
+                isValid = false;
+            } else {
+                document.getElementById('name-error').textContent = '';
+            }
+
+            // Category validation
+            const category = document.getElementById('club-category').value;
+            if (!category) {
+                document.getElementById('category-error').textContent = 'Please select a category';
+                isValid = false;
+            } else {
+                document.getElementById('category-error').textContent = '';
+            }
+
+            // Description validation
+            const description = document.getElementById('club-description').value.trim();
+            if (!description) {
+                document.getElementById('description-error').textContent = 'Description is required';
+                isValid = false;
+            } else if (description.length < 50) {
+                document.getElementById('description-error').textContent = 'Description should be at least 50 characters';
+                isValid = false;
+            } else {
+                document.getElementById('description-error').textContent = '';
+            }
+
+            // Goals validation
+            const goals = document.getElementById('club-goals').value.trim();
+            if (!goals) {
+                document.getElementById('goals-error').textContent = 'Goals are required';
+                isValid = false;
+            } else {
+                document.getElementById('goals-error').textContent = '';
+            }
+
+            // Activities validation
+            const activities = document.getElementById('club-activities').value.trim();
+            if (!activities) {
+                document.getElementById('activities-error').textContent = 'Activities are required';
+                isValid = false;
+            } else {
+                document.getElementById('activities-error').textContent = '';
+            }
+
+            return isValid;
+        }
+
+        // Step 2 validation function
+        function validateStep2() {
+            let isValid = true;
+
+            // Faculty validation
+            const faculty = document.getElementById('founder-faculty').value;
+            if (!faculty) {
+                document.getElementById('founder_faculty-error').textContent = 'Please select your faculty';
+                isValid = false;
+            } else {
+                document.getElementById('founder_faculty-error').textContent = '';
+            }
+
+            // Year validation
+            const year = document.getElementById('founder-year').value;
+            if (!year || year < 1 || year > 6) {
+                document.getElementById('founder_year-error').textContent = 'Please enter a valid year (1-6)';
+                isValid = false;
+            } else {
+                document.getElementById('founder_year-error').textContent = '';
+            }
+
+            // Motivation validation
+            const motivation = document.getElementById('founder-motivation').value.trim();
+            if (!motivation) {
+                document.getElementById('founder_motivation-error').textContent = 'Motivation is required';
+                isValid = false;
+            } else {
+                document.getElementById('founder_motivation-error').textContent = '';
+            }
+
+            // Meeting frequency validation
+            const frequency = document.getElementById('meeting-frequency').value.trim();
+            if (!frequency) {
+                document.getElementById('meeting_frequency-error').textContent = 'Meeting frequency is required';
+                isValid = false;
+            } else {
+                document.getElementById('meeting_frequency-error').textContent = '';
+            }
+
+            return isValid;
+        }
+
+        // Step 3 validation function
+        function validateStep3() {
+            let isValid = true;
+
+            // Terms checkbox validation
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            if (!termsCheckbox.checked) {
+                document.getElementById('terms-error').textContent = 'You must agree to the terms';
+                isValid = false;
+            } else {
+                document.getElementById('terms-error').textContent = '';
+            }
+
+            return isValid;
+        }
+
+        // Navigation event handlers
+        nextToStep2Btn.addEventListener('click', function () {
+            if (validateStep1()) {
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                stepCircle1.classList.remove('active');
+                stepCircle1.classList.add('completed');
+                stepCircle2.classList.add('active');
+            }
+        });
+
+        backToStep1Btn.addEventListener('click', function () {
+            step2.classList.remove('active');
+            step1.classList.add('active');
+            stepCircle2.classList.remove('active');
+            stepCircle1.classList.remove('completed');
+            stepCircle1.classList.add('active');
+        });
+
+        nextToStep3Btn.addEventListener('click', function () {
+            if (validateStep2()) {
+                step2.classList.remove('active');
+                step3.classList.add('active');
+                stepCircle2.classList.remove('active');
+                stepCircle2.classList.add('completed');
+                stepCircle3.classList.add('active');
+            }
+        });
+
+        backToStep2Btn.addEventListener('click', function () {
+            step3.classList.remove('active');
+            step2.classList.add('active');
+            stepCircle3.classList.remove('active');
+            stepCircle2.classList.remove('completed');
+            stepCircle2.classList.add('active');
+        });
+
+        // Form submission
+        const createClubForm = document.getElementById('createClubForm');
+        if (createClubForm) {
+            createClubForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (!validateStep3()) {
+                    return;
+                }
+
+                // Change button state
+                const submitBtn = document.getElementById('submit-application');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+
+                // Submit the form via AJAX
+                const formData = new FormData(createClubForm);
+
+                fetch(createClubForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+
+                        if (data.status === 'success') {
+                            // Show success message
+                            showNotification('success', data.message);
+
+                            // Close modal
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('createClubModal'));
+                            modal.hide();
+
+                            // Reset form
+                            createClubForm.reset();
+
+                            // Reset steps
+                            step3.classList.remove('active');
+                            step1.classList.add('active');
+                            stepCircle3.classList.remove('active');
+                            stepCircle2.classList.remove('completed');
+                            stepCircle1.classList.remove('completed');
+                            stepCircle1.classList.add('active');
+
+                            // Clear error messages
+                            const errorMessages = document.querySelectorAll('.error-message');
+                            errorMessages.forEach(message => {
+                                message.textContent = '';
+                            });
+
+                        } else if (data.status === 'error') {
+                            // Show validation errors
+                            for (const field in data.errors) {
+                                const errorElement = document.getElementById(`${field}-error`);
+                                if (errorElement) {
+                                    errorElement.textContent = data.errors[field][0];
+                                }
+                            }
+
+                            showNotification('error', 'Please fix the errors in the form');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                        showNotification('error', 'An error occurred. Please try again.');
+                    });
+            });
+        }
+    }
+
+    /**
+     * Initialize filter form functionality
+     */
+    function initializeFilterForm() {
+        const filterForm = document.getElementById('clubFilterForm');
+        if (!filterForm) return;
+
+        // Apply filters on change for radios
+        const filterRadios = filterForm.querySelectorAll('input[type="radio"]');
+        filterRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                filterForm.submit();
+            });
+        });
+
+        // Apply filters on change for select
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function () {
+                filterForm.submit();
+            });
+        }
+    }
+
+    /**
+     * Show notification
+     * @param {string} type - notification type: success, error, info
+     * @param {string} message - notification message
+     */
+    function showNotification(type, message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        // Icon based on type
+        let icon = '';
+        switch (type) {
+            case 'success':
+                icon = '<i class="fas fa-check-circle"></i>';
+                break;
+            case 'error':
+                icon = '<i class="fas fa-exclamation-circle"></i>';
+                break;
+            case 'info':
+                icon = '<i class="fas fa-info-circle"></i>';
+                break;
+        }
+
+        notification.innerHTML = `${icon}<span>${message}</span>`;
+
+        // Add to document
+        document.body.appendChild(notification);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            notification.style.animation = 'fade-out 0.5s forwards';
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 5000);
+    }
+</script>
+{% endblock %}

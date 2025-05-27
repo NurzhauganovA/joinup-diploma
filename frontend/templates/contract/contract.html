@@ -1,0 +1,445 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'contract/css/contract.css' %}">
+{% endblock %}
+
+{% block title %} SmartSchool - Contracts {% endblock %}
+
+{% block page_title %} Contracts {% endblock %}
+
+{% block content %}
+
+    <div class="edit_contract_container">
+        <div class="edit_contract_block">
+            <div class="title_block_edit_contract">
+                <h1>Editing the contract</h1>
+                <i>
+                    <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.0312 12.0312L18.9687 18.9687M18.9687 12.0312L12.0312 18.9687M29.375 15.5C29.375 17.3221 29.0161 19.1263 28.3188 20.8097C27.6215 22.4931 26.5995 24.0227 25.3111 25.3111C24.0227 26.5995 22.4931 27.6215 20.8097 28.3188C19.1263 29.0161 17.3221 29.375 15.5 29.375C13.6779 29.375 11.8737 29.0161 10.1903 28.3188C8.50687 27.6215 6.97731 26.5995 5.68889 25.3111C4.40048 24.0227 3.37846 22.4931 2.68117 20.8097C1.98389 19.1263 1.625 17.3221 1.625 15.5C1.625 11.8201 3.08683 8.29096 5.68889 5.68889C8.29096 3.08683 11.8201 1.625 15.5 1.625C19.1799 1.625 22.709 3.08683 25.3111 5.68889C27.9132 8.29096 29.375 11.8201 29.375 15.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </i>
+            </div>
+            <div class="form_block_edit_contract">
+                <div class="contract_data_form_block">
+                    <h1>Contract number:</h1>
+                    <p id="contract_number_data">2024SALMZHU-0092</p>
+                </div>
+                <div class="contract_data_form_block">
+                    <h1>Student's Full Name:</h1>
+                    <p id="student_full_name_data">Salmazhan Zhunussov</p>
+                </div>
+                <div class="contract_data_form_block">
+                    <h1>Agreement date:</h1>
+                    <div class="agreement_date_input_block">
+                        <input type="hidden" name="agreement_date_data">
+                        <div class="main_agreement_date_input_block">
+                            <i>
+                                <svg onclick="setAgreementDate()" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.75 1V3.25M15.25 1V3.25M1 16.75V5.5C1 4.90326 1.23705 4.33097 1.65901 3.90901C2.08097 3.48705 2.65326 3.25 3.25 3.25H16.75C17.3467 3.25 17.919 3.48705 18.341 3.90901C18.7629 4.33097 19 4.90326 19 5.5V16.75M1 16.75C1 17.3467 1.23705 17.919 1.65901 18.341C2.08097 18.7629 2.65326 19 3.25 19H16.75C17.3467 19 17.919 18.7629 18.341 18.341C18.7629 17.919 19 17.3467 19 16.75M1 16.75V9.25C1 8.65326 1.23705 8.08097 1.65901 7.65901C2.08097 7.23705 2.65326 7 3.25 7H16.75C17.3467 7 17.919 7.23705 18.341 7.65901C18.7629 8.08097 19 8.65326 19 9.25V16.75M10 10.75H10.008V10.758H10V10.75ZM10 13H10.008V13.008H10V13ZM10 15.25H10.008V15.258H10V15.25ZM7.75 13H7.758V13.008H7.75V13ZM7.75 15.25H7.758V15.258H7.75V15.25ZM5.5 13H5.508V13.008H5.5V13ZM5.5 15.25H5.508V15.258H5.5V15.25ZM12.25 10.75H12.258V10.758H12.25V10.75ZM12.25 13H12.258V13.008H12.25V13ZM12.25 15.25H12.258V15.258H12.25V15.25ZM14.5 10.75H14.508V10.758H14.5V10.75ZM14.5 13H14.508V13.008H14.5V13Z" stroke="#233255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </i>
+                            <p id="agreement_date_text">02.09.2023</p>
+                        </div>
+                        <i>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 13L13 1M1 1L13 13" stroke="#233255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                    </div>
+                </div>
+                <div class="contract_data_form_block">
+                    <h1>Sum of contract:</h1>
+                    <input type="text" name="contract_sum_data" id="contract_sum_input" value="">
+                </div>
+                <div class="contract_data_form_block">
+                    <h1>Status:</h1>
+                    <select name="contract_status_data" id="contract_status_select">
+                        <option value="Formed">Formed</option>
+                        <option value="Consideration">Consideration</option>
+                        <option value="Signed">Signed</option>
+                        <option value="Finished">Finished</option>
+                        <option value="Canceled">Canceled</option>
+                        <option value="Dissolved">Dissolved</option>
+                    </select>
+                </div>
+                <div class="contract_data_form_block">
+                    <h1>Payment period:</h1>
+                    <select name="contract_payment_period_data" id="contract_payment_period_select">
+                        <option value="Monthly">Monthly</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Annual">Annual</option>
+                    </select>
+                </div>
+                <div class="contract_data_form_block" style="display: block;">
+                    <div class="title_block_contract_entrance_fee">
+                        <h1>Entrance fee:</h1>
+                        <input type="checkbox" name="is_entrance_fee" id="is_entrance_fee">
+                    </div>
+                    <input disabled type="text" name="entrance_fee_data" id="entrance_fee_input" value="0.00" class="entrance_fee_input_block">
+                </div>
+                <div class="contract_data_form_block" style="width: 100%; display: flex; justify-content: flex-end; align-items: flex-end;">
+                    <span>Set up discounts</span>
+                </div>
+            </div>
+            <div class="contract_data_form_block" style="width: 100%; display: flex; justify-content: flex-end; align-items: flex-end;">
+                <div class="save_block_edit_contract">
+                    <h1>Total discounts: <p id="total_discounts">0 tg</p></h1>
+                    <div class="save_button_edit_contract">
+                        <button onclick="saveContractData()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="container_section">
+        <div id="upper_container">
+            <div class="flex space-x-2 items-center" id="left_upper_container">
+                <label>Show</label>
+                <select id="entries">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                </select>
+                <label>entries</label>
+            </div>
+            <div id="academic_container">
+                <select id="select_academic">
+                    <option>Academic year</option>
+                    <option>2022/2023</option>
+                    <option>2023/2024</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="contract_main_info">
+            <div class="contract_main_table_info">
+                <table class="contract_table_container contract_table_style">
+                    <thead>
+                        <tr>
+                            <th><h2>№</h2></th>
+                            <th></th>
+                            <th></th>
+                            <th><h2>Student's Full Name</h2></th>
+                            <th><h2>Date of contract</h2></th>
+                            <th><h2>Termination of<br>contract</h2></th>
+                            <th><h2>Status</h2></th>
+                            <th><h2>Sum of contracts</h2></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="contract_info">
+                    {% for contract in contracts %}
+                        <tr id="contract_tr_object" class="contract-data">
+                            <td><h2>#{{ forloop.counter }}</h2></td>
+                            <td>
+                                <div onclick="toggleContractDetails({{ contract.id }})">
+                                    <i>
+                                        <svg id="open_transactions_{{ contract.id }}" class="open_transactions_icon" width="17" height="10"
+                                             viewBox="0 0 17 10" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16 1L8.5 8.5L1 1" stroke="#233255" stroke-width="2"
+                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </i>
+                                </div>
+                            </td>
+                            <td>
+                                <i>
+                                    <svg onclick="editContractData({{ contract.id }})" width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.862 3.48725L17.549 1.79925C17.9007 1.44757 18.3777 1.25 18.875 1.25C19.3723 1.25 19.8493 1.44757 20.201 1.79925C20.5527 2.15092 20.7502 2.6279 20.7502 3.12525C20.7502 3.62259 20.5527 4.09957 20.201 4.45125L5.832 18.8202C5.30332 19.3486 4.65137 19.737 3.935 19.9502L1.25 20.7502L2.05 18.0652C2.26328 17.3489 2.65163 16.6969 3.18 16.1682L15.863 3.48725H15.862ZM15.862 3.48725L18.5 6.12525"
+                                              stroke="#233255" stroke-width="1.5" stroke-linecap="round"
+                                              stroke-linejoin="round"/>
+                                    </svg>
+                                </i>
+                            </td>
+                            <td><h2>{{ contract.student.user.full_name }}</h2></td>
+                            <td><h2>{{ contract.date|date:"d.m.Y" }}</h2></td>
+                            <td><h2>{% if contract.date_close %}{{ contract.date_close|date:"d.m.Y" }}{% endif %}</h2></td>
+                            <td><h2 class="contract_status_{{ contract.status }} contract_status_base_style">{{ contract.status }}</h2></td>
+                            <td><h2 id="contract_formatted_amount">{{ contract.final_amount }}</h2></td>
+                            <td>
+                                <i>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 6H5H21" stroke="#5240D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#5240D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10 11V17" stroke="#5240D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M14 11V17" stroke="#5240D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </i>
+                            </td>
+                        </tr>
+
+                        <tr class="contract_details_main_container" id="contract_details_{{ contract.id }}" style="display: none">
+                            <td class="contract_details_info_container" colspan="6">
+                                <div class="header_title_block_contract_details">
+                                    <h1 class="active">Transactions</h1>
+                                    <h1>Accruals</h1>
+                                </div>
+                                <div class="main_block_contract_details">
+                                    <div class="contract_transaction_info">
+                                        <table class="contract_table_style">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th><h2>Date of payment</h2></th>
+                                                <th><h2>Payment amount</h2></th>
+                                                <th><h2>Type of payment</h2></th>
+                                                <th><h2>Comment</h2></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="contract_transactions_data">
+                                                {% for transaction in contract.transactions.all %}
+                                                    <tr>
+                                                        <td>
+                                                            <i>
+                                                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M15.862 3.48725L17.549 1.79925C17.9007 1.44757 18.3777 1.25 18.875 1.25C19.3723 1.25 19.8493 1.44757 20.201 1.79925C20.5527 2.15092 20.7502 2.6279 20.7502 3.12525C20.7502 3.62259 20.5527 4.09957 20.201 4.45125L5.832 18.8202C5.30332 19.3486 4.65137 19.737 3.935 19.9502L1.25 20.7502L2.05 18.0652C2.26328 17.3489 2.65163 16.6969 3.18 16.1682L15.863 3.48725H15.862ZM15.862 3.48725L18.5 6.12525"
+                                                                          stroke="#233255" stroke-width="1.5"
+                                                                          stroke-linecap="round"
+                                                                          stroke-linejoin="round"/>
+                                                                </svg>
+                                                            </i>
+                                                        </td>
+                                                        <td><h2>{{ transaction.datetime|date:"d.m.Y" }}</h2></td>
+                                                        <td><h2>{{ transaction.amount }}</h2></td>
+                                                        <td><h2>{{ transaction.payment_type }}</h2></td>
+                                                        <td><h2>{{ transaction.description }}</h2></td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="5"><h2>No transactions</h2></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="contract_accruals_info" style="display: none;">
+                                        <table class="">
+                                            <thead>
+                                            <tr>
+                                                <th><h2>№</h2></th>
+                                                <th><h2>Month</h2></th>
+                                                <th><h2>Accrual amount</h2></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="contract_accruals_data">
+                                                {% for accrual in contract.accruals.all %}
+                                                    <tr>
+                                                        <td><h2>#{{ forloop.counter }}</h2></td>
+                                                        <td><h2>{{ accrual.date }}</h2></td>
+                                                        <td><h2>{{ accrual.amount }}</h2></td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="3"><h2>No accruals</h2></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="contract_transaction_main_info">
+                <div class="contract_transaction_main_table_info">
+                    <table class="contract_transaction_table_container contract_table_style">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th><h2>Date of payment</h2></th>
+                            <th><h2>Payment amount</h2></th>
+                            <th><h2>Type of payment</h2></th>
+                            <th><h2>Comment</h2></th>
+                        </tr>
+                        </thead>
+                        <tbody id="contract_transactions_info"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination_container">
+            <div class="pagination_list_block">
+                <h1>Previous</h1>
+                <p class="active">1</p>
+                <p>2</p>
+                <p>3</p>
+                <h1>Next</h1>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        async function saveContractData() {
+            const contractNumber = document.getElementById('contract_number_data').textContent;
+            let agreementDate = document.getElementById('agreement_date_text').textContent;
+            const contractSum = document.getElementById('contract_sum_input').value;
+            const contractStatus = document.getElementById('contract_status_select').value;
+            const contractPaymentPeriod = document.getElementById('contract_payment_period_select').value;
+            const entranceFee = document.getElementById('entrance_fee_input').value;
+
+            // agreementDate format is YYYY-MM-DD. But change to DD.MM.YYYY
+
+            const data = {
+                contractNumber,
+                agreementDate,
+                contractSum,
+                contractStatus,
+                contractPaymentPeriod,
+                entranceFee
+            };
+
+            console.log(data);
+
+            await fetch(`/contracts/app/${contractNumber}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === 200) {
+                    document.querySelector('.edit_contract_container').style.display = 'none';
+                    window.location.reload();
+                }
+            })
+            .catch(error => console.error(error));
+            window.location.reload();
+        }
+
+        async function setAgreementDate() {
+            let date_input = document.querySelector('input[name="agreement_date_data"]');
+            date_input.type = 'date';
+            date_input.focus();
+            if (date_input.focus) {
+                document.querySelector('.main_agreement_date_input_block').style.display = 'none';
+            }
+
+            date_input.addEventListener('change', () => {
+                let selectedDate = new Date(date_input.value);
+                let day = selectedDate.getDate();
+                let month = selectedDate.getMonth() + 1;
+                let year = selectedDate.getFullYear();
+
+                // Добавляем ведущий ноль, если день меньше 10
+                if (day < 10) {
+                    day = '0' + day;
+                }
+                if (month < 10) {
+                    month = '0' + month;
+                }
+
+                document.getElementById('agreement_date_text').textContent = `${day}.${month}.${year}`;
+                date_input.type = 'hidden';
+                document.querySelector('.main_agreement_date_input_block').style.display = 'flex';
+            });
+
+            date_input.addEventListener('focus', () => {
+                date_input.type = 'date';
+                document.querySelector('.main_agreement_date_input_block').style.display = 'none';
+            });
+
+            date_input.addEventListener('blur', () => {
+                date_input.type = 'hidden';
+                document.querySelector('.main_agreement_date_input_block').style.display = 'flex';
+            });
+
+            date_input.addEventListener('click', () => {
+                date_input.type = 'date';
+                document.querySelector('.main_agreement_date_input_block').style.display = 'none';
+            });
+        }
+
+        async function editContractData(contractID) {
+            document.querySelector('.edit_contract_container').style.display = 'block';
+
+            const contract = await fetch(`/contracts/app/${contractID}`);
+            let contractData = await contract.json();
+            contractData = contractData.data;
+            console.log(contractData);
+            document.getElementById('contract_number_data').textContent = contractData.name;
+            document.getElementById('student_full_name_data').textContent = contractData.student_full_name;
+            document.querySelector('input[name="agreement_date_data"]').value = contractData.date;
+            document.getElementById('agreement_date_text').textContent = contractData.date;
+            document.getElementById('contract_sum_input').value = contractData.final_amount;
+            document.querySelector('select[name="contract_status_data"]').value = contractData.status;
+            document.querySelector('select[name="contract_payment_period_data"]').value = contractData.payment_type;
+            document.querySelector('input[name="entrance_fee_data"]').value = contractData.entrance_fee;
+            document.getElementById('is_entrance_fee').checked = contractData.entrance_fee > 0;
+        }
+
+        document.querySelector('.title_block_edit_contract i').addEventListener('click', () => {
+            document.querySelector('.edit_contract_container').style.display = 'none';
+        });
+    </script>
+
+    <script>
+        const headers = document.querySelectorAll('.header_title_block_contract_details h1');
+
+        // Для каждого заголовка добавляем обработчик события клика
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const parentContractDetails = header.closest('.contract_details_info_container');
+                parentContractDetails.querySelectorAll('.header_title_block_contract_details h1').forEach(h => h.classList.remove('active'));
+                header.classList.add('active');
+                const blocks = parentContractDetails.querySelectorAll('.contract_transaction_info, .contract_accruals_info');
+                console.log(blocks);
+                blocks.forEach(block => {
+                    if (block.classList.contains('contract_transaction_info')) {
+                        block.style.display = header.textContent === 'Transactions' ? 'block' : 'none';
+                    } else {
+                        block.style.display = header.textContent === 'Accruals' ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // По умолчанию показываем блок транзакций для каждого контракта
+        document.querySelectorAll('.contract_transaction_info').forEach(block => {
+            block.style.display = 'block';
+        });
+    </script>
+
+    <script>
+        let contract_tr = document.querySelectorAll('#contract_tr_object');
+        contract_tr.forEach((tr, index) => {
+            if (index % 2 === 0) {
+                tr.classList.add('even');
+            } else {
+                tr.classList.add('odd');
+            }
+        });
+
+        async function toggleContractDetails(contractId) {
+            let contractDetails = document.getElementById('contract_details_' + contractId);
+            let openTransactions = document.getElementById('open_transactions_' + contractId);
+            if (contractDetails.style.display === 'none') {
+                openTransactions.classList.add('non_active');
+                contractDetails.style.display = '';
+            } else {
+                openTransactions.classList.remove('non_active');
+                contractDetails.style.display = 'none';
+            }
+        }
+    </script>
+{% endblock %}

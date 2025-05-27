@@ -1,0 +1,496 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'school/css/school-part.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - School part {% endblock %}
+
+{% block page_title %} School part {% endblock %}
+
+{% block content %}
+
+    <div class="school_part_container">
+        <div class="main_title_info_block">
+            <h1>Dashboard</h1>
+            <div class="create_new_club" id="createNewClub" onclick="createNewClubFunc()">Create New</div>
+        </div>
+        <div class="main_club_information_container">
+            <div class="top_clubs_block_stats">
+                <div class="title_block_top_clubs">
+                    <div class="main_title_block_top_clubs">
+                        <h1>TOP Blog Posts</h1>
+                        <p>{{ count_blogs }} total blogs</p>
+                    </div>
+                    <i>
+                        <svg width="25" height="25" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.25 0C1.00736 0 0 1.00736 0 2.25V4.75C0 5.99264 1.00736 7 2.25 7H4.75C5.99264 7 7 5.99264 7 4.75V2.25C7 1.00736 5.99264 0 4.75 0H2.25ZM2.25 9C1.00736 9 0 10.0074 0 11.25V13.75C0 14.9926 1.00736 16 2.25 16H4.75C5.99264 16 7 14.9926 7 13.75V11.25C7 10.0074 5.99264 9 4.75 9H2.25ZM11.25 0C10.0074 0 9 1.00736 9 2.25V4.75C9 5.99264 10.0074 7 11.25 7H13.75C14.9926 7 16 5.99264 16 4.75V2.25C16 1.00736 14.9926 0 13.75 0H11.25ZM11.25 9C10.0074 9 9 10.0074 9 11.25V13.75C9 14.9926 10.0074 16 11.25 16H13.75C14.9926 16 16 14.9926 16 13.75V11.25C16 10.0074 14.9926 9 13.75 9H11.25Z" fill="#0F172A"/>
+                        </svg>
+                    </i>
+                </div>
+                <div class="main_content_block_top_clubs">
+                    {% for blog in blogs %}
+
+                        <a href="" class="main_club_information">
+                            <div class="author_main_club_information">
+                                <div class="image_block_main_club_information" style="background-image: url('{{ blog.image.url }}')"></div>
+                                <div class="name_block_main_club_information">
+                                    <h1>{{ blog.title }}</h1>
+                                    <p>{{ blog.author.full_name }}</p>
+                                </div>
+                            </div>
+                            <div class="count_club_members_main_club_information">
+                                <h1>{{ blog.count_of_comments }}</h1>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="main_club_info_block">
+                <div class="main_club_info_stats_block">
+                    <div class="first_content_main_club">
+                        <div class="stats_club_card membership_of_clubs">
+                            <i>
+                                <svg width="25" height="25" viewBox="0 0 18 18" fill="#FFF" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.75 3C0.75 1.75736 1.75736 0.75 3 0.75H5.25C6.49264 0.75 7.5 1.75736 7.5 3V5.25C7.5 6.49264 6.49264 7.5 5.25 7.5H3C1.75736 7.5 0.75 6.49264 0.75 5.25V3Z" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M0.75 12.75C0.75 11.5074 1.75736 10.5 3 10.5H5.25C6.49264 10.5 7.5 11.5074 7.5 12.75V15C7.5 16.2426 6.49264 17.25 5.25 17.25H3C1.75736 17.25 0.75 16.2426 0.75 15V12.75Z" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10.5 3C10.5 1.75736 11.5074 0.75 12.75 0.75H15C16.2426 0.75 17.25 1.75736 17.25 3V5.25C17.25 6.49264 16.2426 7.5 15 7.5H12.75C11.5074 7.5 10.5 6.49264 10.5 5.25V3Z" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10.5 12.75C10.5 11.5074 11.5074 10.5 12.75 10.5H15C16.2426 10.5 17.25 11.5074 17.25 12.75V15C17.25 16.2426 16.2426 17.25 15 17.25H12.75C11.5074 17.25 10.5 16.2426 10.5 15V12.75Z" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </i>
+                            <h1>31</h1>
+                            <p>Users count</p>
+                        </div>
+                        <div class="stats_club_card">
+                            <p>Pregnant count</p>
+                            <h1>23</h1>
+                            <div class="range_bar">
+                                <div class="positive_range"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="second_content_main_club">
+                        <a href="" class="stats_club_card posts_stats_club" style="background-image: url('https://preview.keenthemes.com/metronic8/demo16/assets/media/stock/600x600/img-1.jpg')">
+                            <h1>Posts</h1>
+                        </a>
+                        <div class="stats_club_card success_rate_card">
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#FFF" class="bi bi-circle-half" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/>
+                                </svg>
+                            </i>
+                            <h1>{{ pregnancy_progress }}%</h1>
+                            <p>Your pregnancy progress</p>
+                        </div>
+                    </div>
+                    <div class="stats_club_card_longer">
+                        <div class="title_stats_club_card">
+                            <h1>30% Off Themes</h1>
+                            <p>
+                                Get your discounted themes of the month. No hassle, no worries, no fuss instant rewards, everyday.
+                            </p>
+                        </div>
+                        <img src="https://preview.keenthemes.com/metronic8/demo16/assets/media/svg/humans/custom-1.svg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="create_new_club_block">
+                <h1>Create Post</h1>
+                <p>
+                    Create a new club and start your journey with like-minded individuals. Share experiences, tips, and support each other through the ups and downs of pregnancy.
+                </p>
+                <a href="">Create Post</a>
+                <img src="https://preview.keenthemes.com/metronic8/demo16/assets/media/svg/general/rhone.svg" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="school-clubs-container">
+        <div class="clubs-header">
+            <h1>School Clubs</h1>
+            <button class="create-club-btn" onclick="openCreateModal()">Create Club</button>
+        </div>
+
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="club-search" placeholder="Search clubs...">
+            </div>
+            <div class="filter-options">
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="sports">Sports</option>
+                    <option value="academic">Academic</option>
+                    <option value="arts">Arts</option>
+                    <option value="social">Social</option>
+                </select>
+                <select id="day-filter">
+                    <option value="">All Days</option>
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="clubs-grid" id="clubs-container">
+            <!-- Club cards will be loaded here -->
+            <div class="club-card">
+                <div class="club-image">
+                    <img src="/static/images/chess-club.jpg" alt="Chess Club">
+                </div>
+                <div class="club-details">
+                    <h3>Chess Club</h3>
+                    <p class="club-category">Academic</p>
+                    <p class="club-schedule">Monday, Wednesday - 4:00 PM</p>
+                    <p class="club-description">Join our chess club to learn strategies and compete in tournaments.</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+
+            <div class="club-card">
+                <div class="club-image">
+                    <img src="/static/images/basketball-club.jpg" alt="Basketball Club">
+                </div>
+                <div class="club-details">
+                    <h3>Basketball Club</h3>
+                    <p class="club-category">Sports</p>
+                    <p class="club-schedule">Tuesday, Thursday - 5:00 PM</p>
+                    <p class="club-description">Improve your basketball skills and join our school team.</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+
+            <div class="club-card">
+                <div class="club-image">
+                    <img src="/static/images/drama-club.jpg" alt="Drama Club">
+                </div>
+                <div class="club-details">
+                    <h3>Drama Club</h3>
+                    <p class="club-category">Arts</p>
+                    <p class="club-schedule">Friday - 3:30 PM</p>
+                    <p class="club-description">Express yourself through acting and participate in school plays.</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty state when no clubs match filters -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <img src="/static/images/empty-state.svg" alt="No clubs found">
+            <h3>No clubs found</h3>
+            <p>Try adjusting your filters or create a new club</p>
+            <button class="create-club-btn" onclick="openCreateModal()">Create Club</button>
+        </div>
+
+        <!-- Create Club Modal -->
+        <div id="create-club-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Create Club</h2>
+                    <span class="close-modal" onclick="closeCreateModal()">&times;</span>
+                </div>
+                <form id="create-club-form">
+                    <div class="form-group">
+                        <label for="club-name">Club Name <span class="required">*</span></label>
+                        <input type="text" id="club-name" name="clubName" required>
+                        <div class="error-message" id="club-name-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="club-logo">Club Logo <span class="required">*</span></label>
+                        <div class="logo-upload">
+                            <div class="upload-placeholder">
+                                <img src="/static/images/image-placeholder.svg" alt="Upload Logo">
+                            </div>
+                            <input type="file" id="club-logo" name="clubLogo" accept="image/png,image/jpg,image/jpeg">
+                        </div>
+                        <div class="file-info">Allowed file types: png, jpg, jpeg.</div>
+                        <div class="error-message" id="club-logo-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="club-category">Category <span class="required">*</span></label>
+                        <select id="club-category" name="clubCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="sports">Sports</option>
+                            <option value="academic">Academic</option>
+                            <option value="arts">Arts</option>
+                            <option value="social">Social</option>
+                        </select>
+                        <div class="error-message" id="club-category-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meeting-days">Meeting Days <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="monday" name="meetingDays" value="monday">
+                                <label for="monday">Monday</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tuesday" name="meetingDays" value="tuesday">
+                                <label for="tuesday">Tuesday</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="wednesday" name="meetingDays" value="wednesday">
+                                <label for="wednesday">Wednesday</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="thursday" name="meetingDays" value="thursday">
+                                <label for="thursday">Thursday</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="friday" name="meetingDays" value="friday">
+                                <label for="friday">Friday</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="meeting-days-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="club-description">Description <span class="required">*</span></label>
+                        <textarea id="club-description" name="clubDescription" rows="4" required></textarea>
+                        <div class="error-message" id="club-description-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="club-advisor">Faculty Advisor <span class="required">*</span></label>
+                        <input type="text" id="club-advisor" name="clubAdvisor" required>
+                        <div class="error-message" id="club-advisor-error"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeCreateModal()">Cancel</button>
+                        <button type="submit" class="submit-btn">Create Club</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal">
+            <div class="modal-content error-modal-content">
+                <div class="error-icon">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="23" stroke="#FF4D4F" stroke-width="2"/>
+                        <path d="M16 16L32 32" stroke="#FF4D4F" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M32 16L16 32" stroke="#FF4D4F" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>Sorry, looks like there are some errors detected, please try again.</h3>
+                <button class="ok-btn" onclick="closeErrorModal()">Ok, got it!</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        // Modal Functions
+        function openCreateModal() {
+            document.getElementById('create-club-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('create-club-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+
+        function openErrorModal() {
+            document.getElementById('error-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeErrorModal() {
+            document.getElementById('error-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Reset form and clear errors
+        function resetForm() {
+            document.getElementById('create-club-form').reset();
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(element => {
+                element.classList.remove('show');
+                element.textContent = '';
+            });
+        }
+
+        // Form validation
+        document.getElementById('create-club-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let isValid = true;
+            const clubName = document.getElementById('club-name').value;
+            const clubLogo = document.getElementById('club-logo').files;
+            const clubCategory = document.getElementById('club-category').value;
+            const meetingDays = document.querySelectorAll('input[name="meetingDays"]:checked');
+            const clubDescription = document.getElementById('club-description').value;
+            const clubAdvisor = document.getElementById('club-advisor').value;
+
+            // Validate club name
+            if (!clubName) {
+                showError('club-name-error', 'Club name is required');
+                isValid = false;
+            }
+
+            // Validate club logo
+            if (clubLogo.length === 0) {
+                showError('club-logo-error', 'Club logo is required');
+                isValid = false;
+            }
+
+            // Validate club category
+            if (!clubCategory) {
+                showError('club-category-error', 'Please select a category');
+                isValid = false;
+            }
+
+            // Validate meeting days
+            if (meetingDays.length === 0) {
+                showError('meeting-days-error', 'Please select at least one meeting day');
+                isValid = false;
+            }
+
+            // Validate club description
+            if (!clubDescription) {
+                showError('club-description-error', 'Club description is required');
+                isValid = false;
+            }
+
+            // Validate club advisor
+            if (!clubAdvisor) {
+                showError('club-advisor-error', 'Faculty advisor is required');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                openErrorModal();
+                return;
+            }
+
+            // Form is valid, submit it (in a real app, this would be an AJAX request)
+            console.log('Form is valid, submitting...');
+            alert('Club created successfully!');
+            closeCreateModal();
+
+            // In a real application, you would send the data to the server here
+            // and then update the UI once the server responds with success
+            addNewClub({
+                name: clubName,
+                category: clubCategory,
+                schedule: getSelectedDays(meetingDays),
+                description: clubDescription,
+                advisor: clubAdvisor,
+                image: '/static/images/placeholder-club.jpg' // In a real app, this would be the uploaded image
+            });
+        });
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function getSelectedDays(checkboxes) {
+            let days = [];
+            checkboxes.forEach(checkbox => {
+                days.push(checkbox.value.charAt(0).toUpperCase() + checkbox.value.slice(1));
+            });
+            return days.join(', ');
+        }
+
+        // Add a new club to the UI
+        function addNewClub(club) {
+            const clubsContainer = document.getElementById('clubs-container');
+
+            const clubCard = document.createElement('div');
+            clubCard.className = 'club-card';
+
+            clubCard.innerHTML = `
+            <div class="club-image">
+                <img src="${club.image}" alt="${club.name}">
+            </div>
+            <div class="club-details">
+                <h3>${club.name}</h3>
+                <p class="club-category">${club.category.charAt(0).toUpperCase() + club.category.slice(1)}</p>
+                <p class="club-schedule">${club.schedule}</p>
+                <p class="club-description">${club.description}</p>
+                <button class="view-details-btn">View Details</button>
+            </div>
+        `;
+
+            clubsContainer.appendChild(clubCard);
+        }
+
+        // Filter clubs
+        document.getElementById('club-search').addEventListener('input', filterClubs);
+        document.getElementById('category-filter').addEventListener('change', filterClubs);
+        document.getElementById('day-filter').addEventListener('change', filterClubs);
+
+        function filterClubs() {
+            const searchTerm = document.getElementById('club-search').value.toLowerCase();
+            const categoryFilter = document.getElementById('category-filter').value.toLowerCase();
+            const dayFilter = document.getElementById('day-filter').value.toLowerCase();
+
+            const clubs = document.querySelectorAll('.club-card');
+            let visibleCount = 0;
+
+            clubs.forEach(club => {
+                const clubName = club.querySelector('h3').textContent.toLowerCase();
+                const clubCategory = club.querySelector('.club-category').textContent.toLowerCase();
+                const clubSchedule = club.querySelector('.club-schedule').textContent.toLowerCase();
+
+                const matchesSearch = clubName.includes(searchTerm);
+                const matchesCategory = !categoryFilter || clubCategory.includes(categoryFilter);
+                const matchesDay = !dayFilter || clubSchedule.includes(dayFilter);
+
+                if (matchesSearch && matchesCategory && matchesDay) {
+                    club.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    club.style.display = 'none';
+                }
+            });
+
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                document.getElementById('empty-state').style.display = 'block';
+            } else {
+                document.getElementById('empty-state').style.display = 'none';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function (event) {
+            const createModal = document.getElementById('create-club-modal');
+            const errorModal = document.getElementById('error-modal');
+
+            if (event.target === createModal) {
+                closeCreateModal();
+            } else if (event.target === errorModal) {
+                closeErrorModal();
+            }
+        }
+
+        // File upload preview (in a real app)
+        document.getElementById('club-logo').addEventListener('change', function (e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const uploadPlaceholder = document.querySelector('.upload-placeholder');
+                    uploadPlaceholder.innerHTML = `<img src="${event.target.result}" alt="Club Logo" style="width: 100%; height: 100%; object-fit: cover;">`;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+
+{% endblock %}

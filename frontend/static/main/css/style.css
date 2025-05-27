@@ -1,0 +1,406 @@
+@font-face {
+    font-family: 'Gilroy';
+    src: url('../fonts/Gilroy-Light.otf') format('opentype'),
+         url('../fonts/Gilroy-ExtraBold.otf') format('opentype');
+}
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+a {
+    color: #4B0082;
+    text-decoration: none;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+body {
+    font-family: Gilroy, sans-serif;
+    font-weight: 300;
+}
+
+
+/* GET STARTED */
+
+
+
+.container {
+    display: flex;
+}
+
+@keyframes expandSidebar {
+    0% {
+        width: 80px;
+    }
+    100% {
+        width: 280px;
+    }
+}
+
+.sidebar_container {
+    width: 80px;
+    height: 100vh;
+    background-color: #233255;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.5s ease-in-out;
+    animation: expandSidebar 0.5s ease;
+}
+
+.active_sidebar {
+    display: block;
+    width: 280px !important;
+    padding: 40px 16px !important;
+}
+
+.none_active_sidebar {
+    display: none;
+}
+
+nav {
+    width: 100%;
+    margin-left: 80px;
+    padding: 0 45px 120px 0;
+}
+
+.header_container {
+    width: 100%;
+    background-color: #F6AD2B;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+}
+
+.wrapper_header_container {
+    margin: 8px 120px 8px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.school_logo_block_sidebar {
+    display: inline-flex;
+    align-items: center;
+}
+
+.image_school_block img {
+    width: 60px;
+    border-radius: 10px;
+}
+
+.title_school_block img {
+    width: 200px;
+    border-radius: 10px;
+    margin-left: 40px;
+    transition: all 0.3s ease-in-out;
+}
+
+.main_menu_block_sidebar {
+    margin-top: 45px;
+}
+
+.title_main_menu_block {
+    padding: 14px;
+}
+
+.title_main_menu_block h1 {
+    color: #B9BBC1;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-family: Poppins, sans-serif;
+}
+
+.links_list_main_menu_block {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.link_main_menu_block a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px;
+    background-color: transparent;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.link_main_menu_block a:hover {
+    background-color: #F6AD2B;
+}
+
+.link_main_menu_block .active {
+    background-color: #F6AD2B;
+}
+
+.title_link_main_menu_block {
+    display: inline-flex;
+    align-items: center;
+}
+
+.title_link_main_menu_block h1 {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+.title_block_header_container h1 {
+    color: #233255;
+    font-size: 25px;
+    font-weight: 600;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.info_block_header_container {
+    display: inline-flex;
+    align-items: center;
+}
+
+.selected_school_info_block {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 11px;
+    gap: 11px;
+    background-color: #233255;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    margin-right: 45px;
+}
+
+.selected_school_info_block:hover {
+    cursor: pointer;
+    background-color: #3b5280;
+}
+
+.selected_school_info_block h1 {
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.image_profile_info_block {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+main {
+    width: 100%;
+}
+
+.wrapper_main_container {
+    padding: 105px 60px 0 60px;
+}
+
+.base_action_message_block {
+    position: absolute;
+    top: 105px;
+    right: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.base_action_block_container {
+    width: 200px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-radius: 8px;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.error_message_block_container {
+    background-color: #F8D7DA;
+}
+
+.success_message_block_container {
+    background-color: #D4EDDA;
+}
+
+.base_message_block_title h1 {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Montserrat, sans-serif;
+}
+
+.error_message_block_title h1 {
+    color: #ea1414;
+}
+
+.success_message_block_title h1 {
+    color: #155724;
+}
+
+.base_message_block_text {
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Montserrat, sans-serif;
+}
+
+.error_message_block_text {
+    color: #ea1414;
+}
+
+.success_message_block_text {
+    color: #155724;
+}
+
+.base_message_block_button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    background-color: #233255;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Montserrat, sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+}
+
+.base_message_block_button h1 {
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Montserrat, sans-serif;
+}
+
+.base_message_block_button:hover {
+    opacity: 0.8;
+}
+
+.contract_status_base_style {
+    border-radius: 22px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 15px;
+}
+
+.contract_status_Formed {
+    color: #d720d7 !important;
+    background-color: #f3e6f3;
+}
+
+.contract_status_Consideration {
+    color: #FFC107 !important;
+    background-color: #FFF8E1;
+}
+
+.contract_status_Finished {
+    color: #2CED6E !important;
+    background-color: #E6FCEF;
+}
+
+.contract_status_Canceled {
+    color: #FF0000 !important;
+    background-color: #FFF8E1;
+}
+
+.contract_status_Dissolved {
+    color: #000000 !important;
+    background-color: #FFF8E1;
+}
+
+.contract_status_Signed {
+    color: #007BFF !important;
+    background-color: #E1F5FE;
+}
+
+
+.user_extension_block {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    z-index: 9999;
+    top: 75px;
+    right: 120px;
+    background-color: #233255;
+    border-radius: 6px;
+}
+
+.extension_list {
+    padding: 15px 40px;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: Montserrat, sans-serif;
+}
+
+.extension_list:hover {
+    cursor: pointer;
+    background-color: #F6AD2B;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    pointer-events: none; /* чтобы не мешать другим событиям */
+}

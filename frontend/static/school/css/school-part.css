@@ -1,0 +1,704 @@
+.school_part_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.main_title_info_block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main_title_info_block h1 {
+    color: #233255;
+    font-size: 25px;
+    font-weight: 600;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.create_new_club {
+    color: #233255;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 17px;
+    gap: 11px;
+    background-color: #FFF;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.2;
+    font-family: Montserrat, sans-serif;
+}
+
+.create_new_club:hover {
+    opacity: 0.8;
+}
+
+.main_club_information_container {
+    margin: 50px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.top_clubs_block_stats {
+    width: 500px !important;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF;
+    border-radius: 8px;
+    padding: 20px 30px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.title_block_top_clubs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main_title_block_top_clubs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.main_title_block_top_clubs h1 {
+    color: #233255;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.main_title_block_top_clubs p {
+    color: #233255;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.main_content_block_top_clubs {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.main_club_information {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 10px;
+    cursor: pointer;
+}
+
+.main_club_information:hover {
+    background-color: #e67c8c;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.main_club_information:hover .name_block_main_club_information h1 {
+    color: #FFF;
+}
+
+.main_club_information:hover .name_block_main_club_information p {
+    color: #FFF;
+}
+
+.author_main_club_information {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.image_block_main_club_information {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.name_block_main_club_information {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: 10px;
+}
+
+.name_block_main_club_information h1 {
+    color: #233255;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.name_block_main_club_information p {
+    color: #233255;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.2;
+}
+
+.count_club_members_main_club_information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    gap: 8px;
+    background-color: #e67c8c;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #FFF;
+}
+
+.first_content_main_club,
+.second_content_main_club {
+    display: flex;
+    gap: 40px;
+}
+
+.second_content_main_club {
+    margin: 20px 0;
+}
+
+.stats_club_card {
+    width: 200px;
+    height: 150px;
+    background-color: #FFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.stats_club_card i {
+    margin: 20px 0;
+}
+
+.stats_club_card h1 {
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1E1B39;
+}
+
+.membership_of_clubs {
+    background-color: #F8285A;
+}
+
+.membership_of_clubs h1 {
+    color: #FFF !important;
+}
+
+.membership_of_clubs p {
+    color: #FFF !important;
+}
+
+.success_rate_card {
+    background-color: #7239EA;
+}
+
+.success_rate_card h1 {
+    color: #FFF !important;
+}
+
+.success_rate_card p {
+    color: #FFF !important;
+}
+
+.posts_stats_club {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.posts_stats_club h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1E1B39;
+    margin: 0 0 20px 0;
+}
+
+.stats_club_card_longer {
+    width: 480px;
+    height: 150px;
+    background-color: #4AB58E;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_stats_club_card h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FFF;
+    margin: 0 0 20px 0;
+}
+
+.title_stats_club_card p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFF;
+    margin: 0 120px 20px 0;
+    line-height: 1.4;
+}
+
+.stats_club_card_longer img {
+    position: absolute;
+    margin: 0 0 0 390px;
+}
+
+.create_new_club_block {
+    width: 450px;
+    height: 570px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0 0 0;
+    background-color: #1B283F;
+    border-radius: 8px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.create_new_club_block h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FFF;
+    margin: 0 0 40px 40px;
+}
+
+.create_new_club_block p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFF;
+    margin: 0 20px 40px 40px;
+    line-height: 1.4;
+}
+
+.create_new_club_block a {
+    width: 150px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #F8285A;
+    border-radius: 8px;
+    cursor: pointer;
+
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+.create_new_club_block a:hover {
+    background-color: #c11c44;
+}
+
+.create_new_club_block img {
+    position: absolute;
+    margin: 172px 0 0 120px;
+    border-radius: 0 0 8px 8px;
+}
+
+
+
+
+
+
+:root {
+    --primary-color: #233255;
+    --secondary-color: #F6AD2B;
+    --light-bg: #f8f9fa;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --error-color: #FF4D4F;
+}
+
+.school-clubs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.clubs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.clubs-header h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+}
+
+.create-club-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-club-btn:hover {
+    background-color: #e59d1b;
+}
+
+/* Filters Section */
+.filters-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.filter-options {
+    display: flex;
+    gap: 1rem;
+}
+
+.filter-options select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: white;
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+/* Clubs Grid */
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.club-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.club-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.club-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.club-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.club-details {
+    padding: 1.5rem;
+}
+
+.club-details h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.club-category {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.club-schedule {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.club-description {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.view-details-btn {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.view-details-btn:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.empty-state img {
+    width: 150px;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.close-modal {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Form Styles */
+form {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.required {
+    color: var(--error-color);
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.logo-upload {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-placeholder img {
+    width: 40px;
+    height: 40px;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-info {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.submit-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Error Modal */
+.error-modal-content {
+    max-width: 400px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-icon {
+    margin-bottom: 1rem;
+}
+
+.error-modal-content h3 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.ok-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}

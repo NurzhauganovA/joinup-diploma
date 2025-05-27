@@ -1,0 +1,622 @@
+{% extends 'main/base.html' %}
+{% load %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/student_dashboard.css' %}">
+{% endblock %}
+
+{% block title %} SmartSchool - Home {% endblock %}
+
+{% block page_title %} Home {% endblock %}
+
+{% block content %}
+    <div class="section_container">
+        <div class="student_dashboard_container">
+            <div class="student_dashboard_main_container">
+                <div class="course_schedule_container">
+                    <div class="title_block_course_schedule">
+                        <div class="main_day_week_title_block">
+                            <h1 id="open_Monday" class="tablink" onclick="openPage('Monday', this, 'active')">Monday</h1>
+                            <h1 id="open_Tuesday" class="tablink" onclick="openPage('Tuesday', this, 'active')">Tuesday</h1>
+                            <h1 id="open_Wednesday" class="tablink" onclick="openPage('Wednesday', this, 'active')">Wednesday</h1>
+                            <h1 id="open_Thursday" class="tablink" onclick="openPage('Thursday', this, 'active')">Thursday</h1>
+                            <h1 id="open_Friday" class="tablink" onclick="openPage('Friday', this, 'active')">Friday</h1>
+                        </div>
+                        <div style="padding-bottom: 20px">
+                            <div class="date_choose_title_block">
+                                <h1 class="date_text_block">May 7, 2024</h1>
+                                <i>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.75 1V3.25M15.25 1V3.25M1 16.75V5.5C1 4.90326 1.23705 4.33097 1.65901 3.90901C2.08097 3.48705 2.65326 3.25 3.25 3.25H16.75C17.3467 3.25 17.919 3.48705 18.341 3.90901C18.7629 4.33097 19 4.90326 19 5.5V16.75M1 16.75C1 17.3467 1.23705 17.919 1.65901 18.341C2.08097 18.7629 2.65326 19 3.25 19H16.75C17.3467 19 17.919 18.7629 18.341 18.341C18.7629 17.919 19 17.3467 19 16.75M1 16.75V9.25C1 8.65326 1.23705 8.08097 1.65901 7.65901C2.08097 7.23705 2.65326 7 3.25 7H16.75C17.3467 7 17.919 7.23705 18.341 7.65901C18.7629 8.08097 19 8.65326 19 9.25V16.75M10 10.75H10.008V10.758H10V10.75ZM10 13H10.008V13.008H10V13ZM10 15.25H10.008V15.258H10V15.25ZM7.75 13H7.758V13.008H7.75V13ZM7.75 15.25H7.758V15.258H7.75V15.25ZM5.5 13H5.508V13.008H5.5V13ZM5.5 15.25H5.508V15.258H5.5V15.25ZM12.25 10.75H12.258V10.758H12.25V10.75ZM12.25 13H12.258V13.008H12.25V13ZM12.25 15.25H12.258V15.258H12.25V15.25ZM14.5 10.75H14.508V10.758H14.5V10.75ZM14.5 13H14.508V13.008H14.5V13Z"
+                                              stroke="#233255" stroke-width="1.5" stroke-linecap="round"
+                                              stroke-linejoin="round"/>
+                                    </svg>
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main_part_course_schedule_block">
+
+                        <div class="tabcontent" id="Monday">
+                            {% for course, formatted_time in school_schedule.monday_schedule %}
+                            <div class="main_course_info_block">
+                                <div class="main_course_info_list_block">
+                                    <div class="time_course_info_block base_settings_main_course_info">
+                                        <h1>{{ formatted_time }}</h1>
+                                    </div>
+                                    <div class="lesson_name_course_info_block base_settings_main_course_info">
+                                        <p>lesson {{ forloop.counter }}:
+                                        <h1>{{ course.subject.name }}</h1></p>
+                                    </div>
+                                    <div class="cabinet_course_info_block base_settings_main_course_info">
+                                        <p>Cabinet:
+                                        <h1>{{ course.cabinet }}</h1></p>
+                                    </div>
+                                    <div class="skip_course_info_block base_settings_main_course_info">
+                                        <h2>Skip</h2>
+                                    </div>
+                                </div>
+                                <div class="break_time_block">
+                                    {% if forloop.counter <= school_schedule.monday_breaks|length %}
+                                        {% for break_time in school_schedule.monday_breaks %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                                Break {{ break_time }}min
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No more classes today
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tabcontent" id="Tuesday">
+                            {% for course, formatted_time in school_schedule.tuesday_schedule %}
+                            <div class="main_course_info_block">
+                                <div class="main_course_info_list_block">
+                                    <div class="time_course_info_block base_settings_main_course_info">
+                                        <h1>{{ formatted_time }}</h1>
+                                    </div>
+                                    <div class="lesson_name_course_info_block base_settings_main_course_info">
+                                        <p>lesson {{ forloop.counter }}:
+                                        <h1>{{ course.subject.name }}</h1></p>
+                                    </div>
+                                    <div class="cabinet_course_info_block base_settings_main_course_info">
+                                        <p>Cabinet:
+                                        <h1>{{ course.cabinet }}</h1></p>
+                                    </div>
+                                    <div class="skip_course_info_block base_settings_main_course_info">
+                                        <h2>Skip</h2>
+                                    </div>
+                                </div>
+                                <div class="break_time_block">
+                                    {% if forloop.counter <= school_schedule.tuesday_breaks|length %}
+                                        {% for break_time in school_schedule.tuesday_breaks %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                                Break {{ break_time }}min
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No more classes today
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tabcontent" id="Wednesday">
+                            {% for course, formatted_time in school_schedule.wednesday_schedule %}
+                            <div class="main_course_info_block">
+                                <div class="main_course_info_list_block">
+                                    <div class="time_course_info_block base_settings_main_course_info">
+                                        <h1>{{ formatted_time }}</h1>
+                                    </div>
+                                    <div class="lesson_name_course_info_block base_settings_main_course_info">
+                                        <p>lesson {{ forloop.counter }}:
+                                        <h1>{{ course.subject.name }}</h1></p>
+                                    </div>
+                                    <div class="cabinet_course_info_block base_settings_main_course_info">
+                                        <p>Cabinet:
+                                        <h1>{{ course.cabinet }}</h1></p>
+                                    </div>
+                                    <div class="skip_course_info_block base_settings_main_course_info">
+                                        <h2>Skip</h2>
+                                    </div>
+                                </div>
+                                <div class="break_time_block">
+                                    {% if forloop.counter <= school_schedule.wednesday_breaks|length %}
+                                        {% for break_time in school_schedule.wednesday_breaks %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                                Break {{ break_time }}min
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No more classes today
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tabcontent" id="Thursday">
+                            {% for course, formatted_time in school_schedule.thursday_schedule %}
+                            <div class="main_course_info_block">
+                                <div class="main_course_info_list_block">
+                                    <div class="time_course_info_block base_settings_main_course_info">
+                                        <h1>{{ formatted_time }}</h1>
+                                    </div>
+                                    <div class="lesson_name_course_info_block base_settings_main_course_info">
+                                        <p>lesson {{ forloop.counter }}:
+                                        <h1>{{ course.subject.name }}</h1></p>
+                                    </div>
+                                    <div class="cabinet_course_info_block base_settings_main_course_info">
+                                        <p>Cabinet:
+                                        <h1>{{ course.cabinet }}</h1></p>
+                                    </div>
+                                    <div class="skip_course_info_block base_settings_main_course_info">
+                                        <h2>Skip</h2>
+                                    </div>
+                                </div>
+                                <div class="break_time_block">
+                                    {% if forloop.counter <= school_schedule.thursday_breaks|length %}
+                                        {% for break_time in school_schedule.thursday_breaks %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                                Break {{ break_time }}min
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No more classes today
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tabcontent" id="Friday">
+                            {% for course, formatted_time in school_schedule.friday_schedule %}
+                            <div class="main_course_info_block">
+                                <div class="main_course_info_list_block">
+                                    <div class="time_course_info_block base_settings_main_course_info">
+                                        <h1>{{ formatted_time }}</h1>
+                                    </div>
+                                    <div class="lesson_name_course_info_block base_settings_main_course_info">
+                                        <p>lesson {{ forloop.counter }}:
+                                        <h1>{{ course.subject.name }}</h1></p>
+                                    </div>
+                                    <div class="cabinet_course_info_block base_settings_main_course_info">
+                                        <p>Cabinet:
+                                        <h1>{{ course.cabinet }}</h1></p>
+                                    </div>
+                                    <div class="skip_course_info_block base_settings_main_course_info">
+                                        <h2>Skip</h2>
+                                    </div>
+                                </div>
+                                <div class="break_time_block">
+                                    {% if forloop.counter <= school_schedule.friday_breaks|length %}
+                                        {% for break_time in school_schedule.friday_breaks %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                                Break {{ break_time }}min
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No more classes today
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    <div class="different_buttons_block">
+                        <div class="different_buttons_block_item item1">
+                            <button>Add Lesson</button>
+                        </div>
+                        <div class="different_buttons_block_item item2">
+                            <button>Call Sick for Today</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="school_year_action_container">
+                    <div class="title_block_school_year_action">
+                        <h1>Overview</h1>
+                        <div class="date_school_action">
+                            <h1 class="date_text_block">Loading date range...</h1>
+                            <i>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.75 1V3.25M15.25 1V3.25M1 16.75V5.5C1 4.90326 1.23705 4.33097 1.65901 3.90901C2.08097 3.48705 2.65326 3.25 3.25 3.25H16.75C17.3467 3.25 17.919 3.48705 18.341 3.90901C18.7629 4.33097 19 4.90326 19 5.5V16.75M1 16.75C1 17.3467 1.23705 17.919 1.65901 18.341C2.08097 18.7629 2.65326 19 3.25 19H16.75C17.3467 19 17.919 18.7629 18.341 18.341C18.7629 17.919 19 17.3467 19 16.75M1 16.75V9.25C1 8.65326 1.23705 8.08097 1.65901 7.65901C2.08097 7.23705 2.65326 7 3.25 7H16.75C17.3467 7 17.919 7.23705 18.341 7.65901C18.7629 8.08097 19 8.65326 19 9.25V16.75M10 10.75H10.008V10.758H10V10.75ZM10 13H10.008V13.008H10V13ZM10 15.25H10.008V15.258H10V15.25ZM7.75 13H7.758V13.008H7.75V13ZM7.75 15.25H7.758V15.258H7.75V15.25ZM5.5 13H5.508V13.008H5.5V13ZM5.5 15.25H5.508V15.258H5.5V15.25ZM12.25 10.75H12.258V10.758H12.25V10.75ZM12.25 13H12.258V13.008H12.25V13ZM12.25 15.25H12.258V15.258H12.25V15.25ZM14.5 10.75H14.508V10.758H14.5V10.75ZM14.5 13H14.508V13.008H14.5V13Z"
+                                          stroke="#233255" stroke-width="1.5" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </i>
+                        </div>
+                    </div>
+                    <div class="main_part_school_year_action_block">
+                        <div class="list_school_action_container">
+
+                            <div class="attendance_school_action_block school_action">
+                                <div class="icon_attendance_school_action_block base_icon_school_action">
+                                    <i>
+                                        <svg width="20" height="22" viewBox="0 0 20 22" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4"
+                                                  d="M9.99994 21.8358C15.1873 21.8358 19.3924 17.6306 19.3924 12.4433C19.3924 7.25595 15.1873 3.05078 9.99994 3.05078C4.81259 3.05078 0.607422 7.25595 0.607422 12.4433C0.607422 17.6306 4.81259 21.8358 9.99994 21.8358Z"
+                                                  fill="#1B84FF"/>
+                                            <path d="M10 12.8971C9.55583 12.8971 9.1875 12.5288 9.1875 12.0846V6.66797C9.1875 6.2238 9.55583 5.85547 10 5.85547C10.4442 5.85547 10.8125 6.2238 10.8125 6.66797V12.0846C10.8125 12.5288 10.4442 12.8971 10 12.8971Z"
+                                                  fill="#1B84FF"/>
+                                            <path d="M13.1315 1.7388H6.86984C6.43651 1.7388 6.08984 1.39214 6.08984 0.958802C6.08984 0.525469 6.43651 0.167969 6.86984 0.167969H13.1315C13.5648 0.167969 13.9115 0.514635 13.9115 0.947969C13.9115 1.3813 13.5648 1.7388 13.1315 1.7388Z"
+                                                  fill="#1B84FF"/>
+                                        </svg>
+                                    </i>
+                                </div>
+                                <div class="title_attendance_school_action_block base_title_school_action">
+                                    <h1>Attendance</h1>
+                                    <p>Great, you're always attending class. keep it up</p>
+                                </div>
+                                <div class="statistics_attendance_school_action_block base_statistics_school_action">
+                                    <div class="count_attendance_school_action_block base_count_school_action">
+                                        <h1>{{ attendance.attended_status_count }}</h1>
+                                        <p>/</p>
+                                        <p>{{ attendance.total_attendance_status }}</p>
+                                    </div>
+                                    <div class="percentage_attendance_school_action_block base_percentage_school_action">
+                                        <h1>{{ attendance.attended_status_percent }}%</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="homework_school_action_block school_action">
+                                <div class="icon_homework_school_action_block base_icon_school_action">
+                                    <i>
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 2V5C20 5.53043 19.7893 6.03914 19.4142 6.41421C19.0391 6.78929 18.5304 7 18 7H13C12.4696 7 11.9609 6.78929 11.5858 6.41421C11.2107 6.03914 11 5.53043 11 5V2C11 1.46957 11.2107 0.960859 11.5858 0.585786C11.9609 0.210714 12.4696 0 13 0H18C18.5304 0 19.0391 0.210714 19.4142 0.585786C19.7893 0.960859 20 1.46957 20 2ZM7 13H2C1.46957 13 0.960859 13.2107 0.585786 13.5858C0.210714 13.9609 0 14.4696 0 15V18C0 18.5304 0.210714 19.0391 0.585786 19.4142C0.960859 19.7893 1.46957 20 2 20H7C7.53043 20 8.03914 19.7893 8.41421 19.4142C8.78929 19.0391 9 18.5304 9 18V15C9 14.4696 8.78929 13.9609 8.41421 13.5858C8.03914 13.2107 7.53043 13 7 13Z"
+                                                  fill="#A4CEFF"/>
+                                            <path d="M9 2V9C9 9.53043 8.78929 10.0391 8.41421 10.4142C8.03914 10.7893 7.53043 11 7 11H2C1.46957 11 0.960859 10.7893 0.585786 10.4142C0.210714 10.0391 0 9.53043 0 9V2C0 1.46957 0.210714 0.960859 0.585786 0.585786C0.960859 0.210714 1.46957 0 2 0H7C7.53043 0 8.03914 0.210714 8.41421 0.585786C8.78929 0.960859 9 1.46957 9 2ZM18 9H13C12.4696 9 11.9609 9.21071 11.5858 9.58579C11.2107 9.96086 11 10.4696 11 11V18C11 18.5304 11.2107 19.0391 11.5858 19.4142C11.9609 19.7893 12.4696 20 13 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V11C20 10.4696 19.7893 9.96086 19.4142 9.58579C19.0391 9.21071 18.5304 9 18 9Z"
+                                                  fill="#1B84FF"/>
+                                        </svg>
+                                    </i>
+                                </div>
+                                <div class="title_homework_school_action_block base_title_school_action">
+                                    <h1>Homeworks</h1>
+                                    <p>Don’t forget to turn in your task</p>
+                                </div>
+                                <div class="statistics_homework_school_action_block base_statistics_school_action">
+                                    <div class="count_homework_school_action_block base_count_school_action">
+                                        <h1>{{ homeworks.completed }}</h1>
+                                        <p>/</p>
+                                        <p>{{ homeworks.total_homeworks }}</p>
+                                    </div>
+                                    <div class="percentage_homework_school_action_block base_percentage_school_action">
+                                        <h1>{{ homeworks.percent }}%</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tests_school_action_block school_action">
+                                <div class="icon_tests_school_action_block base_icon_school_action">
+                                    <i>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.46875 0V4.84863L11.2793 10.6543V5.08301L5.46875 0ZM17.9688 0L12.1582 5.08301V10.6543L17.9688 4.84375V0ZM0 5.46875L5.07812 11.2793H10.6543L4.84863 5.46875H0ZM18.5938 5.46875L12.7832 11.2793H18.3545L23.4326 5.46875H18.5938ZM5.07812 12.1582L0 17.9688H4.84375L10.6543 12.1582H5.07812ZM12.7832 12.1582L18.5938 17.9688H23.4326L18.3545 12.1582H12.7832ZM11.2793 12.7832L5.46875 18.5938V23.4375L11.2793 18.3545V12.7832ZM12.1582 12.7832V18.3545L17.9688 23.4375V18.5938L12.1582 12.7832Z"
+                                                  fill="#1B84FF"/>
+                                        </svg>
+                                    </i>
+                                </div>
+                                <div class="title_tests_school_action_block base_title_school_action">
+                                    <h1>Tests</h1>
+                                    <p>You take {{ total_subjects }} subjects at this semester</p>
+                                </div>
+                                <div class="statistics_tests_school_action_block base_statistics_school_action">
+                                    <div class="count_tests_school_action_block base_count_school_action">
+                                        <h1>{{ tests.completed }}</h1>
+                                        <p>/</p>
+                                        <p>{{ tests.total_tests }}</p>
+                                    </div>
+                                    <div class="percentage_tests_school_action_block base_percentage_school_action">
+                                        <h1>{{ tests.percent }}%</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="diagram_school_action_container">
+                            <div class="chart_diagram_school_action">
+                                <div id="chart_attendance_diagram"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="homeworks_school_container">
+                    <div class="title_block_homeworks_school">
+                        <h1 id="defaultOpen" class="tablink2" onclick="openHwPage('Today', this, 'active');">Today Homeworks</h1>
+                        <h1 class="tablink2" onclick="openHwPage('Future', this, 'active');">Future</h1>
+                    </div>
+                    <div class="main_part_homeworks_school_block">
+                        <div id="Today" class="list_today_homeworks_school_container tabcontent2">
+                            <!-- Today Homeworks will be added here -->
+                        </div>
+                        <div id="Future" class="list_future_homeworks_school_container tabcontent2">
+                            <!-- Future Homeworks will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="student_dashboard_different_container">
+                <div class="feeling_today_help_container">
+                    <div class="title_block_feeling_today_help">
+                        <h1>How are you feeling today? <p>Here we are to Help</p></h1>
+                    </div>
+                    <img id="feeling-photo" src="{% static 'dashboard/img/student_feeling_help.png' %}" alt="">
+                    <div class="help_buttons_feeling_today">
+                        <button>Psychologist</button>
+                        <button>Nurse</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let getStudentHomeworksRunning = false;
+        let getStudentFutureHomeworksRunning = false;
+        async function getStudentHomeworks() {
+            if (getStudentHomeworksRunning) return;
+            getStudentHomeworksRunning = true;
+
+            await fetch('/panel/homeworks', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const homeworks = data.data;
+                console.log(homeworks);
+                if (data.status === 200) {
+                    if (homeworks.length === 0) {
+                        let homeworksContainer = document.querySelector('.list_today_homeworks_school_container');
+                        homeworksContainer.innerHTML = `
+                            <div class="homeworks_block_list_container">
+                                <div class="title_homeworks_block">
+                                    <h1>No homeworks for today</h1>
+                                </div>
+                            </div>
+                        `
+                    }
+                    homeworks.forEach(homework => {
+                        setStudentHomeworks(homework.id, homework.title, homework.subject, homework.status, homework.is_done);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                getStudentHomeworksRunning = false;
+            });
+        }
+
+        async function getStudentFutureHomeworks() {
+            if (getStudentFutureHomeworksRunning) return;
+            getStudentFutureHomeworksRunning = true;
+
+            await fetch('/panel/homeworks/future', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const homeworks = data.data;
+                console.log(homeworks);
+                if (data.status === 200) {
+                    if (homeworks.length === 0) {
+                        let homeworksContainer = document.querySelector('.list_future_homeworks_school_container');
+                        homeworksContainer.innerHTML = `
+                            <div class="homeworks_block_list_container">
+                                <div class="title_homeworks_block">
+                                    <h1>No future homeworks</h1>
+                                </div>
+                            </div>
+                        `
+                    }
+                    homeworks.forEach(homework => {
+                        setStudentHomeworks(homework.id, homework.title, homework.subject, homework.status, homework.is_done);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                getStudentFutureHomeworksRunning = false;
+            });
+        }
+
+        async function setStudentHomeworks(id, title, subject, status, is_done) {
+            let homeworksContainer = document.querySelector('.list_today_homeworks_school_container');
+            let homework_status = is_done ? 'Done' : 'In Process';
+            let completed_status_color = is_done ? '#00FF00' : '#1B84FF';
+            let homework_check = is_done ? 'checked' : '';
+
+            homeworksContainer.innerHTML += `
+                <div class="homeworks_block_list_container">
+                    <div class="completed_status_homeworks_block" style="background-color: ${completed_status_color}"></div>
+                    <div class="checkbox_homeworks_block" onclick="doHomework(${id})">
+                        <input type="checkbox" id="checkbox_${id}" data-id="${id}" name="homework_check" ${homework_check}>
+                        <label data-id="${id}" for="checkbox_${id}"></label>
+                    </div>
+                    <div class="title_homeworks_block">
+                        <h1>${title}</h1>
+                        <p>${subject}</p>
+                    </div>
+                    <div class="status_homeworks_block">
+                        <h1 class="homework_status_${homework_check}">${homework_status}</h1>
+                    </div>
+                    <div class="actions_homeworks_block">
+                        <button>
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                                </svg>
+                            </i>
+                        </button>
+                        <button>
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                                </svg>
+                            </i>
+                        </button>
+                        <button>
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                                </svg>
+                            </i>
+                        </button>
+                    </div>
+                </div>
+            `
+        }
+
+        async function doHomework(homework_id) {
+            console.log(homework_id);
+            let checkbox = document.getElementById(`checkbox_${homework_id}`);
+            await fetch(`/panel/homeworks/${homework_id}/change_status/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => response.json())
+            .then(async data => {
+                console.log(data);
+                if (data.status === 200) {
+                    document.querySelector('.list_today_homeworks_school_container').innerHTML = '';
+                    await getStudentHomeworks();
+                    await getStudentFutureHomeworks();
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        getStudentHomeworks();
+        getStudentFutureHomeworks();
+
+    </script>
+
+    <script>
+        let percentages = document.querySelectorAll('.base_percentage_school_action h1');
+        for (let i = 0; i < percentages.length; i++) {
+            let percentage = percentages[i];
+            // remove '%' from the end of the string
+            percentage.innerText = percentage.innerText.slice(0, -1);
+            if (parseInt(percentage.innerText) < 50) {
+                percentage.style.color = '#ff0000';
+                percentage.style.backgroundColor = '#fdb6b6';
+            } else if (parseInt(percentage.innerText) >= 50 && parseInt(percentage.innerText) < 75) {
+                percentage.style.color = '#ffd500';
+                percentage.style.backgroundColor = '#ffffe5';
+            } else {
+                percentage.style.color = '#02cc02';
+                percentage.style.backgroundColor = '#cef8ce';
+            }
+            // add '%' to the end of the string
+            percentage.innerText = percentage.innerText + '%';
+        }
+    </script>
+
+    <script>
+        let attendanceDifference = {{ attendance.attendance_difference }};
+        let totalAttendanceStatus = {{ attendance.total_attendance_status }};
+        let totalAttendanceCount = 0;
+
+        for (let i = 0; i < attendanceDifference.length; i++) {
+            totalAttendanceCount += attendanceDifference[i];
+        }
+
+        let options = {
+            series: attendanceDifference.map(val => val / totalAttendanceStatus * 100).map(val => val.toFixed(2)),
+            chart: {
+                height: 250,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '18px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w) {
+                                return totalAttendanceStatus;
+                            }
+                        }
+                    }
+                }
+            },
+            labels: ['Attended', 'Absent', 'Permitted', 'Late', 'Left'],
+            colors: ['#00ff00', '#ff0000', '#0000ff', '#ffff00', '#ff00ff']
+        };
+
+        let chart = new ApexCharts(document.querySelector("#chart_attendance_diagram"), options);
+        chart.render();
+    </script>
+
+    <script>
+        async function openPage(pageName, elmnt, objClass) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove(objClass);
+            }
+            document.getElementById(pageName).style.display = "block";
+            elmnt.classList.add(objClass);
+        }
+        let defaultOpen = document.getElementById("open_{{ school_schedule.today_day }}");
+        defaultOpen.click();
+
+        async function openHwPage(pageName, elmnt, objClass) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent2");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink2");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove(objClass);
+            }
+            document.getElementById(pageName).style.display = "inline-flex";
+            elmnt.classList.add(objClass);
+        }
+        document.getElementById("defaultOpen").click();
+
+    </script>
+{% endblock %}

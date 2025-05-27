@@ -1,0 +1,298 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %} SmartSchool - Home {% endblock %}
+
+{% block page_title %} Home {% endblock %}
+
+{% block content %}
+    <div class="section_container">
+        <div class="analytics_section_container">
+            <div class="main_analytics_container">
+                <div class="daily_user_analytics_container">
+                    <div class="title_daily_user_analytics">
+                        <p>Count of</p>
+                        <h1>Daily users</h1>
+                    </div>
+                    <div class="chart_daily_user_analytics">
+                        <div id="daily_user_analytics_chart"></div>
+                    </div>
+                </div>
+
+                <div class="map_analytics_container">
+                    <svg width="636" height="367" viewBox="0 0 636 367" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_585_5478)">
+                            <path data-back-color="#FF0000" id="regionOfQazaqstan" data-have-school="false" data-region="Batys" fill-rule="evenodd" clip-rule="evenodd" d="M19.3707 180.056L13.3424 177.883L9.53091 179.443L3.1164 168.856L0 156.224L0.245315 144.241L1.9716 140.223L4.69731 138.005L1.9716 132.836L3.23906 124.404L11.8114 115.949L12.72 107.581L21.2878 105.567L28.4565 114.113L31.0459 123.041L34.0396 122.959L31.9499 104.822L38.3463 105.026L45.0288 102.813L46.2599 97.3578L53.2741 96.4486L60.9969 93.1258L65.2627 90.0893L69.0741 83.1527L72.6039 82.9072L76.8288 85.4119L81.994 87.5029L84.3609 92.1303L87.0639 87.9847L97.8531 88.0256L100.474 95.6577L114.176 97.6669L119.831 105.176L127.009 112.236L127.99 112.854L127.827 138.091L127.168 140.573L125.351 146.028L125.228 151.16L117.683 150.951L113.417 158.874L108.043 163.183L103.414 164.038L99.4386 163.956L97.2626 165.724L97.1399 168.906L97.3443 169.683L95.827 173.379L86.2325 169.542L79.0548 166.26L71.4682 167.697L63.0594 172.047L54.7323 177.67L30.578 176.274L19.3707 180.056Z" fill="#D4D4D4"/>
+                            <path data-back-color="#00FF00" id="regionOfQazaqstan" data-have-school="false" data-region="Aqtobe" fill-rule="evenodd" clip-rule="evenodd" d="M129.072 113.223L132.52 114.823L135.8 117.614L142.16 123.441L146.425 127.378L150.137 124.959L152.127 120.096L167.095 116.709L175.091 121.964L178.371 118.496L192.213 120.646L194.693 128.71L207.94 133.678L212.897 128.16L218.148 130.769L220.896 134.173L229.919 132.123L233.28 122.932L247.063 129.928L250.057 140.383L255.754 155.033L247.677 166.566L251.038 177.852L257.685 188.275L270.477 196.848L274.866 204.576L276.755 209.122L256.004 227.409L250.67 224.822L243.574 212.226L234.33 211.444L224.508 232.559L215.622 231L191.945 260.774L161.508 267.051L156.67 236.768L146.048 228.641L138.416 224.74L134.728 216.104L134.033 202.271L134.119 190.535L131.289 181.016L121.158 174.616L114.553 159.552L118.246 152.042L126.078 152.538L126.582 146.424L129.144 138.524L129.072 113.223Z" fill="#D4D4D4"/>
+                            <path data-back-color="#0000FF" id="regionOfQazaqstan" data-have-school="false" data-region="Atyrau" fill-rule="evenodd" clip-rule="evenodd" d="M20.2793 180.952L30.7279 177.343L55.014 178.893L63.4364 173.189L71.8634 168.797L78.8822 167.361L86.078 170.77L96.6992 174.975L98.4164 170.111L98.0757 168.87L98.1666 166.143L99.7566 164.975H103.345L108.388 164.02L113.885 160.143L120.245 175.102L130.639 181.748L133.06 190.88L134.023 216.422L137.839 225.45L145.653 229.304L156.07 237.286L156.524 240.527L148.997 236.586L139.756 232.995L134.505 234.514L123.965 234.759L99.7293 229.627L100.674 227.986L101.083 219.74L97.5169 215.84L89.9667 217.236L74.2621 208.781L65.4989 211.226L62.5279 216.458L44.1702 223.227L26.3531 208.985L27.0936 203.59L32.4632 202.59L20.2793 180.952Z" fill="#D4D4D4"/>
+                            <path data-back-color="#FFFF00" id="regionOfQazaqstan" data-have-school="false" data-region="Mangystau" fill-rule="evenodd" clip-rule="evenodd" d="M99.4158 230.772L123.947 236.068L134.959 235.818L139.534 234.364L148.619 237.873L156.947 242.264L160.699 267.501L151.509 269.319L150.487 346.549L140.292 346.468L110.228 310.203L103.132 312.93L92.6469 319.558L88.463 311.925L91.1478 301.625L74.1257 292.761L68.588 283.897L65.7987 270.192L61.0832 265.842L53.5784 261.042L59.0298 253.346L68.647 253.532L68.9923 247.869L74.53 241.586L82.0348 238.223L95.1182 239.332L99.4158 230.772Z" fill="#D4D4D4"/>
+                            <path data-back-color="#FF00FF" id="regionOfQazaqstan" data-have-school="false" data-region="Qostanay" fill-rule="evenodd" clip-rule="evenodd" d="M208.744 103.113L210.171 96.9991L217.798 95.8081L224.276 91.9944L220.301 79.0439L224.667 74.5755L229.301 70.9617L235.157 70.1026L228.76 66.4888L227.434 60.1704L224.604 56.3112L225.239 46.1154L228.342 41.3743L238.064 39.5288L249.012 42.0516L284.138 31.0966L290.084 26.951L303.863 24.7373L305.053 42.3834L302.205 46.2199L306.18 70.9072L303.845 74.1891L301.669 91.1761L285.882 96.84L288.462 108.168L289.694 118.836L289.121 127.7L287.272 132.214L296.358 133.037L308.905 135.537L317.991 139.173L334.8 144.096L324.197 152.874L322.761 157.551L317.269 166.006L312.703 174.407L307.452 179.907L302.118 181.68L296.376 186.071L286.087 184.407L282.857 196.866L275.434 203.103L271.418 196.13L258.443 187.634L252.001 177.561L248.699 166.765L256.617 155.238L250.711 140.155L247.922 129.446L233.975 121.718L216.299 110.809L208.744 103.113Z" fill="#D4D4D4"/>
+                            <path data-back-color="#00FFFF" id="regionOfQazaqstan" data-have-school="false" data-region="Soltustik" fill-rule="evenodd" clip-rule="evenodd" d="M304.49 24.7418L321.925 19.4507L331.215 15.4051L332.097 7.65028L339.365 4.24561L345.026 0L355.788 2.45918L361.734 6.2775L370.82 1.64097L376.766 6.9548L378.129 18.2189L381.1 19.9417L381.982 24.3554L379.619 35.2286L384.008 35.965L389.005 22.3008L404.546 28.3738L410.411 32.5194L421.037 32.233L421.732 40.2333L415.826 42.9607L413.877 47.3927L415.149 48.9518L419.147 60.5477L416.853 64.0751L423.213 68.2207L422.554 74.3346L406.654 67.9343L402.111 68.5071L399.036 77.0847L391.653 82.7031L383.476 81.3394L378.515 83.8804L375.931 89.176L373.059 85.3577L365.264 80.6757L358.622 87.4941L354.602 88.5624L352.757 84.294L343.858 79.2939L332.537 88.2805L330.92 93.7989L323.924 91.708L322.756 94.3535L319.576 93.8989L309.614 92.2989L303.499 89.9215L305.407 74.5709L307.829 71.1254L303.89 46.5472L306.352 43.0152L304.49 24.7418Z" fill="#D4D4D4"/>
+                            <path data-back-color="#800000" id="regionOfQazaqstan" data-have-school="false" data-region="Pavlodar" fill-rule="evenodd" clip-rule="evenodd" d="M415.717 48.5244L417.666 45.797L430.386 46.4334L434.978 44.5879L445.068 43.0696L448.634 37.8558L461.472 33.6738L476.196 33.7557L478.531 39.9104L474.347 45.4515L497.029 67.7251L520.979 108.181L500.596 123.404L509.945 133.255L514.292 142.323L510.454 148.774L495.73 142.587L493.35 137.25L483.301 133.764L479.212 138.237L471.421 142.782L449.974 143.278L447.39 137.369L428.764 129.186L429.095 115.645L422.081 112.077L430.981 105.467L427.41 95.7852L428.559 84.0893L424.212 74.7754L424.703 67.7569L418.879 63.6931L420.768 60.7794L415.717 48.5244Z" fill="#D4D4D4"/>
+                            <path data-back-color="#008000" id="regionOfQazaqstan" data-have-school="false" data-region="Qaragandy" fill-rule="evenodd" clip-rule="evenodd" d="M318.209 167.097L323.847 158.233L324.996 153.661L345.094 137.587L360.43 150.77L366.213 150.647L369.248 152.37L389.836 132.823L405.009 121.582L419.201 115.627L421.473 112.841L427.665 116.245L427.378 129.91L446.004 138.201L448.998 144.887L472.166 144.233L479.998 139.637L483.528 135.328L492.3 138.119L494.19 143.701L493 147.515L486.685 152.06L490.642 159.733L490.824 164.638L487.567 169.688L489.943 173.175L491.092 179.657L486.949 189.998L494.018 195.317L491.433 198.721L484.955 198.762L475.437 196.753L468.428 193.798L457.679 194.707L453.5 192.694L451.365 187.73L444.191 180.548L419.66 183.012L408.834 185.884L400.303 186.744L383.199 184.98L380.373 189.494L369.134 196.185L358.84 199.221L346.538 194.539L335.635 186.948L328.131 184.675L323.906 174.17L318.209 167.097Z" fill="#D4D4D4"/>
+                            <path data-back-color="#000080" id="regionOfQazaqstan" data-have-school="false" data-region="Ulytau" fill-rule="evenodd" clip-rule="evenodd" d="M257.417 227.59L277.614 209.408L275.797 204.135L284.06 197.648L286.909 185.543L296.671 187.289L302.781 182.743L308.156 181.102L313.525 175.234L317.464 168.093L322.793 174.784L327.258 185.771L335.195 188.13L346.098 195.857L358.849 200.68L369.72 197.353L381.2 190.38L383.722 186.253L400.53 188.039L409.148 187.134L420.183 184.348L444.01 181.802L449.997 188.653L452.414 193.653L457.316 195.889L468.182 195.148L475.197 198.021L484.791 199.994L490.819 200.076L487.253 213.413L489.979 217.431L498.47 216.363L499.619 227.727L491.978 229.409L470.49 228.013L446.949 231.65L434.483 241.086L325.228 252.741L317.282 249.409L299.361 248.096L293.987 242.95L257.417 227.59Z" fill="#D4D4D4"/>
+                            <path data-back-color="#808000" id="regionOfQazaqstan" data-have-school="false" data-region="Qyzylorda" fill-rule="evenodd" clip-rule="evenodd" d="M192.199 261.623L215.863 231.681L224.949 233.345L234.702 212.008L243.229 212.871L250.043 225.386L256.013 228.381L293.455 244.364L298.62 249.046L316.992 250.687L324.496 253.868L324.333 266.505L327.831 276.638L331.806 284.888L332.215 288.333L335.94 296.684L333.559 304.111L324.578 317.653L313.139 324.926L304.608 330.053L305.062 326.239L291.942 307.139L283.084 310.011L267.379 306.83L240.753 311.684L221.56 283.956L194.725 265.683L192.199 261.623Z" fill="#D4D4D4"/>
+                            <path data-back-color="#800080" id="regionOfQazaqstan" data-have-school="false" data-region="Turkistan" fill-rule="evenodd" clip-rule="evenodd" d="M304.807 331.685L325.25 318.389L334.645 304.911L337.371 296.665L333.373 288.029L333.105 284.665L329.194 276.064L325.627 266.541L325.709 253.945L356.178 250.827L363.397 267.241L367.376 282.697L367.172 291.333L362.824 302.002L362.097 308.502L371.283 313.389L374.813 321.78L381.723 326.516L388.037 333.371L359.085 356.099L354.038 362.295L353.793 366.809L344.362 366.972L336.689 361.049L322.338 357.413L315.242 350.913L310.154 344.181L304.499 339.503L304.807 331.685Z" fill="#D4D4D4"/>
+                            <path data-back-color="#008080" id="regionOfQazaqstan" data-have-school="false" data-region="Zhambyl" fill-rule="evenodd" clip-rule="evenodd" d="M357.664 250.473L433.743 242.391L433.493 253.55L437.082 261.369L450.488 277.087L463.857 283.569L465.375 289.315L463.489 293.911L463.735 297.215L471.117 304.579L475.174 315.866L465.252 315.657L447.167 307.861L435.233 310.134L432.734 317.593L434.62 321.903L431.013 326.044L401.852 322.353L394.102 326.294L388.932 332.112L382.74 325.262L375.926 321.116L372.551 312.684L363.774 307.829L364.164 302.516L368.798 291.847L368.716 282.656L364.778 267.06L357.664 250.473Z" fill="#D4D4D4"/>
+                            <path data-back-color="#F6AD2B" id="regionOfQazaqstan" data-have-school="false" data-region="Almaty" fill-rule="evenodd" clip-rule="evenodd" d="M434.96 242.436L447.308 232.913L470.272 229.1L475.724 229.663L479.417 246.3L489.865 252.005L490.724 263.001L494.172 275.888L502.349 285.534L512.889 290.293L523.964 291.893L531.714 289.47L557.059 292.652L559.235 300.08L558.29 308.903L550.149 323.449L550.19 332.803L546.101 334.649L539.528 329.412L531.86 326.662L526.117 320.958L517.668 318.739L476.7 315.907L472.884 304.293L464.857 296.684L464.525 294.038L466.579 289.647L464.648 282.711L451.201 275.979L438.159 260.551L434.751 253.328L434.96 242.436Z" fill="#D4D4D4"/>
+                            <path data-back-color="#808080" id="regionOfQazaqstan" data-have-school="false" data-region="Zhetisu" fill-rule="evenodd" clip-rule="evenodd" d="M557.209 291.483L532.337 287.911L524.418 290.374L513.715 289.011L503.639 284.342L495.785 275.251L492.282 262.737L491.501 251.409L480.598 245.254L477.582 229.908L492.037 230.668L500.977 228.799L499.869 216.322L507.664 214.272L513.897 213.653L529.275 219.563L533.5 223.199L542.131 220.899L559.149 227.467L565.136 228.658L571.042 236.386L577.443 241.554L582.812 244.468L592.184 251.855L589.458 262.646L581.786 262.932L572.191 258.914L550.331 263.428L554.637 267.519L552.916 274.819L557.209 291.483Z" fill="#D4D4D4"/>
+                            <path data-back-color="#FFA500" id="regionOfQazaqstan" data-have-school="false" data-region="Abay" fill-rule="evenodd" clip-rule="evenodd" d="M582.567 242.75L577.974 240.555L571.7 235.464L565.999 227.282L559.562 226.227L542.008 219.499L533.804 221.772L530.033 218.449L513.834 212.172L507.065 213.031L490.66 216.313L488.816 213.236L492.505 199.817L495.685 195.221L488.139 189.803L492.16 180.303L491.215 172.957L489.039 169.552L492.119 165.161L491.869 159.438L488.344 152.42L493.94 148.329L495.171 144.392L510.531 150.629L515.778 142.583L511.308 132.86L502.572 123.587L521.602 109.223L532.959 128.387L535.994 125.269L536.689 121.659L544.602 118.478L550.14 120.941L555.428 126.373L548.518 161.97L558.563 169.152L567.135 176.743L577.583 182.08L584.398 194.808L587.759 212.658L582.553 231.495L582.567 242.75Z" fill="#D4D4D4"/>
+                            <path data-back-color="#A52A2A" id="regionOfQazaqstan" data-have-school="false" data-region="Shygys" fill-rule="evenodd" clip-rule="evenodd" d="M556.668 127.828L568.107 131.01L578.524 126.046L584.843 126.005L597.268 134.705L598.376 141.024L606.167 145.701L609.447 149.847L612.318 156.865L620.768 156.211L628.491 149.601L632.797 151.874L633.76 156.57L635.955 160.02L636.014 169.847L633.224 179.698L622.971 185.607L622.48 196.93L623.793 209.658L612.309 216.476L589.549 213.626L585.774 194.626L578.765 181.248L567.934 175.666L559.394 168.393L549.854 161.388L556.668 127.828Z" fill="#D4D4D4"/>
+                            <path data-back-color="#FFD700" id="regionOfQazaqstan" data-have-school="false" data-region="Aqmola" fill-rule="evenodd" clip-rule="evenodd" d="M331.611 94.8948L333.521 88.5448L343.511 80.1648L350.856 84.6321L353.071 90.0811L353.247 90.516L353.693 90.3669L358.857 88.637L358.976 88.5972L359.062 88.5059L365.292 81.9008L371.537 85.9988L375.055 91.2836L375.542 92.0143L375.922 91.2232L379.242 84.3179L383.396 82.1916L391.615 83.6597L391.842 83.7004L392.021 83.5533L400.218 76.7948L400.335 76.6983L400.379 76.5529L402.831 68.391L406.196 67.9735L422.709 74.8837L426.478 83.3504L425.32 95.4995L425.31 95.611L425.348 95.7164L428.549 104.603L420.922 110.07L420.858 110.116L420.811 110.18L417.56 114.609L403.865 120.673L403.809 120.698L403.761 120.735L388.632 132.456L388.608 132.474L388.587 132.495L368.499 152.289L366.317 150.612L366.171 150.499L365.987 150.509L360.726 150.773L345.067 136.875L344.747 136.591L344.416 136.864L335.783 144.007L318.555 138.831L309.04 134.775L308.989 134.754L308.934 134.743L296.333 132.416L296.297 132.41L296.261 132.408L288.927 132.138L290.492 128.983L290.543 128.881L290.544 128.767L290.649 119.183L290.649 119.152L290.645 119.12L289.329 107.802L289.326 107.774L289.319 107.746L286.901 97.4367L302.719 91.41L308.715 93.4469L308.753 93.46L308.794 93.4667L322.702 95.7654L323.08 95.8277L323.239 95.4798L324.329 93.0924L330.979 95.2268L331.464 95.3824L331.611 94.8948Z" fill="#D4D4D4"/>
+                        </g>
+                        <defs>
+                            <filter id="filter0_d_585_5478" x="261.314" y="42.4609" width="202.833" height="145.49" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                <feOffset dx="5" dy="5"/>
+                                <feGaussianBlur stdDeviation="15"/>
+                                <feComposite in2="hardAlpha" operator="out"/>
+                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_585_5478"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_585_5478" result="shape"/>
+                            </filter>
+                            <clipPath id="clip0_585_5478">
+                                <rect width="636" height="367" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="addition_analytics_container">
+                <div class="overall_users_analytics_container">
+                    <div class="title_overall_users_analytics">
+                        <div class="main_title_overall_users_analytics">
+                            <div class="count_overall_users_analytics">
+                                <h1>{{ overall_users_analytics.overall_users }}</h1>
+                            </div>
+
+                            {% if overall_users_analytics.is_upper %}
+                                <span style="background-color: #aafabc">
+                                    <i style="transform: rotate(180deg); color: #04cc04;">
+                                        <svg width="14" height="15" viewBox="0 0 14 15" fill="#04cc04" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 2.25C7.36244 2.25 7.65625 2.54381 7.65625 2.90625V10.5094L10.4735 7.69221C10.7297 7.43593 11.1453 7.43593 11.4015 7.69221C11.6578 7.94849 11.6578 8.36401 11.4015 8.62029L7.46404 12.5578C7.20776 12.8141 6.79224 12.8141 6.53596 12.5578L2.59846 8.62029C2.34218 8.36401 2.34218 7.94849 2.59846 7.69221C2.85474 7.43593 3.27026 7.43593 3.52654 7.69221L6.34375 10.5094V2.90625C6.34375 2.54381 6.63756 2.25 7 2.25Z"/>
+                                        </svg>
+                                    </i>
+                                    <h1 style="color: #04cc04">{{ overall_users_analytics.difference_with_before_month }}</h1>
+                                </span>
+                            {% else %}
+                                <span>
+                                    <i>
+                                        <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 2.25C7.36244 2.25 7.65625 2.54381 7.65625 2.90625V10.5094L10.4735 7.69221C10.7297 7.43593 11.1453 7.43593 11.4015 7.69221C11.6578 7.94849 11.6578 8.36401 11.4015 8.62029L7.46404 12.5578C7.20776 12.8141 6.79224 12.8141 6.53596 12.5578L2.59846 8.62029C2.34218 8.36401 2.34218 7.94849 2.59846 7.69221C2.85474 7.43593 3.27026 7.43593 3.52654 7.69221L6.34375 10.5094V2.90625C6.34375 2.54381 6.63756 2.25 7 2.25Z" fill="#F8285A"/>
+                                        </svg>
+                                    </i>
+                                    <h1>{{ overall_users_analytics.difference_with_before_month }}</h1>
+                                </span>
+
+                            {% endif %}
+                        </div>
+                        <div class="addition_analytics_container">
+                            <p>Overall users</p>
+                        </div>
+                    </div>
+
+                    <div class="overall_users_analytics_line">
+                        <div class="title_overall_line">
+                            <h1>{{ overall_users_analytics.difference }} to Goal</h1>
+                            <p>{{ overall_users_analytics.percent }}%</p>
+                        </div>
+                        <div class="line_analytics_block">
+                            <div class="active_line_block" style="width: {{ overall_users_analytics.percent }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="new_customers_analytics_container">
+                    <div class="title_overall_users_analytics">
+                        <div class="main_title_overall_users_analytics">
+                            <div class="count_overall_users_analytics">
+                                <h1>{{ count_last_registered_users }}</h1>
+                            </div>
+                        </div>
+                        <div class="addition_analytics_container">
+                            <p>New Customers This Month</p>
+                        </div>
+                    </div>
+
+                    <div class="overall_users_analytics_line">
+                        <div class="title_heroes_line">
+                            <h1>Today's Heroes</h1>
+                        </div>
+                        <div class="heroes_analytics_block">
+                            {% for user in last_registered_users %}
+                                <div class="hero_analytics_block" style="background-image: url('{{ user.photo_avatar }}')"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function mapRegionsOfQazaqstan() {
+            let regions = document.querySelectorAll("#regionOfQazaqstan");
+            for (let region of regions) {
+                showUserCount(region.getAttribute("data-region"));
+
+                let have_school = region.getAttribute("data-have-school");
+                if (have_school === "true") {
+                    region.style.fill = region.getAttribute("data-back-color");
+                }
+                else {
+                    region.addEventListener("mouseover", () => {
+                        region.style.fill = region.getAttribute("data-back-color")
+                    });
+                    region.addEventListener("mouseout", () => {
+                        region.style.fill = "#D4D4D4";
+                    });
+                }
+
+                let regionName = region.getAttribute("data-region");
+            }
+        }
+        mapRegionsOfQazaqstan();
+
+        function showUserCount(data_region) {
+            let school = document.querySelector(`[data-region="${data_region}"]`);
+            const regions = [
+                {% for region in user_regions %}
+                    "{{ region.name }}",
+                {% endfor %}
+            ]
+            if (regions.includes(data_region)) {
+                school.style.fill = school.getAttribute("data-back-color");
+                school.setAttribute("data-have-school", "true");
+            }
+        }
+
+        function hoverCheckCountUsers() {
+            let regions = document.querySelectorAll("#regionOfQazaqstan");
+            // Regions: {'Aqtobe': {'count': 1, 'users': ['+77076098760']}, 'Almaty': {'count': 1, 'users': ['+77076098761']}}
+            const userRegions = {
+                {% for region in user_regions %}
+                    "{{ region.name }}": {
+                        count: {{ region.count }},
+                        users: [
+                            {% for user in region.users %}
+                                "{{ user }}",
+                            {% endfor %}
+                        ]
+                    },
+                {% endfor %}
+            }
+
+            const tooltip = document.createElement("div");
+            tooltip.className = "tooltip";
+            tooltip.style.position = "absolute";
+            tooltip.style.backgroundColor = "#333";
+            tooltip.style.color = "#fff";
+            tooltip.style.padding = "10px";
+            tooltip.style.borderRadius = "5px";
+            tooltip.style.display = "none"; // Скрыт по умолчанию
+            document.body.appendChild(tooltip);
+
+            for (let region of regions) {
+                let regionName = region.getAttribute("data-region");
+                if (userRegions[regionName]) {
+                    let userCount = userRegions[regionName].count;
+                    let users = userRegions[regionName].users;
+
+                    region.setAttribute("data-user-count", userCount);
+                    region.setAttribute("data-users", users.join(", "));
+
+                    region.addEventListener("mouseover", (e) => {
+                        let userCount = region.getAttribute("data-user-count");
+                        let users = region.getAttribute("data-users").split(", ");
+
+                        // Отображаем tooltip с данными
+                        tooltip.innerHTML = `<strong>${regionName}</strong><br>User Count: ${userCount}<br>`;
+                        tooltip.style.display = "block"; // Показываем tooltip
+                        tooltip.style.left = e.pageX + 10 + "px"; // Устанавливаем позицию по оси X
+                        tooltip.style.top = e.pageY + 10 + "px"; // Устанавливаем позицию по оси Y
+                    });
+
+                    region.addEventListener("mouseout", () => {
+                        tooltip.style.display = "none"; // Прячем tooltip при уходе с региона
+                    });
+                }
+                else {
+                    // show region name
+                    region.addEventListener("mouseover", (e) => {
+                        let regionName = region.getAttribute("data-region");
+                        tooltip.innerHTML = `<strong>${regionName}</strong>`;
+                        tooltip.style.display = "block"; // Показываем tooltip
+                        tooltip.style.left = e.pageX + 10 + "px"; // Устанавливаем позицию по оси X
+                        tooltip.style.top = e.pageY + 10 + "px"; // Устанавливаем позицию по оси Y
+                    });
+                }
+            }
+        }
+        hoverCheckCountUsers();
+
+    </script>
+
+    <script>
+
+        const week_days = {{ daily_users_analytics.week_days | safe }};
+
+        console.log(week_days);
+
+        var options = {
+            series: [{
+                name: 'users',
+                data: {{ daily_users_analytics.user_count }}
+            }],
+            chart: {
+                height: 300,
+                type: 'area',
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            xaxis: {
+                type: 'category',
+                categories: week_days
+            },
+            yaxis: {
+                min: 0,
+                max: 5,
+                tickAmount: 5,
+            },
+            tooltip: {
+                x: {
+                    format: 'dd/MM/yy HH:mm'
+                },
+            },
+            colors: ['#4A3AFF']
+        };
+
+        var chart = new ApexCharts(document.querySelector("#daily_user_analytics_chart"), options);
+        chart.render();
+
+    </script>
+
+    <script>
+        let heroes = document.querySelectorAll('.hero_analytics_block');
+        let zIndex = 1;
+
+        heroes.forEach((hero, index) => {
+            hero.style.zIndex = zIndex++;
+            hero.style.marginLeft = `${index * 50}px`;
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,399 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'school/css/distribution.css' %}">
+{% endblock %}
+
+{% block title %} SmartSchool - Distribution {% endblock %}
+
+{% block page_title %} Distribution {% endblock %}
+
+{% block content %}
+    <div class="section_container">
+        <div class="distribution_container">
+
+            <!-- LEFT LIST BLOCK -->
+            <div class="users_school_part_container">
+                <div class="users_data_school_part_block">
+                    <button class="add_statement_distribution" onclick="addNewStatement()">Add statement</button>
+                    <div class="user_list_data_school_part">
+                        {% for statement in statements %}
+                            <div class="li_statement_approve_block">
+                                <div id="user_list_{{ student.id }}" class="user_data_school_part">
+                                    <div class="image_block_user_data">
+                                        <div class="background_user_avatar_block"
+                                             style="background-image: url('{{ statement.user.get_photo }}');">
+                                        </div>
+                                    </div>
+                                    <div class="main_info_block_user_data">
+                                        <h1>{{ statement.user.full_name }}</h1>
+                                    </div>
+                                </div>
+                                <div class="statement_approve_block">
+                                    <label>
+                                        <select name="approve_to_class" id="approve_to_class_{{ statement.id }}">
+                                            <option value="">Class</option>
+                                            {% for class in classes %}
+                                                <option value="{{ class.id }}">{{ class.class_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                    <button class="approve_statement" onclick="approveStatement({{ statement.id }})">Approve</button>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="no_statements">
+                                <h1>No statements</h1>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADD CLASS BLOCK -->
+            <div class="add_new_class_container">
+                <div class="add_new_class_block">
+                    <div class="title_block_add_new_class">
+                        <h1>Add new class</h1>
+                        <i onclick="closeAddNewClass()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18" stroke="#233255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 6L18 18" stroke="#233255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                    </div>
+                    <div class="form_add_new_class_block">
+                        <form action="{% url 'add_new_class' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form_class_main_info_block">
+                                <div class="input_block_add_new_class">
+                                    <label for="class_num">Number</label>
+                                    <select name="class_num" id="class_num" required>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
+                                <div class="input_block_add_new_class">
+                                    <label for="class_liter">Liter</label>
+                                    <select name="class_liter" id="class_liter" required>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                    </select>
+                                </div>
+                                <div class="input_block_add_new_class">
+                                    <label for="teacher">Teacher</label>
+                                    <select name="class_teacher" id="teacher">
+                                        {% for teacher in teachers %}
+                                            <option value="{{ teacher.id }}">{{ teacher.full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="description_block_add_new_class">
+                                <label for="class_description" class="description_new_class_info">Description</label>
+                                <input type="text" name="class_description" id="class_description" placeholder="Enter description">
+                            </div>
+                            <button class="add_new_class_button">Add class</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADD STATEMENT BLOCK -->
+            <div class="add_new_class_container add_new_statement_container">
+                <div class="add_new_class_block add_new_statement_block">
+                    <div class="title_block_add_new_class">
+                        <h1>Add new statement</h1>
+                        <i onclick="closeAddNewStatement()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18" stroke="#233255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 6L18 18" stroke="#233255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                    </div>
+                    <div class="form_add_new_class_block">
+                        <form action="{% url 'add_new_statement' %}" method="POST" enctype="multipart/form-data" id="form-add-statement">
+                            {% csrf_token %}
+                            <div class="form_add_new_statement_block">
+                                <div class="form_block_label">
+                                    <label for="statement_phone">Mobile phone</label>
+                                    <input type="text" name="statement_phone" id="statement_phone" placeholder="Enter phone" required>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_email">Email</label>
+                                    <input type="email" name="statement_email" id="statement_email" placeholder="Enter email" required>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_name">Full name</label>
+                                    <input type="text" name="statement_name" id="statement_name" placeholder="Enter full name" required>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_iin">IIN</label>
+                                    <input type="text" name="statement_iin" id="statement_iin" placeholder="Enter IIN" required>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_birth">Birth date</label>
+                                    <input type="date" name="statement_birth" id="statement_birth" placeholder="Enter birth date" required>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_parent">Parent</label>
+                                    <select name="statement_parent" id="statement_parent" required>
+                                        {% for parent in parents %}
+                                            <option value="{{ parent.id }}">{{ parent.full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form_block_label">
+                                    <label for="statement_photo">Photo avatar</label>
+                                    <input type="file" name="statement_photo" id="statement_photo" required class="custom-file-input">
+                                    <i class="input-group-append">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+                                            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
+                                            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                                        </svg>
+                                    </i>
+                                    <label for="statement_photo" class="custom-file-label">Choose a file...</label>
+                                </div>
+                            </div>
+                            <button class="add_new_class_button">Add statement</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT DETAIL BLOCK -->
+            <div class="distribution_classes_container">
+                <div class="title_of_distribution_classes">
+                    <h1>List of classes</h1>
+                    <button class="add_distribution_class"
+                            onclick="addDistributionClass()">Add class</button>
+                </div>
+                <div class="distribution_classes_list_block">
+                    <ul class="distribution_ul_classes_list">
+                        {% for class in classes %}
+                            <li class="distribution_class_list_block">
+                                <div class="title_block_distribution_class">
+                                    <div class="main_info_block_distribution_class">
+                                        <h1>Class: <span>{{ class.class_name }}</span></h1>
+                                        <h1>Teacher: <span>{{ class.teacher }}</span></h1>
+                                    </div>
+                                    <div class="edit_distribution_class_block">
+                                        <i>
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.862 3.48725L17.549 1.79925C17.9007 1.44757 18.3777 1.25 18.875 1.25C19.3723 1.25 19.8493 1.44757 20.201 1.79925C20.5527 2.15092 20.7502 2.6279 20.7502 3.12525C20.7502 3.62259 20.5527 4.09957 20.201 4.45125L5.832 18.8202C5.30332 19.3486 4.65137 19.737 3.935 19.9502L1.25 20.7502L2.05 18.0652C2.26328 17.3489 2.65163 16.6969 3.18 16.1682L15.863 3.48725H15.862ZM15.862 3.48725L18.5 6.12525" stroke="#233255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </i>
+                                    </div>
+                                </div>
+                                <div class="table_data_distribution_class_block">
+                                    <table class="table_distribution_class">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <h1>№</h1>
+                                            </th>
+                                            <th>
+                                                <h1>Full name</h1>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for student in class.students %}
+                                            <tr>
+                                                <td>
+                                                    <h1>{{ forloop.counter }}</h1>
+                                                </td>
+                                                <td class="full_name">
+                                                    <div class="title">
+                                                        <h1>{{ student.full_name }}</h1>
+                                                        <p>{{ student.contract_number }}</p>
+                                                    </div>
+                                                    <i onclick="removeStudentFromClass({{ student.id }})">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M3 6H5H21" stroke="#A30D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#A30D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M10 11V17" stroke="#A30D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M14 11V17" stroke="#A30D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </i>
+                                                </td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td>
+                                                    <h1>...</h1>
+                                                </td>
+                                                <td>
+                                                    <h1>No students</h1>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function formatPhoneNumber(input) {
+            let phoneNumber = input.replace(/\D/g, '');
+            phoneNumber = phoneNumber.replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+7 ($2) $3-$4-$5');
+            return phoneNumber;
+        }
+
+        function unformatPhoneNumber(input) {
+            let phoneNumber = input.replace(/\D/g, '');
+            return phoneNumber;
+        }
+
+        let phoneInput = document.querySelector('#statement_phone');
+
+        phoneInput.addEventListener('input', () => {
+            let formattedNumber = formatPhoneNumber(phoneInput.value);
+            phoneInput.value = formattedNumber;
+            if (phoneInput.value.length > 18) {
+                phoneInput.value = phoneInput.value.slice(0, 18);
+            }
+        });
+
+        phoneInput.addEventListener('blur', () => {
+            let phoneNumber = unformatPhoneNumber(phoneInput.value);
+
+            if (phoneNumber.length !== 11) {
+                phoneInput.setCustomValidity('Phone number must be 11 digits');
+            } else {
+                phoneInput.setCustomValidity('');
+            }
+        });
+
+        document.querySelector('#form-add-statement').addEventListener('submit', (event) => {
+            let phoneNumber = unformatPhoneNumber(phoneInput.value);
+
+            if (phoneNumber.length !== 11) {
+                phoneInput.setCustomValidity('Phone number must be 11 digits');
+            } else {
+                phoneInput.setCustomValidity('');
+            }
+        });
+
+        let selectedFileName = document.querySelector('.custom-file-label');
+        let fileInput = document.querySelector('.custom-file-input');
+
+        fileInput.addEventListener('change', function () {
+            selectedFileName.textContent = fileInput.files[0].name;
+        });
+    </script>
+
+    <script>
+        function addNewStatement() {
+            let addNewClassContainer = document.querySelector('.add_new_statement_container');
+            addNewClassContainer.classList.add('active');
+        }
+
+        function closeAddNewStatement() {
+            let addNewClassContainer = document.querySelector('.add_new_statement_container');
+            addNewClassContainer.classList.remove('active');
+        }
+    </script>
+
+    <script>
+        function addDistributionClass() {
+            let addNewClassContainer = document.querySelector('.add_new_class_container');
+            addNewClassContainer.classList.add('active');
+        }
+
+        function closeAddNewClass() {
+            let addNewClassContainer = document.querySelector('.add_new_class_container');
+            addNewClassContainer.classList.remove('active');
+        }
+    </script>
+
+    <script>
+        console.log("123");
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let blocks = document.querySelectorAll('.li_statement_approve_block');
+
+            blocks.forEach((block, index) => {
+                block.addEventListener('click', function () {
+                    let statementApproveBlock = block.querySelector('.statement_approve_block');
+                    statementApproveBlock.classList.toggle('active');
+                });
+
+                let select = block.querySelector('.statement_approve_block select');
+                select.addEventListener('click', function (event) {
+                    // Предотвращаем всплытие события
+                    event.stopPropagation();
+                });
+            });
+        });
+
+        function approveStatement(student_id) {
+            let select = document.querySelector(`#approve_to_class_${student_id}`);
+            let class_id = select.value;
+
+            if (class_id) {
+                fetch(`/panel/distribution/approve-to-class`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        student_id: student_id,
+                        class_id: class_id
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            window.location.reload();
+                        }
+                    });
+            }
+        }
+
+        function removeStudentFromClass(student_id) {
+            fetch(`/panel/distribution/remove-from-class`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    student_id: student_id
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        window.location.reload();
+                    }
+                });
+        }
+    </script>
+{% endblock %}
