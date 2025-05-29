@@ -1,0 +1,1080 @@
+/* Стили для детальной страницы клуба - добавить к school-part.css */
+
+.club-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Обложка клуба */
+.club-hero {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    min-height: 400px;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+}
+
+.club-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.club-banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(35, 50, 85, 0.7);
+    backdrop-filter: blur(2px);
+}
+
+.club-banner-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+}
+
+.banner-pattern {
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+    background-size: 40px 40px;
+}
+
+.club-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    min-height: 400px;
+    color: white;
+}
+
+.club-main-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+}
+
+.club-logo-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.club-logo-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-placeholder-large {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+}
+
+.club-title-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.club-tagline {
+    font-size: 1.2rem;
+    margin: 0 0 1.5rem 0;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.club-meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-label {
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+.category-badge {
+    background: rgba(246, 173, 43, 0.9);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.club-actions-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.member-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.role-badge {
+    background: rgba(63, 81, 181, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.btn-join-large {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #F6AD2B;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(246, 173, 43, 0.3);
+}
+
+.btn-join-large:hover {
+    background: #e59d1b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(246, 173, 43, 0.4);
+}
+
+.status-info span {
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.status-closed {
+    background: rgba(244, 67, 54, 0.9);
+    color: white;
+}
+
+.status-pending {
+    background: rgba(255, 152, 0, 0.9);
+    color: white;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.social-link.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-link.facebook {
+    background: #1877f2;
+}
+
+.social-link.telegram {
+    background: #0088cc;
+}
+
+.social-link.website {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Контент клуба */
+.club-content-section {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.club-main-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Навигация по разделам */
+.club-nav-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    background: rgba(246, 173, 43, 0.1);
+    color: #F6AD2B;
+}
+
+.tab-btn.active {
+    color: #F6AD2B;
+    border-bottom-color: #F6AD2B;
+    background: white;
+}
+
+/* Контент разделов */
+.tab-content {
+    display: none;
+    padding: 2rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.about-section h3,
+.members-section h3,
+.events-section h3,
+.news-section h3,
+.resources-section h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #233255;
+    margin: 0 0 1.5rem 0;
+}
+
+.club-description {
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 2rem;
+}
+
+.associated-faculties {
+    margin-bottom: 2rem;
+}
+
+.associated-faculties h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin-bottom: 1rem;
+}
+
+.faculty-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.faculty-tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.contact-info h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin-bottom: 1rem;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #666;
+}
+
+.contact-item svg {
+    color: #F6AD2B;
+}
+
+.contact-item a {
+    color: #233255;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-item a:hover {
+    color: #F6AD2B;
+}
+
+/* Участники */
+.members-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.member-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.member-card:hover {
+    background: #e3f2fd;
+    transform: translateY(-2px);
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.member-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.member-role {
+    background: #233255;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+.member-faculty {
+    background: #F6AD2B;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+.join-date {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+}
+
+/* Мероприятия */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.event-card {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.event-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.event-image {
+    width: 200px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.event-content {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.event-header h4 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0;
+}
+
+.event-type {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.event-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.event-description {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.btn-register {
+    background: #F6AD2B;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: #e59d1b;
+    transform: translateY(-1px);
+}
+
+/* Новости */
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.news-item {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.news-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.news-image {
+    width: 150px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.news-content {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.news-content h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.5rem 0;
+}
+
+.news-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.news-date {
+    font-weight: 600;
+}
+
+.news-excerpt {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.read-more {
+    color: #F6AD2B;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* Ресурсы */
+.resources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resource-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+    background: #e3f2fd;
+    transform: translateY(-1px);
+}
+
+.resource-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #233255;
+    color: white;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.resource-content {
+    flex: 1;
+}
+
+.resource-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.resource-content p {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.resource-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.resource-type {
+    background: #e0e0e0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #F6AD2B;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-download:hover {
+    background: #e59d1b;
+    transform: translateY(-1px);
+}
+
+/* Боковая панель */
+.club-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1rem 0;
+}
+
+/* Статистика */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.stats-grid .stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #233255;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+/* События в боковой панели */
+.sidebar-events {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sidebar-event {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #F6AD2B;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.date-day {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.event-info h5 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.event-time,
+.event-location {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Похожие клубы */
+.similar-clubs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.similar-club {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.similar-club:hover {
+    background: #f8f9fa;
+}
+
+.similar-club-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.logo-placeholder-small {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 1rem;
+}
+
+.similar-club-info h5 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.similar-club-info p {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Пустые состояния */
+.empty-state-small {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.empty-state-small p {
+    margin: 0;
+    font-style: italic;
+}
+
+/* Модал вступления */
+.join-modal {
+    max-width: 400px;
+}
+
+.join-modal .modal-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.club-info-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.club-logo-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.club-logo-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.club-info-preview h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.club-info-preview p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.modal-actions .btn-secondary,
+.modal-actions .btn-primary {
+    flex: 1;
+    max-width: 120px;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-actions .btn-secondary {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+}
+
+.modal-actions .btn-secondary:hover {
+    border-color: #ccc;
+    color: #333;
+}
+
+.modal-actions .btn-primary {
+    background: #F6AD2B;
+    color: white;
+    border: 2px solid #F6AD2B;
+}
+
+.modal-actions .btn-primary:hover {
+    background: #e59d1b;
+    border-color: #e59d1b;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .club-content-section {
+        grid-template-columns: 1fr;
+    }
+
+    .club-sidebar {
+        grid-row: 1;
+    }
+
+    .club-hero-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .club-main-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .club-title-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .club-meta-info {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .club-hero-content {
+        padding: 1.5rem;
+    }
+
+    .club-title-section h1 {
+        font-size: 2rem;
+    }
+
+    .club-nav-tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .members-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .event-card,
+    .news-item {
+        flex-direction: column;
+    }
+
+    .event-image,
+    .news-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .club-detail-container {
+        padding: 0 1rem;
+    }
+
+    .club-hero-content {
+        padding: 1rem;
+    }
+
+    .club-title-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .club-meta-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    .sidebar-card {
+        padding: 1rem;
+    }
+}

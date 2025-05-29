@@ -1,659 +1,756 @@
-/* clubs.css - Стили для модуля клубов */
+/* Добавить к существующему школьному CSS файлу */
 
-:root {
-    --primary-color: #233255;
-    --accent-color: #F6AD2B;
-    --light-bg: #f8f9fa;
-    --gray-light: #e9ecef;
-    --gray-medium: #6c757d;
-    --gray-dark: #343a40;
+.clubs-main-container {
+    padding: 0;
 }
 
-/* Header Banner */
-.header-banner {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 3rem 0;
+/* Заголовок страницы */
+.clubs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
+    padding: 2rem;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+    border-radius: 12px;
+    color: white;
 }
 
-.header-banner::after {
-    content: "";
-    position: absolute;
-    right: -5%;
-    bottom: -50px;
-    width: 250px;
-    height: 250px;
-    background-color: var(--accent-color);
-    opacity: 0.2;
-    border-radius: 50%;
-}
-
-.header-banner h1 {
-    font-weight: 700;
+.clubs-header-info h1 {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: white;
 }
 
-/* Club Cards */
-.club-card {
+.clubs-header-info p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+    color: white;
+}
+
+.create-club-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    overflow: hidden;
+    font-weight: 600;
+    cursor: pointer;
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.create-club-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Статистика */
+.clubs-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    border-radius: 12px;
+    color: white;
+}
+
+.stat-info h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #233255;
+}
+
+.stat-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0 0;
+}
+
+/* Рекомендация теста */
+.quiz-recommendation {
+    background: linear-gradient(135deg, #F6AD2B 0%, #FFD700 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: #233255;
+}
+
+.quiz-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quiz-info h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.quiz-info p {
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    opacity: 0.8;
+}
+
+.quiz-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #233255;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.quiz-btn:hover {
+    background: #1a2642;
+    transform: translateY(-2px);
+}
+
+/* Фильтры и поиск */
+.filters-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box svg {
+    position: absolute;
+    left: 1rem;
+    color: #666;
+    z-index: 1;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+.filter-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-options select {
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    font-size: 1rem;
+    min-width: 150px;
+    cursor: pointer;
+}
+
+.filter-options select:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+/* Рекомендуемые клубы */
+.featured-clubs {
+    margin-bottom: 3rem;
+}
+
+.featured-clubs h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #233255;
+}
+
+.featured-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.featured-club-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.featured-club-card:hover {
+    transform: translateY(-4px);
+}
+
+.featured-club-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.featured-club-image img {
+    width: 100%;
     height: 100%;
-    border: 1px solid var(--gray-light);
-}
-
-.club-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.club-card .card-img-top {
-    height: 180px;
     object-fit: cover;
 }
 
-.club-card .card-body {
-    padding: 1.25rem;
-}
-
-.club-card .club-category {
-    background-color: var(--primary-color);
+.club-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
     color: white;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 30px;
-    display: inline-block;
-    margin-bottom: 0.5rem;
 }
 
-.club-card .club-title {
+.featured-club-info {
+    padding: 1.5rem;
+}
+
+.featured-club-info h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #233255;
+}
+
+.featured-club-info p {
+    color: #666;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.club-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.members-count {
+    color: #F6AD2B;
     font-weight: 600;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
+}
+
+.club-category {
+    background: #233255;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+/* Сетка клубов */
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.club-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.club-card:hover {
+    transform: translateY(-4px);
+    border-color: #F6AD2B;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.club-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.club-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.club-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.club-status {
+    flex-shrink: 0;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.status-pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-inactive {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.club-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #233255;
+}
+
+.club-content .club-category {
+    background: #F6AD2B;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+.club-description {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .club-stats {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--gray-medium);
-}
-
-/* Filter Sidebar */
-.filter-sidebar {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    border: 1px solid var(--gray-light);
-    position: sticky;
-    top: 20px;
-}
-
-.filter-sidebar h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-}
-
-.filter-group {
-    margin-bottom: 1.5rem;
-}
-
-.filter-group h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-}
-
-.custom-checkbox label {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.custom-checkbox input {
-    margin-right: 0.5rem;
-}
-
-.search-box {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
-    border: 1px solid var(--gray-light);
-    border-radius: 30px;
-}
-
-.search-box i {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gray-medium);
-}
-
-/* Buttons */
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.btn-primary:hover {
-    background-color: #1a2545;
-    border-color: #1a2545;
-}
-
-.btn-accent {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: white;
-}
-
-.btn-accent:hover {
-    background-color: #e09a1e;
-    border-color: #e09a1e;
-    color: white;
-}
-
-/* Featured Clubs Carousel */
-.featured-clubs {
-    margin-bottom: 3rem;
-}
-
-.featured-carousel {
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.featured-carousel .carousel-item {
-    height: 350px;
-}
-
-.featured-carousel .carousel-item img {
-    height: 100%;
-    object-fit: cover;
-}
-
-.featured-carousel .carousel-caption {
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 2rem;
-    text-align: left;
-}
-
-/* Quiz Card */
-.quiz-card {
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 10px;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.quiz-card::before {
-    content: "";
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background-color: var(--accent-color);
-    opacity: 0.2;
-    top: -50px;
-    right: -50px;
-    border-radius: 50%;
-}
-
-.quiz-card h3 {
-    font-weight: 700;
     margin-bottom: 1rem;
 }
 
-/* Create Club Card */
-.create-club-card {
-    background-color: var(--light-bg);
-    border-radius: 10px;
-    padding: 2rem;
-    text-align: center;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 2px dashed var(--gray-light);
-}
-
-.create-club-card h3 {
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-}
-
-.create-club-card p {
-    margin-bottom: 1.5rem;
-    color: var(--gray-medium);
-}
-
-/* Modal Steps */
-.modal-step {
-    display: none;
-}
-
-.modal-step.active {
-    display: block;
-}
-
-.modal-header {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.steps-indicator {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.step-circle {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: var(--gray-light);
-    color: var(--gray-dark);
+.stat-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    margin: 0 0.5rem;
-    position: relative;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
 }
 
-.step-circle.active {
-    background-color: var(--primary-color);
-    color: white;
+.stat-item svg {
+    width: 16px;
+    height: 16px;
 }
 
-.step-circle.completed {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-.step-circle:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: var(--gray-light);
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.error-message {
-    color: #dc3545;
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    background-color: var(--light-bg);
-    border-radius: 8px;
-    margin: 2rem 0;
-}
-
-.empty-state img {
-    max-width: 200px;
-    margin-bottom: 1.5rem;
-}
-
-.empty-state h3 {
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-}
-
-.empty-state p {
-    color: var(--gray-medium);
-    margin-bottom: 1.5rem;
-}
-
-/* Pagination */
-.pagination .page-link {
-    color: var(--primary-color);
-}
-
-.pagination .page-item.active .page-link {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
-}
-
-/* Club Detail Page */
-.club-detail-header {
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.club-detail-header .banner {
-    height: 300px;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.club-detail-info {
-    position: relative;
-    margin-top: -80px;
-    background-color: white;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: flex-end;
-    margin-left: 2rem;
-    margin-right: 2rem;
-}
-
-.club-logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-top: -60px;
-    border: 5px solid white;
-    background-color: white;
-}
-
-.club-title-area {
-    margin-left: 1.5rem;
-    flex-grow: 1;
-}
-
-.club-join-btn {
-    margin-left: auto;
-}
-
-.club-tabs {
-    margin-top: 2rem;
-}
-
-.club-tab-content {
-    padding: 2rem 0;
-}
-
-.member-card {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: var(--light-bg);
-}
-
-.member-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 1rem;
-}
-
-.member-info {
-    flex-grow: 1;
-}
-
-.member-role {
-    background-color: var(--primary-color);
-    color: white;
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 30px;
-    display: inline-block;
-    margin-left: 0.5rem;
-}
-
-.member-role.founder {
-    background-color: var(--accent-color);
-}
-
-.event-card {
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--gray-light);
-}
-
-.event-card .event-header {
-    padding: 1rem;
-    border-bottom: 1px solid var(--gray-light);
-    display: flex;
-    align-items: center;
-}
-
-.event-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-}
-
-.event-title {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-}
-
-.event-type {
-    font-size: 0.85rem;
-    color: var(--gray-medium);
-}
-
-.event-details {
-    padding: 1rem;
-}
-
-.event-info {
+.club-faculties {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.event-info-item {
-    display: flex;
-    align-items: center;
+.faculty-tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.5rem;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
 }
 
-.event-info-item i {
-    color: var(--primary-color);
-    margin-right: 0.5rem;
+.club-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
 }
 
-.resource-card {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
+.btn-primary {
+    flex: 1;
+    background: #233255;
+    color: white;
+    padding: 0.75rem;
+    border: none;
     border-radius: 8px;
-    border: 1px solid var(--gray-light);
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.resource-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+.btn-primary:hover {
+    background: #1a2642;
+    transform: translateY(-1px);
 }
 
-.resource-icon {
-    width: 50px;
-    height: 50px;
+.btn-secondary {
+    flex: 1;
+    background: transparent;
+    color: #F6AD2B;
+    padding: 0.75rem;
+    border: 2px solid #F6AD2B;
     border-radius: 8px;
-    background-color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #F6AD2B;
     color: white;
+    transform: translateY(-1px);
+}
+
+/* Пустое состояние */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #999;
+    margin-bottom: 2rem;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.page-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 1rem;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-.resource-info {
-    flex-grow: 1;
-}
-
-.resource-type {
-    font-size: 0.85rem;
-    color: var(--gray-medium);
-}
-
-.resource-download {
-    margin-left: auto;
-}
-
-/* Notifications */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 5px;
+.page-btn:hover,
+.page-btn.active {
+    background: #F6AD2B;
+    border-color: #F6AD2B;
     color: white;
-    z-index: 9999;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-width: 350px;
-    animation: slide-in 0.4s forwards;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
 }
 
-.notification.success {
-    background-color: #28a745;
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-.notification.error {
-    background-color: #dc3545;
+/* Формы */
+#create-club-form {
+    padding: 2rem;
 }
 
-.notification.info {
-    background-color: #17a2b8;
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
-.notification i {
-    margin-right: 10px;
-    font-size: 1.2rem;
+.form-group {
+    margin-bottom: 1.5rem;
 }
 
-@keyframes slide-in {
-    0% {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #233255;
 }
 
-@keyframes fade-out {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+.required {
+    color: #d32f2f;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-    .club-detail-info {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin-top: -50px;
-    }
-
-    .club-title-area {
-        margin-left: 0;
-        margin-top: 1rem;
-    }
-
-    .club-join-btn {
-        margin-left: 0;
-        margin-top: 1rem;
-    }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Загрузка файлов */
+.file-upload {
+    position: relative;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+    font-weight: 500;
+}
+
+.file-upload-label:hover {
+    border-color: #F6AD2B;
+    color: #F6AD2B;
+}
+
+.file-info {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+/* Действия формы */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 2rem;
+}
+
+.form-actions .btn-secondary {
+    flex: none;
+    min-width: 120px;
+}
+
+.form-actions .btn-primary {
+    flex: none;
+    min-width: 120px;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-    .filter-sidebar {
-        position: static;
-        margin-bottom: 2rem;
+    .clubs-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
     }
 
-    .header-banner h1 {
+    .clubs-header-info h1 {
         font-size: 2rem;
     }
 
-    .featured-carousel .carousel-item {
-        height: 250px;
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    .event-info {
-        flex-direction: column;
-        gap: 0.75rem;
+    .filter-options {
+        justify-content: center;
     }
+
+    .clubs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
-@media (max-width: 576px) {
-    .club-detail-header .banner {
-        height: 200px;
-    }
-
-    .club-logo {
-        width: 80px;
-        height: 80px;
-        margin-top: -40px;
-    }
-
-    .member-card {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .member-avatar {
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-
-    .resource-card {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .resource-icon {
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-
-    .resource-download {
-        margin-left: 0;
-        margin-top: 1rem;
-    }
+.stat-card:hover {
+    transform: translateY(-2px);
 }

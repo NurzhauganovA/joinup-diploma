@@ -1,0 +1,366 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'clubs/css/club_donations.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Поддержать {{ club.name }} {% endblock %}
+
+{% block page_title %} Поддержать клуб {% endblock %}
+
+{% block content %}
+<div class="donations-container">
+    <!-- Заголовок -->
+    <div class="donations-header">
+        <div class="club-info-header">
+            <div class="club-logo-header">
+                {% if club.logo %}
+                <img src="{{ club.logo.url }}" alt="{{ club.name }}">
+                {% else %}
+                <div class="logo-placeholder-header">{{ club.name.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="club-details-header">
+                <h1>Поддержать {{ club.name }}</h1>
+                <p>Помогите клубу развиваться и достигать новых высот</p>
+                <a href="{% url 'club_detail' club.slug %}" class="back-to-club">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19L5 12L12 5"/>
+                    </svg>
+                    Вернуться к клубу
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="donations-content">
+        <!-- Статистика -->
+        <div class="donations-stats">
+            <div class="stat-card-donation">
+                <div class="stat-icon-donation">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61A5.5 5.5 0 0 0 7.5 12L12 16.5L16.5 12A5.5 5.5 0 0 0 20.84 4.61Z"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ total_donations|floatformat:0 }} ₸</h3>
+                    <p>Всего собрано</p>
+                </div>
+            </div>
+
+            <div class="stat-card-donation">
+                <div class="stat-icon-donation">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                        <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ donations_count }}</h3>
+                    <p>Спонсоров</p>
+                </div>
+            </div>
+
+            <div class="stat-card-donation">
+                <div class="stat-icon-donation">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M16 12L12 8L8 12"/>
+                        <path d="M12 16L12 8"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ club.members_count }}</h3>
+                    <p>Участников клуба</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="donations-main-content">
+            <!-- Форма доната -->
+            <div class="donation-form-card">
+                <div class="donation-form-header">
+                    <h2>Сделать донат</h2>
+                    <p>Выберите сумму или введите свою</p>
+                </div>
+
+                <form id="donation-form">
+                    {% csrf_token %}
+                    <div class="amount-selection">
+                        <div class="preset-amounts">
+                            <button type="button" class="amount-btn" data-amount="1000">1,000 ₸</button>
+                            <button type="button" class="amount-btn" data-amount="2500">2,500 ₸</button>
+                            <button type="button" class="amount-btn" data-amount="5000">5,000 ₸</button>
+                            <button type="button" class="amount-btn" data-amount="10000">10,000 ₸</button>
+                        </div>
+
+                        <div class="custom-amount">
+                            <label for="custom-amount-input">Или введите свою сумму:</label>
+                            <div class="amount-input-group">
+                                <input type="number" id="custom-amount-input" name="amount" min="100" max="100000"
+                                       placeholder="Введите сумму">
+                                <span class="currency">₸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="donation-message">
+                        <label for="donation-message">Сообщение (необязательно):</label>
+                        <textarea id="donation-message" name="message" rows="3"
+                                  placeholder="Напишите сообщение поддержки..."></textarea>
+                    </div>
+
+                    <div class="donation-options">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="is_anonymous" id="anonymous-donation">
+                            <span class="checkmark"></span>
+                            Анонимный донат
+                        </label>
+                    </div>
+
+                    <div class="donation-form-actions">
+                        <button type="submit" class="btn-donate" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M20.84 4.61A5.5 5.5 0 0 0 7.5 12L12 16.5L16.5 12A5.5 5.5 0 0 0 20.84 4.61Z"/>
+                            </svg>
+                            Поддержать клуб
+                        </button>
+                        <p class="donation-note">Минимальная сумма: 100 ₸</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Последние донаты -->
+            <div class="recent-donations-card">
+                <h3>Последние спонсоры</h3>
+                {% if recent_donations %}
+                <div class="donations-list">
+                    {% for donation in recent_donations %}
+                    <div class="donation-item">
+                        <div class="donor-avatar">
+                            {% if donation.user.user_info.photo_avatar %}
+                            <img src="{{ donation.user.user_info.photo_avatar.url }}"
+                                 alt="{{ donation.user.full_name }}">
+                            {% else %}
+                            <div class="avatar-placeholder-small">{{ donation.user.full_name.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="donation-details">
+                            <div class="donor-info">
+                                <h4>{{ donation.user.full_name|default:"Спонсор" }}</h4>
+                                <span class="donation-amount">{{ donation.amount|floatformat:0 }} ₸</span>
+                            </div>
+                            {% if donation.message %}
+                            <p class="donation-message-text">"{{ donation.message }}"</p>
+                            {% endif %}
+                            <span class="donation-date">{{ donation.created_at|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-donations">
+                    <div class="empty-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M20.84 4.61A5.5 5.5 0 0 0 7.5 12L12 16.5L16.5 12A5.5 5.5 0 0 0 20.84 4.61Z"/>
+                        </svg>
+                    </div>
+                    <h4>Станьте первым спонсором!</h4>
+                    <p>Поддержите {{ club.name }} и помогите клубу развиваться</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модал успешного доната -->
+<div id="success-modal" class="modal">
+    <div class="modal-content success-modal">
+        <div class="modal-header success-header">
+            <div class="success-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12A10 10 0 1 1 5.93 7.69"/>
+                    <polyline points="22,4 12,14.01 9,11.01"/>
+                </svg>
+            </div>
+            <h2>Спасибо за поддержку!</h2>
+        </div>
+        <div class="modal-body">
+            <p>Ваш донат успешно отправлен клубу {{ club.name }}</p>
+            <div class="donation-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Сумма:</span>
+                    <span class="summary-value" id="donated-amount">-</span>
+                </div>
+                <div class="summary-item" id="donation-message-summary" style="display: none;">
+                    <span class="summary-label">Сообщение:</span>
+                    <span class="summary-value" id="donated-message">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="closeSuccessModal()">Закрыть</button>
+            <a href="{% url 'club_detail' club.slug %}" class="btn-secondary">Вернуться к клубу</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Обработка выбора суммы
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const amount = this.dataset.amount;
+
+            // Убираем активный класс с других кнопок
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+
+            // Добавляем активный класс текущей кнопке
+            this.classList.add('active');
+
+            // Устанавливаем значение в поле ввода
+            document.getElementById('custom-amount-input').value = amount;
+
+            // Активируем кнопку доната
+            updateDonateButton();
+        });
+    });
+
+    // Обработка ввода пользовательской суммы
+    document.getElementById('custom-amount-input').addEventListener('input', function () {
+        // Убираем активный класс с кнопок предустановленных сумм
+        document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+
+        // Активируем кнопку доната
+        updateDonateButton();
+    });
+
+    function updateDonateButton() {
+        const amount = document.getElementById('custom-amount-input').value;
+        const donateBtn = document.querySelector('.btn-donate');
+
+        if (amount && parseFloat(amount) >= 100) {
+            donateBtn.disabled = false;
+            donateBtn.classList.add('enabled');
+        } else {
+            donateBtn.disabled = true;
+            donateBtn.classList.remove('enabled');
+        }
+    }
+
+    // Обработка отправки формы
+    document.getElementById('donation-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const amount = document.getElementById('custom-amount-input').value;
+        const message = document.getElementById('donation-message').value;
+        const isAnonymous = document.getElementById('anonymous-donation').checked;
+
+        if (!amount || parseFloat(amount) < 100) {
+            alert('Минимальная сумма доната: 100 ₸');
+            return;
+        }
+
+        if (parseFloat(amount) > 100000) {
+            alert('Максимальная сумма доната: 100,000 ₸');
+            return;
+        }
+
+        // Показываем индикатор загрузки
+        const donateBtn = document.querySelector('.btn-donate');
+        const originalText = donateBtn.innerHTML;
+        donateBtn.innerHTML = '<span class="loading-spinner"></span> Обработка...';
+        donateBtn.disabled = true;
+
+        // Отправляем донат
+        fetch(`/panel/club/{{ club.slug }}/donate/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: parseFloat(amount),
+                message: message,
+                is_anonymous: isAnonymous
+            })
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccessModal(amount, message);
+                        // Сброс формы
+                        document.getElementById('donation-form').reset();
+                        document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+                    } else {
+                        alert(data.error || 'Произошла ошибка при обработке доната');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отправке доната');
+                })
+                .finally(() => {
+                    // Восстанавливаем кнопку
+                    donateBtn.innerHTML = originalText;
+                    donateBtn.disabled = false;
+                    updateDonateButton();
+                });
+    });
+
+    function showSuccessModal(amount, message) {
+        document.getElementById('donated-amount').textContent = `${parseFloat(amount).toLocaleString()} ₸`;
+
+        if (message) {
+            document.getElementById('donated-message').textContent = `"${message}"`;
+            document.getElementById('donation-message-summary').style.display = 'block';
+        } else {
+            document.getElementById('donation-message-summary').style.display = 'none';
+        }
+
+        document.getElementById('success-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('success-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+
+        // Перезагружаем страницу для обновления статистики
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+
+    // Закрытие модала при клике вне его
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('success-modal');
+        if (event.target === modal) {
+            closeSuccessModal();
+        }
+    });
+
+    // Форматирование числа в поле ввода
+    document.getElementById('custom-amount-input').addEventListener('blur', function () {
+        const value = this.value;
+        if (value) {
+            // Форматируем число с разделителями тысяч
+            this.value = parseFloat(value).toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).replace(/,/g, '');
+        }
+    });
+
+    // Инициализация
+    updateDonateButton();
+</script>
+{% endblock %}
