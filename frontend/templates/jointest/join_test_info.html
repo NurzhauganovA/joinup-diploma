@@ -1,0 +1,342 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'jointest/css/join-test.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Тест для вступления {% endblock %}
+
+{% block page_title %} Тест для вступления в клуб {% endblock %}
+
+{% block content %}
+<div class="join-test-info-container">
+    <!-- Заголовок -->
+    <div class="test-info-header">
+        <div class="club-info-section">
+            <div class="club-logo-test">
+                {% if club.logo %}
+                <img src="{{ club.logo.url }}" alt="{{ club.name }}">
+                {% else %}
+                <div class="logo-placeholder-test">{{ club.name.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="club-details-test">
+                <h1>{{ test.title }}</h1>
+                <h2>{{ club.name }}</h2>
+                <p>{{ test.description|default:"Пройдите тест для вступления в клуб" }}</p>
+            </div>
+        </div>
+
+        <div class="test-status-info">
+            <div class="status-item">
+                <span class="status-label">Попыток осталось:</span>
+                <span class="status-value attempts-left">{{ attempts_left }}</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Статус:</span>
+                <span class="status-value status-{{ membership.status }}">
+                    {% if membership.status == 'test_required' %}
+                        Требуется тест
+                    {% elif membership.status == 'test_failed' %}
+                        Тест не пройден
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-info-content">
+        <div class="test-info-main">
+            <!-- Информация о тесте -->
+            <div class="test-details-card">
+                <div class="card-header">
+                    <h3>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9A3 3 0 0 1 15 9"/>
+                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                        </svg>
+                        Информация о тесте
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="test-info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M9 11H15M9 15H15M17 21L12 16L7 21V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V21Z"/>
+                                </svg>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-value">{{ test.max_attempts }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правила прохождения -->
+            <div class="test-rules-card">
+                <div class="card-header">
+                    <h3>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10,9 9,9 8,9"/>
+                        </svg>
+                        Правила прохождения
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <ul class="rules-list">
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            Внимательно читайте каждый вопрос перед ответом
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            У вас есть {{ test.time_limit }} минут на прохождение всего теста
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            Для успешного прохождения нужно набрать минимум {{ test.passing_score }}%
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            После начала теста вы не сможете выйти без потери попытки
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            Максимальное количество попыток: {{ test.max_attempts }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Кнопка начала теста -->
+            <div class="start-test-section">
+                {% if attempts_left > 0 %}
+                <button id="start-test-btn" class="btn-start-test">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    Начать тест
+                </button>
+                <p class="start-test-note">Убедитесь, что у вас есть стабильное интернет-соединение</p>
+                {% else %}
+                <div class="no-attempts-left">
+                    <div class="no-attempts-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <h3>Попытки исчерпаны</h3>
+                    <p>Вы использовали все доступные попытки для прохождения теста</p>
+                    <a href="{% url 'club_detail' club.slug %}" class="btn-back-to-club">Вернуться к клубу</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Боковая панель -->
+        <div class="test-info-sidebar">
+            <!-- История попыток -->
+            {% if previous_attempts %}
+            <div class="attempts-history-card">
+                <div class="card-header">
+                    <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        История попыток
+                    </h4>
+                </div>
+                <div class="card-content">
+                    <div class="attempts-list">
+                        {% for attempt in previous_attempts %}
+                        <div class="attempt-item attempt-{{ attempt.status }}">
+                            <div class="attempt-header">
+                                <span class="attempt-number">Попытка {{ forloop.counter }}</span>
+                                <span class="attempt-date">{{ attempt.started_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                            <div class="attempt-details">
+                                <div class="attempt-status">
+                                    {% if attempt.status == 'passed' %}
+                                    <span class="status-badge status-passed">Пройдена</span>
+                                    {% elif attempt.status == 'failed' %}
+                                    <span class="status-badge status-failed">Не пройдена</span>
+                                    {% elif attempt.status == 'expired' %}
+                                    <span class="status-badge status-expired">Время истекло</span>
+                                    {% endif %}
+                                </div>
+                                {% if attempt.score is not None %}
+                                <div class="attempt-score">{{ attempt.score|floatformat:1 }}%</div>
+                                {% endif %}
+                            </div>
+                            {% if attempt.time_spent %}
+                            <div class="attempt-time">
+                                Время: {{ attempt.time_spent|floatformat:0 }} сек
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Информация о клубе -->
+            <div class="club-info-card">
+                <div class="card-header">
+                    <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                            <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                        </svg>
+                        О клубе
+                    </h4>
+                </div>
+                <div class="card-content">
+                    <div class="club-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ club.members_count }}</span>
+                            <span class="stat-label">Участников</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ club.category.name }}</span>
+                            <span class="stat-label">Категория</span>
+                        </div>
+                    </div>
+                    <div class="club-description">
+                        <p>{{ club.short_description }}</p>
+                    </div>
+                    <a href="{% url 'club_detail' club.slug %}" class="btn-view-club">
+                        Подробнее о клубе
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модал подтверждения начала теста -->
+<div id="confirm-test-modal" class="modal">
+    <div class="modal-content confirm-modal">
+        <div class="modal-header">
+            <h3>Подтверждение начала теста</h3>
+            <span class="close-modal" onclick="closeConfirmModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                </svg>
+            </div>
+            <h4>Готовы начать тест?</h4>
+            <p>После начала у вас будет <strong>{{ test.time_limit }} минут</strong> на прохождение теста. Прерывание
+                теста приведет к потере попытки.</p>
+            <div class="confirmation-details">
+                <div class="detail-item">
+                    <span>Вопросов:</span>
+                    <strong>{{ questions_count }}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Проходной балл:</span>
+                    <strong>{{ test.passing_score }}%</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Попыток осталось:</span>
+                    <strong>{{ attempts_left }}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeConfirmModal()">Отмена</button>
+            <button class="btn-confirm" onclick="confirmStartTest()">Да, начать тест</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('start-test-btn')?.addEventListener('click', function () {
+        document.getElementById('confirm-test-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeConfirmModal() {
+        document.getElementById('confirm-test-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function confirmStartTest() {
+        const btn = document.querySelector('.btn-confirm');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Создание теста...';
+        btn.disabled = true;
+
+        fetch(`/clubs/membership/{{ membership.id }}/start-test/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert(data.error || 'Произошла ошибка при создании теста');
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при создании теста');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+    }
+
+    // Закрытие модала при клике вне его
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('confirm-test-modal');
+        if (event.target === modal) {
+            closeConfirmModal();
+        }
+    });
+</script>
+{% endblock %}

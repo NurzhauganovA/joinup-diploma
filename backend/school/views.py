@@ -1,5 +1,3 @@
-# Обновить school/views.py
-
 import json
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,8 +14,8 @@ from authorization.models import User, Student, UserInfo
 from authorization import UserRoles
 from school.forms import ClubApplicationForm
 from school.models import (
-    Class, Faculty, ClubCategory, ClubInterestQuiz, Club,
-    ClubApplication, ClubMember, ClubEvent, EventRegistration, QuizResult, Donation
+    Class, Faculty, ClubCategory, Club,
+    ClubApplication, ClubMember, ClubEvent, EventRegistration, Donation
 )
 from school.services import GetSchoolPartData
 from school.utils import CacheData
@@ -70,15 +68,12 @@ def clubs_list(request):
     # Рекомендуемые клубы
     featured_clubs = Club.objects.filter(is_featured=True, status='active')[:5]
 
-    # Активная викторина
-    active_quiz = ClubInterestQuiz.objects.filter(is_active=True).first()
 
     context = {
         'page_obj': page_obj,
         'categories': categories,
         'faculties': faculties,
         'featured_clubs': featured_clubs,
-        'active_quiz': active_quiz,
         'selected_category': category_id,
         'selected_faculty': faculty_id,
         'search_query': search_query,
@@ -177,227 +172,6 @@ def create_club_application(request):
     }
 
     return render(request, 'clubs/includes/club_application_form.html', context)
-
-
-@login_required
-@require_POST
-def join_club(request, club_id):
-    """Подача заявки на вступление в клуб"""
-    club = get_object_or_404(Club, id=club_id, status='active')
-
-    if not club.accepting_members:
-        return JsonResponse({
-            'success': False,
-            'error': 'Клуб в настоящее время не принимает новых участников'
-        })
-
-    # Проверяем, не является ли пользователь уже участником
-    existing_membership = ClubMember.objects.filter(club=club, user=request.user).first()
-    if existing_membership:
-        if existing_membership.status == 'active':
-            return JsonResponse({
-                'success': False,
-                'error': 'Вы уже являетесь участником этого клуба'
-            })
-        elif existing_membership.status == 'pending':
-            return JsonResponse({
-                'success': False,
-                'error': 'Ваша заявка уже рассматривается'
-            })
-
-    # Создаем заявку на вступление
-    try:
-        with transaction.atomic():
-            if existing_membership:
-                existing_membership.status = 'pending'
-                existing_membership.save()
-            else:
-                ClubMember.objects.create(
-                    user=request.user,
-                    club=club,
-                    status='pending'
-                )
-
-            return JsonResponse({
-                'success': True,
-                'message': 'Заявка подана успешно!'
-            })
-    except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'error': 'Произошла ошибка при подаче заявки'
-        })
-
-
-@login_required
-def start_club_quiz(request):
-    """Начало теста для подбора клуба"""
-    active_quiz = get_object_or_404(ClubInterestQuiz, is_active=True)
-
-    # Получаем первый вопрос
-    first_question = active_quiz.questions.order_by('order').first()
-
-    if not first_question:
-        messages.error(request, 'Тест временно недоступен')
-        return redirect('clubs_list')
-
-    # Очищаем предыдущие ответы из сессии
-    if 'quiz_answers' in request.session:
-        del request.session['quiz_answers']
-
-    context = {
-        'quiz': active_quiz,
-        'question': first_question,
-        'question_number': 1,
-        'total_questions': active_quiz.questions.count(),
-    }
-
-    return render(request, 'clubs/quiz_start.html', context)
-
-
-@login_required
-@require_POST
-def submit_quiz_answer(request):
-    """Обработка ответа на вопрос теста"""
-    quiz_id = request.POST.get('quiz_id')
-    question_id = request.POST.get('question_id')
-    option_id = request.POST.get('option_id')
-
-    quiz = get_object_or_404(ClubInterestQuiz, id=quiz_id, is_active=True)
-    question = get_object_or_404(quiz.questions, id=question_id)
-
-    # Сохраняем ответ в сессии
-    if 'quiz_answers' not in request.session:
-        request.session['quiz_answers'] = {}
-
-    request.session['quiz_answers'][question_id] = option_id
-    request.session.modified = True
-
-    # Проверяем, есть ли следующий вопрос
-    next_question = quiz.questions.filter(order__gt=question.order).order_by('order').first()
-
-    if next_question:
-        # Возвращаем следующий вопрос
-        return JsonResponse({
-            'status': 'next_question',
-            'question': {
-                'id': next_question.id,
-                'text': next_question.text,
-                'number': next_question.order,
-                'total': quiz.questions.count(),
-                'options': [
-                    {'id': option.id, 'text': option.text}
-                    for option in next_question.options.all()
-                ]
-            }
-        })
-    else:
-        # Тест завершен, обрабатываем результаты
-        try:
-            result = process_quiz_results(request.user, quiz, request.session['quiz_answers'])
-            return JsonResponse({
-                'status': 'completed',
-                'redirect_url': reverse('quiz_results')
-            })
-        except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Ошибка при обработке результатов теста'
-            }, status=500)
-
-
-def process_quiz_results(user, quiz, answers):
-    """Обработка результатов теста и подбор подходящих клубов"""
-    from collections import defaultdict
-    from school.models import QuizResult, UserAnswer, QuizOption, OptionCategoryRelation
-
-    # Подсчитываем баллы по категориям
-    category_scores = defaultdict(int)
-
-    for question_id, option_id in answers.items():
-        try:
-            option = QuizOption.objects.get(id=option_id)
-            # Получаем связи категорий с опцией
-            relations = OptionCategoryRelation.objects.filter(option=option)
-            for relation in relations:
-                category_scores[relation.category] += relation.strength
-        except QuizOption.DoesNotExist:
-            continue
-
-    # Сортируем категории по баллам
-    sorted_categories = sorted(category_scores.items(), key=lambda x: x[1], reverse=True)
-
-    # Получаем топ-3 категории
-    top_categories = [cat for cat, score in sorted_categories[:3]]
-
-    # Находим рекомендуемые клубы
-    recommended_clubs = Club.objects.filter(
-        category__in=top_categories,
-        status='active',
-        accepting_members=True
-    ).order_by('-members_count')[:6]
-
-    # Сохраняем результат
-    with transaction.atomic():
-        # Удаляем предыдущий результат если есть
-        QuizResult.objects.filter(user=user, quiz=quiz).delete()
-
-        # Создаем новый результат
-        result = QuizResult.objects.create(
-            user=user,
-            quiz=quiz,
-            top_category_1=top_categories[0] if len(top_categories) > 0 else None,
-            top_category_2=top_categories[1] if len(top_categories) > 1 else None,
-            top_category_3=top_categories[2] if len(top_categories) > 2 else None,
-        )
-
-        # Добавляем рекомендуемые клубы
-        result.recommended_clubs.set(recommended_clubs)
-
-        # Сохраняем ответы пользователя
-        for question_id, option_id in answers.items():
-            try:
-                question = quiz.questions.get(id=question_id)
-                option = QuizOption.objects.get(id=option_id)
-                UserAnswer.objects.create(
-                    quiz_result=result,
-                    question=question,
-                    selected_option=option
-                )
-            except (QuizOption.DoesNotExist, Exception):
-                continue
-
-    return result
-
-
-@login_required
-def quiz_results(request):
-    """Отображение результатов теста"""
-    # Получаем последний результат пользователя
-    result = QuizResult.objects.filter(user=request.user).order_by('-date_taken').first()
-
-    if not result:
-        messages.error(request, 'Результаты теста не найдены. Пройдите тест заново.')
-        return redirect('quiz_start')
-
-    # Получаем рекомендуемые клубы
-    recommended_clubs = result.recommended_clubs.all()
-
-    # Получаем топ категории
-    top_categories = [
-        result.top_category_1,
-        result.top_category_2,
-        result.top_category_3
-    ]
-    top_categories = [cat for cat in top_categories if cat is not None]
-
-    context = {
-        'result': result,
-        'recommended_clubs': recommended_clubs,
-        'top_categories': top_categories,
-    }
-
-    return render(request, 'clubs/quiz_results.html', context)
 
 
 @login_required

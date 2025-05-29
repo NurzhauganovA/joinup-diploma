@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from school import SectionActionStatus, Regions
+from school import Regions
 
 
 class School(models.Model):
@@ -15,7 +15,7 @@ class School(models.Model):
     direct = models.CharField(max_length=155)
     language = models.CharField(max_length=155)
     country = models.CharField(max_length=155, null=True, blank=True)
-    region = models.CharField(max_length=155, choices=Regions.choices, null=False)
+    region = models.CharField(max_length=155, choices=Regions.get_choices(), default=Regions.AQMOLA)
     city = models.CharField(max_length=155, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     bin = models.CharField(max_length=12)
@@ -190,6 +190,9 @@ class ClubMember(models.Model):
         ('active', 'Active'),
         ('inactive', 'Inactive'),
         ('pending', 'Pending Approval'),
+        ('test_required', 'Test Required'),  # Новый статус
+        ('test_in_progress', 'Test In Progress'),  # Новый статус
+        ('test_failed', 'Test Failed'),  # Новый статус
     )
 
     user = models.ForeignKey('authorization.User', on_delete=models.CASCADE, related_name='club_memberships')
@@ -197,18 +200,32 @@ class ClubMember(models.Model):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='member')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     join_date = models.DateField(auto_now_add=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True, blank=True)
+    faculty = models.ForeignKey('Faculty', on_delete=models.SET_NULL, null=True, blank=True)
     bio = models.TextField(blank=True)
-
-    # Skills and expertise related to the club
     skills = models.TextField(blank=True)
-
-    # Additional info
     academic_year = models.PositiveSmallIntegerField(null=True, blank=True)
-
     is_public = models.BooleanField(default=True, help_text="Whether this membership is visible to others")
+
+    # Новые поля для тестирования
+    test_attempt = models.ForeignKey("JoinTestAttempt", on_delete=models.SET_NULL, null=True, blank=True)
+    attempts_count = models.IntegerField(default=0)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def can_take_test(self):
+        """Может ли пользователь пройти тест"""
+        if not hasattr(self.club, 'join_test') or not self.club.join_test.is_active:
+            return False
+        return self.attempts_count < self.club.join_test.max_attempts
+
+    def get_current_attempt(self):
+        """Получить текущую попытку прохождения теста"""
+        return JoinTestAttempt.objects.filter(
+            user=self.user,
+            test=self.club.join_test,
+            status='in_progress'
+        ).first()
 
     class Meta:
         verbose_name = "Club Member"
@@ -217,7 +234,7 @@ class ClubMember(models.Model):
         unique_together = ('user', 'club')
 
     def __str__(self):
-        return f"{self.user.mobile_phone} - {self.club.name} ({self.role})"
+        return f"{self.user.full_name} - {self.club.name} ({self.role})"
 
 
 class ClubEvent(models.Model):
@@ -427,103 +444,128 @@ class Donation(models.Model):
         ordering = ['-created_at']
 
 
-class ClubInterestQuiz(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
+class JoinTest(models.Model):
+    """Тест для вступления в клуб"""
+    club = models.OneToOneField(Club, on_delete=models.CASCADE, related_name='join_test')
+    title = models.CharField(max_length=200, default="Тест для вступления")
+    description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+    passing_score = models.IntegerField(default=70, help_text="Минимальный балл для прохождения (%)")
+    time_limit = models.IntegerField(default=30, help_text="Ограничение по времени (минуты)")
+    max_attempts = models.IntegerField(default=3, help_text="Максимальное количество попыток")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return f"Тест для {self.club.name}"
 
     class Meta:
-        verbose_name = "Club Interest Quiz"
-        verbose_name_plural = "Club Interest Quizzes"
-        db_table = 'club_interest_quizzes'
-        ordering = ['-created_at']
+        verbose_name = "Тест для вступления"
+        verbose_name_plural = "Тесты для вступления"
+        db_table = 'join_tests'
 
 
-class QuizQuestion(models.Model):
-    quiz = models.ForeignKey(ClubInterestQuiz, on_delete=models.CASCADE, related_name='questions')
-    text = models.TextField()
-    order = models.PositiveSmallIntegerField(default=0)
+class JoinTestQuestion(models.Model):
+    """Вопрос теста для вступления"""
+    QUESTION_TYPES = (
+        ('single', 'Один правильный ответ'),
+        ('multiple', 'Несколько правильных ответов'),
+        ('text', 'Текстовый ответ'),
+    )
+
+    test = models.ForeignKey(JoinTest, on_delete=models.CASCADE, related_name='questions')
+    question_text = models.TextField()
+    question_type = models.CharField(max_length=20, choices=QUESTION_TYPES, default='single')
+    points = models.IntegerField(default=1, help_text="Баллы за правильный ответ")
+    order = models.PositiveIntegerField(default=0)
+    is_required = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.quiz.title} - Q{self.order}"
+        return f"Вопрос {self.order}: {self.question_text[:50]}..."
 
     class Meta:
-        verbose_name = "Quiz Question"
-        verbose_name_plural = "Quiz Questions"
-        db_table = 'quiz_questions'
+        verbose_name = "Вопрос теста"
+        verbose_name_plural = "Вопросы теста"
+        db_table = 'join_test_questions'
         ordering = ['order']
 
 
-class QuizOption(models.Model):
-    question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE, related_name='options')
-    text = models.CharField(max_length=200)
-
-    # Clubs that this option is related to with strength of relationship
-    related_categories = models.ManyToManyField(ClubCategory, through='OptionCategoryRelation')
-
-    def __str__(self):
-        return self.text
-
-    class Meta:
-        verbose_name = "Quiz Option"
-        verbose_name_plural = "Quiz Options"
-        db_table = 'quiz_options'
-        ordering = ['question__order', 'text']
-
-
-class OptionCategoryRelation(models.Model):
-    option = models.ForeignKey(QuizOption, on_delete=models.CASCADE)
-    category = models.ForeignKey(ClubCategory, on_delete=models.CASCADE)
-    strength = models.SmallIntegerField(default=1, help_text="Strength of relationship: 1-5")
-
-    class Meta:
-        verbose_name = "Option Category Relation"
-        verbose_name_plural = "Option Category Relations"
-        db_table = 'option_category_relations'
-        unique_together = ('option', 'category')
+class JoinTestAnswer(models.Model):
+    """Варианты ответов на вопросы теста"""
+    question = models.ForeignKey(JoinTestQuestion, on_delete=models.CASCADE, related_name='answers')
+    answer_text = models.TextField()
+    is_correct = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.option.text} - {self.category.name} ({self.strength})"
+        return f"Ответ: {self.answer_text[:30]}..."
+
+    class Meta:
+        verbose_name = "Вариант ответа"
+        verbose_name_plural = "Варианты ответов"
+        db_table = 'join_test_answers'
+        ordering = ['order']
 
 
-class QuizResult(models.Model):
-    user = models.ForeignKey('authorization.User', on_delete=models.CASCADE, related_name='quiz_results')
-    quiz = models.ForeignKey(ClubInterestQuiz, on_delete=models.CASCADE)
-    date_taken = models.DateTimeField(auto_now_add=True)
+class JoinTestAttempt(models.Model):
+    """Попытка прохождения теста"""
+    STATUS_CHOICES = (
+        ('in_progress', 'В процессе'),
+        ('completed', 'Завершена'),
+        ('failed', 'Провалена'),
+        ('passed', 'Пройдена'),
+        ('expired', 'Время истекло'),
+    )
 
-    # Store the top recommended categories
-    top_category_1 = models.ForeignKey(ClubCategory, on_delete=models.CASCADE, related_name='top_results_1')
-    top_category_2 = models.ForeignKey(ClubCategory, on_delete=models.CASCADE, related_name='top_results_2', null=True,
-                                       blank=True)
-    top_category_3 = models.ForeignKey(ClubCategory, on_delete=models.CASCADE, related_name='top_results_3', null=True,
-                                       blank=True)
+    user = models.ForeignKey('authorization.User', on_delete=models.CASCADE, related_name='join_test_attempts')
+    test = models.ForeignKey(JoinTest, on_delete=models.CASCADE, related_name='attempts')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    score = models.FloatField(null=True, blank=True, help_text="Результат в процентах")
+    total_questions = models.IntegerField(default=0)
+    correct_answers = models.IntegerField(default=0)
+    started_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    time_spent = models.IntegerField(null=True, blank=True, help_text="Время в секундах")
 
-    # Store the top recommended clubs
-    recommended_clubs = models.ManyToManyField(Club, related_name='recommended_in')
+    def is_expired(self):
+        if self.status != 'in_progress':
+            return False
+        time_limit_seconds = self.test.time_limit * 60
+        return (timezone.now() - self.started_at).seconds > time_limit_seconds
+
+    def calculate_score(self):
+        if self.total_questions == 0:
+            return 0
+        return (self.correct_answers / self.total_questions) * 100
+
+    def is_passed(self):
+        return self.score and self.score >= self.test.passing_score
 
     def __str__(self):
-        return f"{self.user.mobile_phone} - {self.quiz.title} ({self.date_taken})"
+        return f"{self.user.full_name} - {self.test.club.name} ({self.status})"
 
     class Meta:
-        verbose_name = "Quiz Result"
-        verbose_name_plural = "Quiz Results"
-        db_table = 'quiz_results'
-        ordering = ['-date_taken']
-        unique_together = ('user', 'quiz')
+        verbose_name = "Попытка теста"
+        verbose_name_plural = "Попытки тестов"
+        db_table = 'join_test_attempts'
+        ordering = ['-started_at']
 
 
-class UserAnswer(models.Model):
-    quiz_result = models.ForeignKey(QuizResult, on_delete=models.CASCADE, related_name='answers')
-    question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
-    selected_option = models.ForeignKey(QuizOption, on_delete=models.CASCADE)
+class JoinTestUserAnswer(models.Model):
+    """Ответы пользователя на вопросы теста"""
+    attempt = models.ForeignKey(JoinTestAttempt, on_delete=models.CASCADE, related_name='user_answers')
+    question = models.ForeignKey(JoinTestQuestion, on_delete=models.CASCADE)
+    selected_answers = models.ManyToManyField(JoinTestAnswer, blank=True)
+    text_answer = models.TextField(blank=True, null=True)
+    is_correct = models.BooleanField(default=False)
+    points_earned = models.IntegerField(default=0)
+    answered_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Ответ на вопрос {self.question.order}"
 
     class Meta:
-        verbose_name = "User Answer"
-        verbose_name_plural = "User Answers"
-        db_table = 'user_answers'
-        unique_together = ('quiz_result', 'question')
+        verbose_name = "Ответ пользователя"
+        verbose_name_plural = "Ответы пользователей"
+        db_table = 'join_test_user_answers'

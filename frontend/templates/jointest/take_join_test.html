@@ -1,0 +1,520 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'jointest/css/join-test.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Прохождение теста {% endblock %}
+
+{% block page_title %} Тест для вступления {% endblock %}
+
+{% block content %}
+<div class="take-test-container">
+    <!-- Заголовок с таймером -->
+    <div class="test-header">
+        <div class="test-info">
+            <h1>{{ test.title }}</h1>
+            <p>{{ club.name }}</p>
+        </div>
+        <div class="test-timer">
+            <div class="timer-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <div class="timer-display">
+                <span id="timer">{{ time_left|floatformat:0 }}</span>
+                <span class="timer-label">сек</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Прогресс-бар -->
+    <div class="test-progress">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-info">
+            <span id="current-question">1</span> из {{ questions.count }} вопросов
+        </div>
+    </div>
+
+    <!-- Форма теста -->
+    <form id="test-form">
+        {% csrf_token %}
+        <div class="questions-container">
+            {% for question in questions %}
+            <div class="question-card" data-question-id="{{ question.id }}" {% if not forloop.first
+                 %}style="display: none;" {% endif %}>
+                <div class="question-header">
+                    <div class="question-number">
+                        Вопрос {{ forloop.counter }}
+                        {% if question.is_required %}
+                        <span class="required-indicator">*</span>
+                        {% endif %}
+                    </div>
+                    <div class="question-points">{{ question.points }} {{ question.points|pluralize:"балл,балла,баллов"
+                        }}
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <h3 class="question-text">{{ question.question_text }}</h3>
+
+                    <div class="answers-container">
+                        {% if question.question_type == 'single' %}
+                        <!-- Один правильный ответ -->
+                        {% for answer in question.answers.all %}
+                        <label class="answer-option single-choice">
+                            <input type="radio"
+                                   name="question_{{ question.id }}"
+                                   value="{{ answer.id }}"
+                                   {% if question.id in user_answers and answer in
+                                   user_answers.question.id.selected_answers.all %}checked{% endif %}>
+                            <span class="answer-checkmark"></span>
+                            <span class="answer-text">{{ answer.answer_text }}</span>
+                        </label>
+                        {% endfor %}
+
+                        {% elif question.question_type == 'multiple' %}
+                        <!-- Несколько правильных ответов -->
+                        <div class="multiple-choice-note">Выберите все подходящие варианты</div>
+                        {% for answer in question.answers.all %}
+                        <label class="answer-option multiple-choice">
+                            <input type="checkbox"
+                                   name="question_{{ question.id }}"
+                                   value="{{ answer.id }}"
+                                   {% if question.id in user_answers and answer in
+                                   user_answers.question.id.selected_answers.all %}checked{% endif %}>
+                            <span class="answer-checkmark"></span>
+                            <span class="answer-text">{{ answer.answer_text }}</span>
+                        </label>
+                        {% endfor %}
+
+                        {% elif question.question_type == 'text' %}
+                        <!-- Текстовый ответ -->
+                        <div class="text-answer-container">
+                                <textarea name="question_{{ question.id }}_text"
+                                          class="text-answer"
+                                          placeholder="Введите ваш ответ..."
+                                          rows="4">{% if question.id in user_answers %}{{ user_answers.question.id.text_answer }}{% endif %}</textarea>
+                            <div class="text-answer-counter">
+                                <span class="char-count">0</span> символов
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Навигация по вопросам -->
+        <div class="test-navigation">
+            <button type="button" id="prev-question" class="btn-nav" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"/>
+                </svg>
+                Назад
+            </button>
+
+            <div class="questions-dots">
+                {% for question in questions %}
+                <button type="button"
+                        class="question-dot {% if forloop.first %}active{% endif %}"
+                        data-question="{{ forloop.counter0 }}"
+                        title="Вопрос {{ forloop.counter }}">
+                    {{ forloop.counter }}
+                </button>
+                {% endfor %}
+            </div>
+
+            <button type="button" id="next-question" class="btn-nav">
+                Далее
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Кнопка завершения теста -->
+        <div class="test-completion" style="display: none;">
+            <div class="completion-info">
+                <h3>Все вопросы отвечены!</h3>
+                <p>Проверьте ваши ответы и завершите тест</p>
+            </div>
+            <button type="button" id="finish-test" class="btn-finish-test">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                </svg>
+                Завершить тест
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Модал подтверждения завершения -->
+<div id="finish-test-modal" class="modal">
+    <div class="modal-content finish-modal">
+        <div class="modal-header">
+            <h3>Завершить тест?</h3>
+        </div>
+        <div class="modal-body">
+            <div class="finish-warning">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18A2 2 0 0 0 3.55 21H20.45A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+            </div>
+            <p>Вы уверены, что хотите завершить тест? После завершения вы не сможете изменить ответы.</p>
+            <div class="test-summary">
+                <div class="summary-item">
+                    <span>Отвечено вопросов:</span>
+                    <span id="answered-count">0</span> из {{ questions.count }}
+                </div>
+                <div class="summary-item">
+                    <span>Времени осталось:</span>
+                    <span id="time-remaining">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeFinishModal()">Продолжить тест</button>
+            <button class="btn-confirm-finish" onclick="confirmFinishTest()">Завершить тест</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модал истечения времени -->
+<div id="time-up-modal" class="modal">
+    <div class="modal-content time-up-modal">
+        <div class="modal-header">
+            <h3>Время истекло!</h3>
+        </div>
+        <div class="modal-body">
+            <div class="time-up-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <p>Время на прохождение теста истекло. Тест будет автоматически завершен.</p>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-confirm" onclick="handleTimeUp()">Понятно</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentQuestion = 0;
+    let timeLeft = {{ time_left }};
+    let timerInterval;
+    let questions = document.querySelectorAll('.question-card');
+    let totalQuestions = questions.length;
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function () {
+        startTimer();
+        updateProgress();
+        initializeNavigation();
+        initializeAnswerTracking();
+
+        // Предотвращаем случайное закрытие страницы
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = 'Вы уверены, что хотите покинуть тест? Прогресс будет потерян.';
+        });
+    });
+
+    // Таймер
+    function startTimer() {
+        timerInterval = setInterval(function () {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                showTimeUpModal();
+            } else if (timeLeft <= 300) { // 5 минут
+                document.querySelector('.timer-display').classList.add('timer-warning');
+            } else if (timeLeft <= 60) { // 1 минута
+                document.querySelector('.timer-display').classList.add('timer-critical');
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent =
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function showTimeUpModal() {
+        document.getElementById('time-up-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function handleTimeUp() {
+        // Автоматически завершаем тест
+        finishTest(true);
+    }
+
+    // Навигация по вопросам
+    function initializeNavigation() {
+        document.getElementById('prev-question').addEventListener('click', function () {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        });
+
+        document.getElementById('next-question').addEventListener('click', function () {
+            if (currentQuestion < totalQuestions - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        });
+
+        // Навигация через точки
+        document.querySelectorAll('.question-dot').forEach(function (dot) {
+            dot.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                showQuestion(questionIndex);
+            });
+        });
+    }
+
+    function showQuestion(index) {
+        // Сохраняем ответ текущего вопроса
+        saveCurrentAnswer();
+
+        // Скрываем текущий вопрос
+        questions[currentQuestion].style.display = 'none';
+        document.querySelectorAll('.question-dot')[currentQuestion].classList.remove('active');
+
+        // Показываем новый вопрос
+        currentQuestion = index;
+        questions[currentQuestion].style.display = 'block';
+        document.querySelectorAll('.question-dot')[currentQuestion].classList.add('active');
+
+        // Обновляем навигацию
+        document.getElementById('prev-question').disabled = currentQuestion === 0;
+        document.getElementById('next-question').textContent =
+                currentQuestion === totalQuestions - 1 ? 'Завершить' : 'Далее';
+
+        // Если последний вопрос, показываем кнопку завершения
+        if (currentQuestion === totalQuestions - 1) {
+            document.querySelector('.test-completion').style.display = 'block';
+        } else {
+            document.querySelector('.test-completion').style.display = 'none';
+        }
+
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+        document.getElementById('progress-fill').style.width = progress + '%';
+        document.getElementById('current-question').textContent = currentQuestion + 1;
+    }
+
+    // Отслеживание ответов
+    function initializeAnswerTracking() {
+        // Отслеживаем изменения в ответах
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(function (input) {
+            input.addEventListener('change', function () {
+                saveCurrentAnswer();
+                updateQuestionStatus();
+            });
+        });
+
+        document.querySelectorAll('textarea.text-answer').forEach(function (textarea) {
+            textarea.addEventListener('input', function () {
+                saveCurrentAnswer();
+                updateQuestionStatus();
+                updateCharCount(this);
+            });
+        });
+
+        // Инициализируем счетчики символов
+        document.querySelectorAll('textarea.text-answer').forEach(updateCharCount);
+    }
+
+    function updateCharCount(textarea) {
+        const counter = textarea.parentElement.querySelector('.char-count');
+        if (counter) {
+            counter.textContent = textarea.value.length;
+        }
+    }
+
+    function saveCurrentAnswer() {
+        const questionCard = questions[currentQuestion];
+        const questionId = questionCard.dataset.questionId;
+
+        // Получаем ответы
+        const selectedAnswers = [];
+        const checkboxes = questionCard.querySelectorAll('input[type="checkbox"]:checked');
+        const radio = questionCard.querySelector('input[type="radio"]:checked');
+        const textAnswer = questionCard.querySelector('textarea.text-answer');
+
+        if (radio) {
+            selectedAnswers.push(parseInt(radio.value));
+        }
+
+        checkboxes.forEach(function (cb) {
+            selectedAnswers.push(parseInt(cb.value));
+        });
+
+        // Сохраняем ответ на сервере
+        const data = {
+            question_id: questionId,
+            selected_answers: selectedAnswers,
+            text_answer: textAnswer ? textAnswer.value : ''
+        };
+
+        fetch(`/clubs/attempt/{{ attempt.id }}/submit-answer/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Обновляем статус вопроса
+                        updateQuestionStatus();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving answer:', error);
+                });
+    }
+
+    function updateQuestionStatus() {
+        const questionCard = questions[currentQuestion];
+        const dot = document.querySelectorAll('.question-dot')[currentQuestion];
+
+        // Проверяем, есть ли ответ
+        const hasAnswer =
+                questionCard.querySelector('input[type="radio"]:checked') ||
+                questionCard.querySelector('input[type="checkbox"]:checked') ||
+                (questionCard.querySelector('textarea.text-answer') &&
+                        questionCard.querySelector('textarea.text-answer').value.trim());
+
+        if (hasAnswer) {
+            dot.classList.add('answered');
+        } else {
+            dot.classList.remove('answered');
+        }
+
+        // Проверяем, все ли вопросы отвечены
+        updateTestCompletion();
+    }
+
+    function updateTestCompletion() {
+        const answeredQuestions = document.querySelectorAll('.question-dot.answered').length;
+        const completionInfo = document.querySelector('.test-completion');
+
+        if (answeredQuestions === totalQuestions) {
+            completionInfo.style.display = 'block';
+            completionInfo.querySelector('h3').textContent = 'Все вопросы отвечены!';
+        } else {
+            completionInfo.querySelector('h3').textContent =
+                    `Отвечено ${answeredQuestions} из ${totalQuestions} вопросов`;
+        }
+    }
+
+    // Завершение теста
+    document.getElementById('finish-test').addEventListener('click', function () {
+        saveCurrentAnswer();
+        showFinishModal();
+    });
+
+    function showFinishModal() {
+        const answeredCount = document.querySelectorAll('.question-dot.answered').length;
+        document.getElementById('answered-count').textContent = answeredCount;
+
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('time-remaining').textContent =
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        document.getElementById('finish-test-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFinishModal() {
+        document.getElementById('finish-test-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function confirmFinishTest() {
+        const btn = document.querySelector('.btn-confirm-finish');
+        btn.innerHTML = '<span class="loading-spinner"></span> Завершение...';
+        btn.disabled = true;
+
+        finishTest(false);
+    }
+
+    function finishTest(timeUp = false) {
+        clearInterval(timerInterval);
+
+        fetch(`/clubs/attempt/{{ attempt.id }}/complete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({time_up: timeUp})
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Удаляем предупреждение о закрытии страницы
+                        window.removeEventListener('beforeunload', null);
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert(data.error || 'Произошла ошибка при завершении теста');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error finishing test:', error);
+                    alert('Произошла ошибка при завершении теста');
+                });
+    }
+
+    // Закрытие модалов при клике вне их
+    window.addEventListener('click', function (event) {
+        const finishModal = document.getElementById('finish-test-modal');
+        const timeUpModal = document.getElementById('time-up-modal');
+
+        if (event.target === finishModal) {
+            closeFinishModal();
+        }
+    });
+
+    // Автосохранение при переходе между вопросами
+    document.getElementById('next-question').addEventListener('click', function () {
+        if (currentQuestion < totalQuestions - 1) {
+            showQuestion(currentQuestion + 1);
+        } else {
+            // Последний вопрос - показываем модал завершения
+            saveCurrentAnswer();
+            showFinishModal();
+        }
+    });
+
+    // Сохранение при закрытии страницы
+    window.addEventListener('beforeunload', function () {
+        saveCurrentAnswer();
+    });
+</script>
+{% endblock %}

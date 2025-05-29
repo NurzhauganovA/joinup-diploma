@@ -13,14 +13,6 @@ urlpatterns = [
     path('create/', views.create_club_application, name='create_club'),
     path('get-application-form/', views.get_club_application_form, name='get_application_form'),
 
-    # Вступление в клуб
-    path('club/<int:club_id>/join/', views.join_club, name='join_club'),
-
-    # Тест для подбора клуба
-    path('quiz/', views.start_club_quiz, name='quiz_start'),
-    path('quiz/submit-answer/', views.submit_quiz_answer, name='quiz_submit_answer'),
-    path('quiz-results/', views.quiz_results, name='quiz_results'),
-
     # Регистрация на мероприятия
     path('events/<int:event_id>/register/', views.register_for_event, name='register_for_event'),
 

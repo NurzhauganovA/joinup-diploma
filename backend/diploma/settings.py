@@ -40,6 +40,7 @@ LOCAL_APPS = [
     'dashboard',
     'contract',
     'school',
+    'jointest',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + ANOTHER_APPS + LOCAL_APPS

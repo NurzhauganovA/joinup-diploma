@@ -23,17 +23,3 @@ class Regions(models.TextChoices):
     @classmethod
     def get_choices(cls):
         return [region for region in cls.choices]
-
-
-class SectionActionStatus(models.TextChoices):
-    """ Статус посещения раздела """
-
-    ATTENDED = 'Attended', 'Посещено'
-    ABSENT = 'Absent', 'Отсутствие'
-    PERMITTED = 'Permitted', 'Разрешено'
-    LATE = 'Late', 'Опоздание'
-    LEFT = 'Left', 'Покинул занятие'
-
-    @classmethod
-    def get_choices(cls):
-        return [status for status in cls.choices]

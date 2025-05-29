@@ -1,0 +1,293 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'jointest/css/join-test.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Результаты теста {% endblock %}
+
+{% block page_title %} Результаты теста {% endblock %}
+
+{% block content %}
+<div class="test-results-container">
+    <!-- Заголовок результатов -->
+    <div class="results-header {% if is_passed %}passed{% else %}failed{% endif %}">
+        <div class="results-icon">
+            {% if is_passed %}
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12A10 10 0 1 1 5.93 7.69"/>
+                <polyline points="22,4 12,14.01 9,11.01"/>
+            </svg>
+            {% else %}
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            {% endif %}
+        </div>
+
+        <div class="results-info">
+            {% if is_passed %}
+            <h1>Поздравляем! Тест пройден!</h1>
+            <p>Ваша заявка отправлена на рассмотрение администратору клуба</p>
+            {% else %}
+            <h1>Тест не пройден</h1>
+            <p>К сожалению, вы не набрали минимальный проходной балл</p>
+            {% endif %}
+        </div>
+
+        <div class="club-info-result">
+            <div class="club-logo-result">
+                {% if club.logo %}
+                <img src="{{ club.logo.url }}" alt="{{ club.name }}">
+                {% else %}
+                <div class="logo-placeholder-result">{{ club.name.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="club-name-result">{{ club.name }}</div>
+        </div>
+    </div>
+
+    <!-- Статистика результатов -->
+    <div class="results-stats">
+        <div class="stat-card main-score">
+            <div class="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M16 12L12 8L8 12"/>
+                    <path d="M12 16V8"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ attempt.score|floatformat:1 }}%</div>
+                <div class="stat-label">Ваш результат</div>
+                <div class="stat-sublabel">
+                    Проходной балл: {{ test.passing_score }}%
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12L11 14L15 10"/>
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ attempt.correct_answers }}</div>
+                <div class="stat-label">Правильных ответов</div>
+                <div class="stat-sublabel">из {{ attempt.total_questions }}</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ attempt.time_spent|floatformat:0 }}</div>
+                <div class="stat-label">Секунд потрачено</div>
+                <div class="stat-sublabel">из {{ test.time_limit|floatformat:0 }} минут</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H8"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">{{ membership.attempts_count }}</div>
+                <div class="stat-label">Попытка</div>
+                <div class="stat-sublabel">из {{ test.max_attempts }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подробный разбор ответов -->
+    <div class="results-details">
+        <div class="details-header">
+            <h2>Подробный разбор</h2>
+            <div class="toggle-details">
+                <button id="toggle-details-btn" class="btn-toggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 12,15 18,9"/>
+                    </svg>
+                    Показать подробности
+                </button>
+            </div>
+        </div>
+
+        <div class="details-content" id="details-content" style="display: none;">
+            <div class="answers-review">
+                {% for user_answer in user_answers %}
+                <div class="answer-review-card {% if user_answer.is_correct %}correct{% else %}incorrect{% endif %}">
+                    <div class="answer-header">
+                        <div class="question-info">
+                            <span class="question-number">Вопрос {{ forloop.counter }}</span>
+                            <span class="question-points">{{ user_answer.question.points }} {{ user_answer.question.points|pluralize:"балл,балла,баллов" }}</span>
+                        </div>
+                        <div class="answer-status">
+                            {% if user_answer.is_correct %}
+                            <span class="status-badge correct">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2">
+                                        <polyline points="20,6 9,17 4,12"/>
+                                    </svg>
+                                    Правильно
+                                </span>
+                            {% else %}
+                            <span class="status-badge incorrect">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                    Неправильно
+                                </span>
+                            {% endif %}
+                            <span class="points-earned">{{ user_answer.points_earned }}/{{ user_answer.question.points }}</span>
+                        </div>
+                    </div>
+
+                    <div class="question-text">
+                        {{ user_answer.question.question_text }}
+                    </div>
+
+                    <div class="answer-options">
+                        {% if user_answer.question.question_type == 'text' %}
+                        <div class="text-answer-review">
+                            <div class="answer-label">Ваш ответ:</div>
+                            <div class="user-text-answer">{{ user_answer.text_answer|default:"Ответ не дан" }}</div>
+                        </div>
+                        {% else %}
+                        {% for answer in user_answer.question.answers.all %}
+                        <div class="option-review
+                                {% if answer in user_answer.selected_answers.all %}user-selected{% endif %}
+                                {% if answer.is_correct %}correct-answer{% endif %}">
+                            <div class="option-indicator">
+                                {% if answer in user_answer.selected_answers.all %}
+                                {% if user_answer.question.question_type == 'single' %}
+                                <div class="radio-indicator selected"></div>
+                                {% else %}
+                                <div class="checkbox-indicator selected"></div>
+                                {% endif %}
+                                {% else %}
+                                {% if user_answer.question.question_type == 'single' %}
+                                <div class="radio-indicator"></div>
+                                {% else %}
+                                <div class="checkbox-indicator"></div>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="option-text">{{ answer.answer_text }}</div>
+                            {% if answer.is_correct %}
+                            <div class="correct-indicator">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <polyline points="20,6 9,17 4,12"/>
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Действия -->
+    <div class="results-actions">
+        {% if is_passed %}
+        <div class="success-actions">
+            <div class="action-info">
+                <h3>Что дальше?</h3>
+                <p>Ваша заявка отправлена администратору клуба. Ожидайте уведомления о принятии решения.</p>
+            </div>
+            <div class="action-buttons">
+                <a href="{% url 'club_detail' club.slug %}" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9L12 2L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    Вернуться к клубу
+                </a>
+                <a href="{% url 'clubs_list' %}" class="btn-secondary">
+                    Посмотреть другие клубы
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="failed-actions">
+            <div class="action-info">
+                <h3>Не расстраивайтесь!</h3>
+                {% if membership.can_take_test %}
+                <p>У вас осталось {{ test.max_attempts|add:"-"|add:membership.attempts_count }} {{
+                    test.max_attempts|add:"-"|add:membership.attempts_count|pluralize:"попытка,попытки,попыток" }}.
+                    Попробуйте еще раз!</p>
+                {% else %}
+                <p>Вы использовали все доступные попытки. Попробуйте присоединиться к другим клубам.</p>
+                {% endif %}
+            </div>
+            <div class="action-buttons">
+                {% if membership.can_take_test %}
+                <a href="{% url 'join_test_info' membership.id %}" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12S4 4 12 4S23 12 23 12S20 20 12 20S1 12 1 12Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Попробовать снова
+                </a>
+                {% endif %}
+                <a href="{% url 'club_detail' club.slug %}" class="btn-secondary">
+                    Вернуться к клубу
+                </a>
+                <a href="{% url 'clubs_list' %}" class="btn-secondary">
+                    Другие клубы
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('toggle-details-btn').addEventListener('click', function () {
+        const content = document.getElementById('details-content');
+        const btn = this;
+        const icon = btn.querySelector('svg');
+
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18,15 12,9 6,15"/></svg> Скрыть подробности';
+        } else {
+            content.style.display = 'none';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg> Показать подробности';
+        }
+    });
+
+    // Анимация появления результатов
+    document.addEventListener('DOMContentLoaded', function () {
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 150);
+        });
+    });
+</script>
+{% endblock %}
