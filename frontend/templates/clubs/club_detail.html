@@ -135,7 +135,7 @@
             <!-- Навигация по разделам -->
             <div class="club-nav-tabs">
                 <button class="tab-btn active" data-tab="about">О клубе</button>
-                <button class="tab-btn" data-tab="members">Участники</button>
+                <button class="tab-btn" data-tab="members">Участники ({{ members.count }})</button>
                 <button class="tab-btn" data-tab="events">Мероприятия</button>
                 <button class="tab-btn" data-tab="news">Новости</button>
                 {% if is_member %}
@@ -208,181 +208,197 @@
                                 {% endif %}
                             </div>
                             <div class="member-info">
-                                <h4>{{ article.title }}</h4>
-                                <div class="news-meta">
-                                    <span class="news-date">{{ article.created_at|date:"d M Y" }}</span>
-                                    {% if article.created_by %}
-                                    <span class="news-author">{{ article.created_by.full_name }}</span>
-                                    {% endif %}
-                                </div>
-                                <p class="news-excerpt">{{ article.content|truncatewords:30|linebreaks }}</p>
-                                <a href="#" class="read-more">Читать далее</a>
+                                <h4>{{ member.user.full_name }}</h4>
                             </div>
-                            </article>
                             {% empty %}
                             <div class="empty-state-small">
-                                <p>Пока нет новостей</p>
+                                <p>Пока нет участников</p>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-
-                <!-- Ресурсы (только для участников) -->
-                {% if is_member %}
-                <div id="resources" class="tab-content">
-                    <div class="resources-section">
-                        <h3>Ресурсы клуба</h3>
-
-                        <div class="resources-list">
-                            {% for resource in resources %}
-                            <div class="resource-item">
-                                <div class="resource-icon">
-                                    {% if resource.resource_type == 'document' %}
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2">
-                                        <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
-                                        <polyline points="14,2 14,8 20,8"/>
-                                        <line x1="16" y1="13" x2="8" y2="13"/>
-                                        <line x1="16" y1="17" x2="8" y2="17"/>
-                                        <polyline points="10,9 9,9 8,9"/>
-                                    </svg>
-                                    {% elif resource.resource_type == 'video' %}
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2">
-                                        <polygon points="23 7 16 12 23 17 23 7"/>
-                                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                                    </svg>
-                                    {% elif resource.resource_type == 'link' %}
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2">
-                                        <path d="M10 13A5 5 0 0 0 14.54 10.54L21 4A7.07 7.07 0 0 0 12 1.93L10 13Z"/>
-                                        <path d="M14 11A5 5 0 0 0 9.46 13.46L3 20A7.07 7.07 0 0 0 12 22.07L14 11Z"/>
-                                    </svg>
-                                    {% else %}
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2">
-                                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/>
-                                    </svg>
-                                    {% endif %}
-                                </div>
-
-                                <div class="resource-content">
-                                    <h4>{{ resource.title }}</h4>
-                                    {% if resource.description %}
-                                    <p>{{ resource.description|truncatewords:20 }}</p>
-                                    {% endif %}
-                                    <div class="resource-meta">
-                                        <span class="resource-type">{{ resource.get_resource_type_display }}</span>
-                                        <span class="resource-date">{{ resource.created_at|date:"d M Y" }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="resource-action">
-                                    {% if resource.file %}
-                                    <a href="{{ resource.file.url }}" target="_blank" class="btn-download">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                             stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
-                                            <polyline points="7 10 12 15 17 10"/>
-                                            <line x1="12" y1="15" x2="12" y2="3"/>
-                                        </svg>
-                                        Скачать
-                                    </a>
-                                    {% elif resource.link %}
-                                    <a href="{{ resource.link }}" target="_blank" class="btn-download">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                             stroke="currentColor" stroke-width="2">
-                                            <path d="M18 13V19C18 20.1046 17.1046 21 16 21H5C3.89543 21 3 20.1046 3 19V8C3 6.89543 3.89543 6 5 6H11"/>
-                                            <path d="M15 3L21 3L21 9"/>
-                                            <path d="M10 14L21 3"/>
-                                        </svg>
-                                        Открыть
-                                    </a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% empty %}
-                            <div class="empty-state-small">
-                                <p>Пока нет ресурсов</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
             </div>
 
-            <!-- Боковая панель -->
-            <div class="club-sidebar">
-                <!-- Статистика клуба -->
-                <div class="sidebar-card">
-                    <h4>Статистика</h4>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">{{ club.members_count }}</div>
-                            <div class="stat-label">Участников</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">{{ upcoming_events.count }}</div>
-                            <div class="stat-label">Мероприятий</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">{{ club.views_count }}</div>
-                            <div class="stat-label">Просмотров</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">{{ news.count }}</div>
-                            <div class="stat-label">Новостей</div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Ресурсы (только для участников) -->
+            {% if is_member %}
+            <div id="resources" class="tab-content">
+                <div class="resources-section">
+                    <h3>Ресурсы клуба</h3>
 
-                <!-- Ближайшие события -->
-                {% if upcoming_events %}
-                <div class="sidebar-card">
-                    <h4>Ближайшие события</h4>
-                    <div class="sidebar-events">
-                        {% for event in upcoming_events|slice:":3" %}
-                        <div class="sidebar-event">
-                            <div class="event-date">
-                                <div class="date-day">{{ event.start_date|date:"d" }}</div>
-                                <div class="date-month">{{ event.start_date|date:"M" }}</div>
+                    <div class="resources-list">
+                        {% for resource in resources %}
+                        <div class="resource-item">
+                            <div class="resource-icon">
+                                {% if resource.resource_type == 'document' %}
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                                    <polyline points="14,2 14,8 20,8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10,9 9,9 8,9"/>
+                                </svg>
+                                {% elif resource.resource_type == 'video' %}
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <polygon points="23 7 16 12 23 17 23 7"/>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                </svg>
+                                {% elif resource.resource_type == 'link' %}
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M10 13A5 5 0 0 0 14.54 10.54L21 4A7.07 7.07 0 0 0 12 1.93L10 13Z"/>
+                                    <path d="M14 11A5 5 0 0 0 9.46 13.46L3 20A7.07 7.07 0 0 0 12 22.07L14 11Z"/>
+                                </svg>
+                                {% else %}
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/>
+                                </svg>
+                                {% endif %}
                             </div>
-                            <div class="event-info">
-                                <h5>{{ event.title }}</h5>
-                                <p class="event-time">{{ event.start_date|date:"H:i" }}</p>
-                                <p class="event-location">{{ event.location }}</p>
+
+                            <div class="resource-content">
+                                <h4>{{ resource.title }}</h4>
+                                {% if resource.description %}
+                                <p>{{ resource.description|truncatewords:20 }}</p>
+                                {% endif %}
+                                <div class="resource-meta">
+                                    <span class="resource-type">{{ resource.get_resource_type_display }}</span>
+                                    <span class="resource-date">{{ resource.created_at|date:"d M Y" }}</span>
+                                </div>
                             </div>
+
+                            <div class="resource-action">
+                                {% if resource.file %}
+                                <a href="{{ resource.file.url }}" target="_blank" class="btn-download">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
+                                        <polyline points="7 10 12 15 17 10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Скачать
+                                </a>
+                                {% elif resource.link %}
+                                <a href="{{ resource.link }}" target="_blank" class="btn-download">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13V19C18 20.1046 17.1046 21 16 21H5C3.89543 21 3 20.1046 3 19V8C3 6.89543 3.89543 6 5 6H11"/>
+                                        <path d="M15 3L21 3L21 9"/>
+                                        <path d="M10 14L21 3"/>
+                                    </svg>
+                                    Открыть
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="empty-state-small">
+                            <p>Пока нет ресурсов</p>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
+            {% if is_member %}
+                </div>
+            {% endif %}
 
-                <!-- Похожие клубы -->
-                <div class="sidebar-card">
-                    <h4>Похожие клубы</h4>
-                    <div class="similar-clubs">
-                        <!-- Здесь будут похожие клубы -->
-                        <div class="similar-club">
-                            <div class="similar-club-logo">
-                                <div class="logo-placeholder-small">M</div>
-                            </div>
-                            <div class="similar-club-info">
-                                <h5>Music Club</h5>
-                                <p>124 участника</p>
-                            </div>
-                        </div>
-                        <!-- Добавить больше похожих клубов через контекст -->
+        <!-- Боковая панель -->
+        <div class="club-sidebar">
+            <!-- Статистика клуба -->
+            <div class="sidebar-card">
+                <h4>Статистика</h4>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ club.get_members_count }}</div>
+                        <div class="stat-label">Участников</div>
                     </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ upcoming_events.count }}</div>
+                        <div class="stat-label">Мероприятий</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ club.views_count }}</div>
+                        <div class="stat-label">Просмотров</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ news.count }}</div>
+                        <div class="stat-label">Новостей</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ближайшие события -->
+            {% if upcoming_events %}
+            <div class="sidebar-card">
+                <h4>Ближайшие события</h4>
+                <div class="sidebar-events">
+                    {% for event in upcoming_events|slice:":3" %}
+                    <div class="sidebar-event">
+                        <div class="event-date">
+                            <div class="date-day">{{ event.start_date|date:"d" }}</div>
+                            <div class="date-month">{{ event.start_date|date:"M" }}</div>
+                        </div>
+                        <div class="event-info">
+                            <h5>{{ event.title }}</h5>
+                            <p class="event-time">{{ event.start_date|date:"H:i" }}</p>
+                            <p class="event-location">{{ event.location }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Похожие клубы -->
+            <div class="sidebar-card">
+                <h4>Похожие клубы</h4>
+                <div class="similar-clubs">
+                    <!-- Пример похожих клубов - замените на реальные данные -->
+                    <div class="similar-club" onclick="window.location.href='/panel/club/music-club/'">
+                        <div class="similar-club-logo">
+                            <div class="logo-placeholder-small">M</div>
+                        </div>
+                        <div class="similar-club-info">
+                            <h5>Music Club</h5>
+                            <p>124 участника</p>
+                        </div>
+                    </div>
+
+                    <div class="similar-club" onclick="window.location.href='/panel/club/chess-club/'">
+                        <div class="similar-club-logo">
+                            <div class="logo-placeholder-small">C</div>
+                        </div>
+                        <div class="similar-club-info">
+                            <h5>Chess Club</h5>
+                            <p>89 участников</p>
+                        </div>
+                    </div>
+
+                    <!-- Если нет похожих клубов -->
+                    {% comment %}
+                    <div class="empty-state-small">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                            <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                        </svg>
+                        <p>Пока нет похожих клубов</p>
+                    </div>
+                    {% endcomment %}
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Модал подтверждения вступления -->
-    <div id="join-modal" class="modal">
+    <div id="join-modal" class="modal" style="display:none;">
         <div class="modal-content join-modal">
             <div class="modal-header">
                 <h3>Присоединиться к клубу</h3>
@@ -415,112 +431,212 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        // Переключение табов
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const tabId = this.dataset.tab;
+{% csrf_token %}
+<script>
+    // Включаем обновленный JavaScript код из предыдущего артефакта
 
-                // Убираем активные классы
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    // Переключение табов
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tabId = this.dataset.tab;
 
-                // Добавляем активные классы
-                this.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
-            });
+            // Убираем активные классы
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            // Добавляем активные классы
+            this.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         });
+    });
 
-        // Вступление в клуб
-        let currentClubId = null;
+    // Вступление в клуб - ОБНОВЛЕННАЯ ЛОГИКА
+    let currentClubId = null;
 
-        function joinClub(clubId) {
-            currentClubId = clubId;
-            document.getElementById('join-modal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+    function joinClub(clubId) {
+        currentClubId = clubId;
+        document.getElementById('join-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
 
-        function closeJoinModal() {
-            document.getElementById('join-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            currentClubId = null;
-        }
+    function closeJoinModal() {
+        document.getElementById('join-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        currentClubId = null;
+    }
 
-        function confirmJoinClub() {
-            if (!currentClubId) return;
+    function confirmJoinClub() {
+        if (!currentClubId) return;
 
-            fetch(`/clubs/${currentClubId}/join/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Content-Type': 'application/json',
-                },
-            })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Заявка подана успешно!');
-                            location.reload();
+        const btn = document.querySelector('#join-modal .btn-primary');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Подача заявки...';
+        btn.disabled = true;
+
+        fetch(`/join-test/join/${currentClubId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.has_test) {
+                            // Если есть тест, показываем модал подтверждения теста
+                            closeJoinModal();
+                            showTestConfirmationModal(data.membership_id);
                         } else {
-                            alert(data.error || 'Произошла ошибка');
+                            // Если теста нет, просто показываем успех
+                            alert('Заявка подана успешно! Ожидайте решения администратора.');
+                            location.reload();
                         }
-                        closeJoinModal();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Произошла ошибка при подаче заявки');
-                        closeJoinModal();
-                    });
+                    } else {
+                        alert(data.error || 'Произошла ошибка');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при подаче заявки');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    closeJoinModal();
+                });
+    }
+
+    // Новая функция для показа модала подтверждения теста
+    function showTestConfirmationModal(membershipId) {
+        // Создаем модал для подтверждения теста если его нет
+        if (!document.getElementById('test-confirm-modal')) {
+            const modalHTML = `
+                    <div id="test-confirm-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>Требуется пройти тест</h3>
+                                <span class="close-modal" onclick="closeTestConfirmModal()">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="test-info-icon" style="margin-bottom: 1rem; color: #F6AD2B;">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                                    </svg>
+                                </div>
+                                <h4>Для вступления в клуб нужно пройти тест</h4>
+                                <p>Клуб требует прохождения вступительного тестирования. Готовы ли вы пройти тест прямо сейчас?</p>
+                            </div>
+                            <div class="modal-actions">
+                                <button class="btn-secondary" onclick="closeTestConfirmModal()">Позже</button>
+                                <button class="btn-primary" onclick="goToTest()">Пройти тест</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
-        // Регистрация на мероприятие
-        function registerForEvent(eventId) {
-            if (!confirm('Вы уверены, что хотите зарегистрироваться на это мероприятие?')) {
-                return;
+        // Сохраняем ID членства для перехода к тесту
+        window.currentMembershipId = membershipId;
+
+        // Показываем модал
+        document.getElementById('test-confirm-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeTestConfirmModal() {
+        document.getElementById('test-confirm-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function goToTest() {
+        if (window.currentMembershipId) {
+            window.location.href = `/join-test/info/${window.currentMembershipId}/`;
+        }
+    }
+
+    // Регистрация на мероприятие
+    function registerForEvent(eventId) {
+        if (!confirm('Вы уверены, что хотите зарегистрироваться на это мероприятие?')) {
+            return;
+        }
+
+        fetch(`/panel/events/${eventId}/register/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Вы успешно зарегистрированы на мероприятие!');
+                        location.reload();
+                    } else {
+                        alert(data.error || 'Произошла ошибка');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при регистрации');
+                });
+    }
+
+    // Закрытие модалов при клике вне их
+    window.addEventListener('click', function (event) {
+        const joinModal = document.getElementById('join-modal');
+        const testModal = document.getElementById('test-confirm-modal');
+
+        if (event.target === joinModal) {
+            closeJoinModal();
+        }
+
+        if (event.target === testModal) {
+            closeTestConfirmModal();
+        }
+    });
+
+    // Плавная прокрутка к разделам
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Спиннер загрузки стили
+    const spinnerCSS = `
+            .loading-spinner {
+                width: 20px;
+                height: 20px;
+                border: 2px solid transparent;
+                border-top: 2px solid currentColor;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                display: inline-block;
+                margin-right: 0.5rem;
             }
 
-            fetch(`/events/${eventId}/register/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Content-Type': 'application/json',
-                },
-            })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Вы успешно зарегистрированы на мероприятие!');
-                            location.reload();
-                        } else {
-                            alert(data.error || 'Произошла ошибка');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Произошла ошибка при регистрации');
-                    });
-        }
-
-        // Закрытие модала при клике вне его
-        window.addEventListener('click', function (event) {
-            const joinModal = document.getElementById('join-modal');
-            if (event.target === joinModal) {
-                closeJoinModal();
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
-        });
+        `;
 
-        // Плавная прокрутка к разделам
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+    // Добавляем стили если их нет
+    if (!document.getElementById('spinner-styles')) {
+        const style = document.createElement('style');
+        style.id = 'spinner-styles';
+        style.textContent = spinnerCSS;
+        document.head.appendChild(style);
+    }
+</script>
 {% endblock %}

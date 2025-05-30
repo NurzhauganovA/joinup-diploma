@@ -233,9 +233,7 @@
             <div class="action-info">
                 <h3>Не расстраивайтесь!</h3>
                 {% if membership.can_take_test %}
-                <p>У вас осталось {{ test.max_attempts|add:"-"|add:membership.attempts_count }} {{
-                    test.max_attempts|add:"-"|add:membership.attempts_count|pluralize:"попытка,попытки,попыток" }}.
-                    Попробуйте еще раз!</p>
+                <p>У вас осталось {{ test.max_attempts|add:"-"|add:membership.attempts_count }} {{ test.max_attempts|add:"-"|add:membership.attempts_count|pluralize:"попытка,попытки,попыток" }}. Попробуйте еще раз!</p>
                 {% else %}
                 <p>Вы использовали все доступные попытки. Попробуйте присоединиться к другим клубам.</p>
                 {% endif %}

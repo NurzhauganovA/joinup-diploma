@@ -1,5 +1,4 @@
 import json
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -16,7 +15,7 @@ from school.models import Club, ClubMember, JoinTestAttempt, JoinTestQuestion, J
 @require_POST
 def join_club(request, club_id):
     """Подача заявки на вступление в клуб"""
-    club = get_object_or_404(Club, id=club_id, status='active')
+    club = get_object_or_404(Club, id=club_id)
 
     if not club.accepting_members:
         return JsonResponse({
@@ -63,7 +62,8 @@ def join_club(request, club_id):
                 'success': True,
                 'message': 'Заявка подана успешно!',
                 'has_test': has_test,
-                'membership_id': membership.id
+                'membership_id': membership.id,
+                'redirect_url': reverse('join_test_info', args=[membership.id]) if has_test else None
             })
     except Exception as e:
         return JsonResponse({
@@ -199,13 +199,17 @@ def take_join_test(request, attempt_id):
         attempt.user_answers.select_related('question').prefetch_related('selected_answers')
     }
 
+    # Рассчитываем оставшееся время
+    time_passed = (timezone.now() - attempt.started_at).seconds
+    time_left = max(0, (attempt.test.time_limit * 60) - time_passed)
+
     context = {
         'attempt': attempt,
         'test': attempt.test,
         'club': attempt.test.club,
         'questions': questions,
         'user_answers': user_answers,
-        'time_left': max(0, (attempt.test.time_limit * 60) - (timezone.now() - attempt.started_at).seconds),
+        'time_left': time_left,
     }
 
     return render(request, 'jointest/take_join_test.html', context)
@@ -232,6 +236,8 @@ def submit_test_answer(request, attempt_id):
         data = json.loads(request.body)
         question_id = data.get('question_id')
         selected_answers = data.get('selected_answers', [])
+        print("Question ID:", question_id)
+        print("Selected answers:", selected_answers)
         text_answer = data.get('text_answer', '')
 
         question = get_object_or_404(JoinTestQuestion, id=question_id, test=attempt.test)
@@ -252,9 +258,14 @@ def submit_test_answer(request, attempt_id):
             correct_answers = JoinTestAnswer.objects.filter(
                 question=question,
                 is_correct=True
-            ).values_list('id', flatten=True)
+            ).values_list('id', flat=True)
 
-            user_answer.selected_answers.set(selected_answers)
+            # Сохраняем выбранные ответы
+            for answer_id in selected_answers:
+                answer = get_object_or_404(JoinTestAnswer, id=answer_id, question=question)
+                user_answer.selected_answers.add(answer)
+            # Удаляем ответы, которые не были выбраны
+            user_answer.selected_answers.exclude(id__in=selected_answers).delete()
 
             # Проверяем правильность ответа
             if question.question_type == 'single':
@@ -294,9 +305,13 @@ def complete_join_test(request, attempt_id):
         with transaction.atomic():
             # Подсчитываем результаты
             user_answers = attempt.user_answers.all()
+            print("User answers:", user_answers)
             correct_answers = user_answers.filter(is_correct=True).count()
+            print("Correct answers count:", correct_answers)
             total_points = sum(ua.points_earned for ua in user_answers)
+            print("Total points earned:", total_points)
             max_points = sum(q.points for q in attempt.test.questions.all())
+            print("Max points possible:", max_points)
 
             # Вычисляем процент
             score = (total_points / max_points * 100) if max_points > 0 else 0
@@ -344,13 +359,15 @@ def join_test_results(request, attempt_id):
         'selected_answers', 'question__answers'
     ).order_by('question__order')
 
+    membership = ClubMember.objects.get(user=request.user, club=attempt.test.club)
+
     context = {
         'attempt': attempt,
         'test': attempt.test,
         'club': attempt.test.club,
         'user_answers': user_answers,
         'is_passed': attempt.is_passed(),
-        'membership': ClubMember.objects.get(user=request.user, club=attempt.test.club),
+        'membership': membership,
     }
 
     return render(request, 'jointest/join_test_results.html', context)

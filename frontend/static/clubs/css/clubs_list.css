@@ -58,6 +58,14 @@
     margin-bottom: 2rem;
 }
 
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 5px;
+}
+
 .stat-icon {
     display: flex;
     align-items: center;
@@ -545,6 +553,7 @@
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    scrollbar-width: none;
 }
 
 .modal-header {

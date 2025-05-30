@@ -6,24 +6,24 @@ from .views import (
 
 
 urlpatterns = [
-    # Страница с информацией о вступительном тесте
-    path('', join_test_info, name='join_test_info'),
-
-    # Начало вступительного теста
-    path('start/', start_join_test, name='start_join_test'),
-
-    # Принять участие в клубе
+    # Присоединение к клубу (AJAX запрос)
     path('join/<int:club_id>/', join_club, name='join_club'),
 
-    # Прохождение вступительного теста
-    path('take/<int:club_id>/', take_join_test, name='take_join_test'),
+    # Страница с информацией о тесте
+    path('info/<int:membership_id>/', join_test_info, name='join_test_info'),
 
-    # Отправка ответа на вопрос теста
-    path('submit-answer/', submit_test_answer, name='submit_test_answer'),
+    # Начало прохождения теста
+    path('start/<int:membership_id>/', start_join_test, name='start_join_test'),
 
-    # Завершение вступительного теста
-    path('complete/', complete_join_test, name='complete_join_test'),
+    # Страница прохождения теста
+    path('take/<int:attempt_id>/', take_join_test, name='take_join_test'),
 
-    # Результаты вступительного теста
-    path('results/<int:club_id>/', join_test_results, name='join_test_results'),
+    # Отправка ответа на вопрос
+    path('submit-answer/<int:attempt_id>/', submit_test_answer, name='submit_test_answer'),
+
+    # Завершение теста
+    path('complete/<int:attempt_id>/', complete_join_test, name='complete_join_test'),
+
+    # Результаты теста
+    path('results/<int:attempt_id>/', join_test_results, name='join_test_results'),
 ]

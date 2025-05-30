@@ -173,6 +173,10 @@ class Club(models.Model):
         db_table = 'clubs'
         ordering = ['-created_at']
 
+    def get_members_count(self):
+        """Получить количество участников клуба"""
+        return ClubMember.objects.filter(club=self, status='active').count()
+
 
 class ClubMember(models.Model):
     ROLE_CHOICES = (

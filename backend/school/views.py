@@ -29,7 +29,7 @@ def clubs_list(request):
     faculties = Faculty.objects.all()
 
     # Базовый queryset активных клубов
-    clubs = Club.objects.select_related('category').prefetch_related('associated_faculties')
+    clubs = Club.objects.filter(status="active").select_related('category').prefetch_related('associated_faculties')
 
     # Применяем фильтры
     category_id = request.GET.get('category')
@@ -68,6 +68,10 @@ def clubs_list(request):
     # Рекомендуемые клубы
     featured_clubs = Club.objects.filter(is_featured=True, status='active')[:5]
 
+    members_count = ClubMember.objects.filter(
+        club__in=clubs,
+        status='active'
+    ).count()
 
     context = {
         'page_obj': page_obj,
@@ -78,7 +82,9 @@ def clubs_list(request):
         'selected_faculty': faculty_id,
         'search_query': search_query,
         'sort_by': sort_by,
-        'clubs': page_obj,  # Для совместимости
+        'clubs': clubs,
+        'total_clubs': clubs.count(),
+        'members_count': members_count,
     }
 
     return render(request, 'clubs/clubs_list.html', context)
@@ -143,11 +149,7 @@ def create_club_application(request):
                     application.save()
 
                     messages.success(request, 'Ваша заявка на создание клуба успешно подана!')
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Заявка подана успешно! Мы рассмотрим её в ближайшее время.',
-                        'redirect_url': reverse('clubs_list')
-                    })
+                    return redirect('clubs_list')
             except Exception as e:
                 return JsonResponse({
                     'status': 'error',

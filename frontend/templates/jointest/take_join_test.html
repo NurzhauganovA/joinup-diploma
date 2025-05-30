@@ -46,8 +46,7 @@
         {% csrf_token %}
         <div class="questions-container">
             {% for question in questions %}
-            <div class="question-card" data-question-id="{{ question.id }}" {% if not forloop.first
-                 %}style="display: none;" {% endif %}>
+            <div class="question-card" data-question-id="{{ question.id }}" {% if not forloop.first %}style="display: none;" {% endif %}>
                 <div class="question-header">
                     <div class="question-number">
                         Вопрос {{ forloop.counter }}
@@ -55,8 +54,7 @@
                         <span class="required-indicator">*</span>
                         {% endif %}
                     </div>
-                    <div class="question-points">{{ question.points }} {{ question.points|pluralize:"балл,балла,баллов"
-                        }}
+                    <div class="question-points">{{ question.points }} {{ question.points|pluralize:"балл,балла,баллов" }}
                     </div>
                 </div>
 
@@ -71,8 +69,7 @@
                             <input type="radio"
                                    name="question_{{ question.id }}"
                                    value="{{ answer.id }}"
-                                   {% if question.id in user_answers and answer in
-                                   user_answers.question.id.selected_answers.all %}checked{% endif %}>
+                                   {% if question.id in user_answers and answer in user_answers.question.id.selected_answers.all %}checked{% endif %}>
                             <span class="answer-checkmark"></span>
                             <span class="answer-text">{{ answer.answer_text }}</span>
                         </label>
@@ -86,8 +83,7 @@
                             <input type="checkbox"
                                    name="question_{{ question.id }}"
                                    value="{{ answer.id }}"
-                                   {% if question.id in user_answers and answer in
-                                   user_answers.question.id.selected_answers.all %}checked{% endif %}>
+                                   {% if question.id in user_answers and answer in user_answers.question.id.selected_answers.all %}checked{% endif %}>
                             <span class="answer-checkmark"></span>
                             <span class="answer-text">{{ answer.answer_text }}</span>
                         </label>
@@ -225,6 +221,7 @@
         updateProgress();
         initializeNavigation();
         initializeAnswerTracking();
+        updateNavigationButtons(); // Добавили инициализацию кнопок
 
         // Предотвращаем случайное закрытие страницы
         window.addEventListener('beforeunload', function (e) {
@@ -253,8 +250,7 @@
     function updateTimerDisplay() {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
-        document.getElementById('timer').textContent =
-                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
 
     function showTimeUpModal() {
@@ -269,15 +265,21 @@
 
     // Навигация по вопросам
     function initializeNavigation() {
+        // ИСПРАВЛЕННАЯ ЛОГИКА - убираем дублирующий обработчик
         document.getElementById('prev-question').addEventListener('click', function () {
             if (currentQuestion > 0) {
                 showQuestion(currentQuestion - 1);
             }
         });
 
+        // ОСНОВНОЙ обработчик кнопки "Далее"
         document.getElementById('next-question').addEventListener('click', function () {
             if (currentQuestion < totalQuestions - 1) {
                 showQuestion(currentQuestion + 1);
+            } else {
+                // Последний вопрос - показываем модал завершения
+                saveCurrentAnswer();
+                showFinishModal();
             }
         });
 
@@ -304,18 +306,41 @@
         document.querySelectorAll('.question-dot')[currentQuestion].classList.add('active');
 
         // Обновляем навигацию
-        document.getElementById('prev-question').disabled = currentQuestion === 0;
-        document.getElementById('next-question').textContent =
-                currentQuestion === totalQuestions - 1 ? 'Завершить' : 'Далее';
+        updateNavigationButtons();
+        updateProgress();
+    }
 
-        // Если последний вопрос, показываем кнопку завершения
+    function updateNavigationButtons() {
+        const prevBtn = document.getElementById('prev-question');
+        const nextBtn = document.getElementById('next-question');
+
+        // Обновляем кнопку "Назад"
+        prevBtn.disabled = currentQuestion === 0;
+
+        // Обновляем кнопку "Далее" с сохранением иконки
         if (currentQuestion === totalQuestions - 1) {
-            document.querySelector('.test-completion').style.display = 'block';
+            nextBtn.innerHTML = `
+                Завершить
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                </svg>
+            `;
         } else {
-            document.querySelector('.test-completion').style.display = 'none';
+            nextBtn.innerHTML = `
+                Далее
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"/>
+                </svg>
+            `;
         }
 
-        updateProgress();
+        // Показываем/скрываем секцию завершения
+        const completionSection = document.querySelector('.test-completion');
+        if (currentQuestion === totalQuestions - 1) {
+            completionSection.style.display = 'block';
+        } else {
+            completionSection.style.display = 'none';
+        }
     }
 
     function updateProgress() {
@@ -378,7 +403,7 @@
             text_answer: textAnswer ? textAnswer.value : ''
         };
 
-        fetch(`/clubs/attempt/{{ attempt.id }}/submit-answer/`, {
+        fetch(`/join-test/submit-answer/{{ attempt.id }}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
@@ -467,7 +492,7 @@
     function finishTest(timeUp = false) {
         clearInterval(timerInterval);
 
-        fetch(`/clubs/attempt/{{ attempt.id }}/complete/`, {
+        fetch(`/join-test/complete/{{ attempt.id }}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
@@ -498,17 +523,6 @@
 
         if (event.target === finishModal) {
             closeFinishModal();
-        }
-    });
-
-    // Автосохранение при переходе между вопросами
-    document.getElementById('next-question').addEventListener('click', function () {
-        if (currentQuestion < totalQuestions - 1) {
-            showQuestion(currentQuestion + 1);
-        } else {
-            // Последний вопрос - показываем модал завершения
-            saveCurrentAnswer();
-            showFinishModal();
         }
     });
 
