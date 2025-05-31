@@ -237,3 +237,146 @@ class ClubApplicationAdmin(admin.ModelAdmin):
                 f'Заявка "{obj.name}" отклонена.',
                 level='WARNING'
             )
+
+
+@admin.register(ClubContract)
+class ClubContractAdmin(admin.ModelAdmin):
+    list_display = ['title', 'club', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at', 'club__category']
+    search_fields = ['title', 'club__name', 'content']
+    readonly_fields = ['created_at', 'updated_at']
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('club', 'title', 'is_active')
+        }),
+        ('Содержание контракта', {
+            'fields': ('content', 'pdf_template')
+        }),
+        ('Системная информация', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+# Обновленный admin для ClubMemberContract
+@admin.register(ClubMemberContract)
+class ClubMemberContractAdmin(admin.ModelAdmin):
+    list_display = [
+        'member_name',
+        'club_name',
+        'status',
+        'signed_at',
+        'created_at',
+        'signature_valid'
+    ]
+    list_filter = ['status', 'signed_at', 'created_at', 'member__club__category']
+    search_fields = [
+        'member__user__first_name',
+        'member__user__last_name',
+        'member__club__name',
+        'digital_signature'
+    ]
+    readonly_fields = [
+        'created_at',
+        'updated_at',
+        'signature_data_display',
+        'contract_details'
+    ]
+
+    def member_name(self, obj):
+        return obj.member.user.full_name
+
+    member_name.short_description = 'Участник'
+
+    def club_name(self, obj):
+        return obj.member.club.name
+
+    club_name.short_description = 'Клуб'
+
+    def signature_valid(self, obj):
+        if obj.signature_data and obj.status == 'signed':
+            return format_html('<span style="color: green;">✓ Подписан</span>')
+        elif obj.status == 'pending':
+            return format_html('<span style="color: orange;">⏳ Ожидает</span>')
+        else:
+            return format_html('<span style="color: red;">✗ Не подписан</span>')
+
+    signature_valid.short_description = 'Статус подписи'
+
+    def signature_data_display(self, obj):
+        if obj.signature_data:
+            data = obj.signature_data
+            return format_html("""
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                    <strong>ФИО:</strong> {}<br>
+                    <strong>ИИН:</strong> {}<br>
+                    <strong>Выдан:</strong> {}<br>
+                    <strong>Действителен с:</strong> {} до {}<br>
+                    <strong>Серийный номер:</strong> {}
+                </div>
+            """.format(
+                data.get('full_name', '-'),
+                data.get('iin', '-'),
+                data.get('issuer', '-'),
+                data.get('valid_from', '-'),
+                data.get('valid_to', '-'),
+                data.get('serial_number', '-')
+            ))
+        return "Нет данных подписи"
+
+    signature_data_display.short_description = 'Данные ЭЦП'
+
+    def contract_details(self, obj):
+        return format_html("""
+            <div style="background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                <strong>Контракт:</strong> {}<br>
+                <strong>IP адрес:</strong> {}<br>
+                <strong>User Agent:</strong> {}<br>
+                <strong>Создан:</strong> {}
+            </div>
+        """.format(
+            obj.contract_template.title,
+            obj.ip_address or 'Не записан',
+            (obj.user_agent[:50] + '...') if obj.user_agent and len(obj.user_agent) > 50 else (
+                        obj.user_agent or 'Не записан'),
+            obj.created_at.strftime('%d.%m.%Y %H:%M')
+        ))
+
+    contract_details.short_description = 'Детали контракта'
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('member', 'contract_template', 'status')
+        }),
+        ('Данные подписания', {
+            'fields': ('signed_at', 'signature_data_display', 'digital_signature')
+        }),
+        ('Файлы', {
+            'fields': ('signed_pdf', 'signature_file'),
+            'classes': ('collapse',)
+        }),
+        ('Метаданные', {
+            'fields': ('ip_address', 'user_agent', 'contract_details'),
+            'classes': ('collapse',)
+        }),
+        ('Системная информация', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        })
+    )
+
+    actions = ['mark_as_signed', 'mark_as_expired']
+
+    def mark_as_signed(self, request, queryset):
+        queryset.update(status='signed')
+        self.message_user(request, f'Отмечено как подписанные: {queryset.count()} контрактов')
+
+    mark_as_signed.short_description = 'Отметить как подписанные'
+
+    def mark_as_expired(self, request, queryset):
+        queryset.update(status='expired')
+        self.message_user(request, f'Отмечено как истекшие: {queryset.count()} контрактов')
+
+    mark_as_expired.short_description = 'Отметить как истекшие'

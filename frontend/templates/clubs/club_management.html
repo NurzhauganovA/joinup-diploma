@@ -1,0 +1,576 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'clubs/css/club_management.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Управление {{ club.name }} {% endblock %}
+
+{% block page_title %} Управление клубом {% endblock %}
+
+{% block content %}
+<div class="club-management-container">
+    <!-- Заголовок -->
+    <div class="management-header">
+        <div class="club-info-header">
+            <div class="club-logo-header">
+                {% if club.logo %}
+                <img src="{{ club.logo.url }}" alt="{{ club.name }}">
+                {% else %}
+                <div class="logo-placeholder-header">{{ club.name.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="club-details-header">
+                <h1>{{ club.name }}</h1>
+                <p>Управление участниками и заявками</p>
+                <a href="{% url 'club_detail' club.slug %}" class="back-to-club">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19L5 12L12 5"/>
+                    </svg>
+                    Вернуться к клубу
+                </a>
+            </div>
+        </div>
+        <div class="management-role">
+            <span class="role-badge role-{{ membership.role }}">{{ membership.get_role_display }}</span>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="management-stats">
+        <div class="stat-card-mgmt">
+            <div class="stat-icon-mgmt">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                    <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.total_members }}</h3>
+                <p>Активных участников</p>
+            </div>
+        </div>
+
+        <div class="stat-card-mgmt">
+            <div class="stat-icon-mgmt">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.pending_applications }}</h3>
+                <p>Ожидающих решения</p>
+            </div>
+        </div>
+
+        <div class="stat-card-mgmt">
+            <div class="stat-icon-mgmt">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.contract_pending }}</h3>
+                <p>Ожидают контракт</p>
+            </div>
+        </div>
+
+        <div class="stat-card-mgmt">
+            <div class="stat-icon-mgmt">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H8"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.total_applications }}</h3>
+                <p>Всего заявок</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Навигация по разделам -->
+    <div class="management-tabs">
+        <button class="tab-btn active" data-tab="pending">
+            Заявки на рассмотрение ({{ stats.pending_applications }})
+        </button>
+        <button class="tab-btn" data-tab="contracts">
+            Ожидают контракт ({{ stats.contract_pending }})
+        </button>
+        <button class="tab-btn" data-tab="members">
+            Участники ({{ stats.total_members }})
+        </button>
+    </div>
+
+    <!-- Заявки на рассмотрение -->
+    <div id="pending" class="tab-content active">
+        <div class="applications-section">
+            <h3>Заявки на рассмотрение</h3>
+            {% if pending_applications %}
+            <div class="applications-list">
+                {% for application in pending_applications %}
+                <div class="application-card">
+                    <div class="application-header">
+                        <div class="applicant-info">
+                            <div class="applicant-avatar">
+                                {% if application.user.user_info.photo_avatar %}
+                                <img src="{{ application.user.user_info.photo_avatar.url }}"
+                                     alt="{{ application.user.full_name }}">
+                                {% else %}
+                                <div class="avatar-placeholder">{{ application.user.full_name.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="applicant-details">
+                                <h4>{{ application.user.full_name }}</h4>
+                                <p class="applicant-contact">{{ application.user.mobile_phone }}</p>
+                                {% if application.faculty %}
+                                <span class="faculty-badge">{{ application.faculty.name }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="application-meta">
+                            <span class="application-date">{{ application.created_at|date:"d M Y H:i" }}</span>
+                            <span class="status-badge status-{{ application.status }}">{{ application.get_status_display }}</span>
+                        </div>
+                    </div>
+
+                    <div class="application-content">
+                        {% if application.test_attempt %}
+                        <div class="test-results">
+                            <h5>Результаты теста:</h5>
+                            <div class="test-stats">
+                                <div class="test-stat">
+                                    <span class="stat-label">Балл:</span>
+                                    <span class="stat-value {% if application.test_attempt.is_passed %}passed{% else %}failed{% endif %}">
+                                        {{ application.test_attempt.score|floatformat:1 }}%
+                                    </span>
+                                </div>
+                                <div class="test-stat">
+                                    <span class="stat-label">Правильных:</span>
+                                    <span class="stat-value">{{ application.test_attempt.correct_answers }}/{{ application.test_attempt.total_questions }}</span>
+                                </div>
+                                <div class="test-stat">
+                                    <span class="stat-label">Время:</span>
+                                    <span class="stat-value">{{ application.test_attempt.time_spent|floatformat:0 }} сек</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if application.bio %}
+                        <div class="applicant-bio">
+                            <h5>О себе:</h5>
+                            <p>{{ application.bio }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if application.skills %}
+                        <div class="applicant-skills">
+                            <h5>Навыки:</h5>
+                            <p>{{ application.skills }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="application-actions">
+                        <button class="btn-view-details" onclick="viewApplicationDetails({{ application.id }})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M1 12S4 4 12 4S23 12 23 12S20 20 12 20S1 12 1 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Подробнее
+                        </button>
+                        <button class="btn-approve" onclick="approveApplication({{ application.id }})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <polyline points="20,6 9,17 4,12"/>
+                            </svg>
+                            Одобрить
+                        </button>
+                        <button class="btn-reject" onclick="showRejectModal({{ application.id }})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            Отклонить
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M16 16S14 14 12 14S8 16 8 16"/>
+                        <line x1="9" y1="9" x2="9.01" y2="9"/>
+                        <line x1="15" y1="9" x2="15.01" y2="9"/>
+                    </svg>
+                </div>
+                <h3>Нет заявок на рассмотрение</h3>
+                <p>Все заявки обработаны или новых заявок пока нет</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Ожидают контракт -->
+    <div id="contracts" class="tab-content">
+        <div class="contracts-section">
+            <h3>Ожидают подписания контракта</h3>
+            {% if contract_pending %}
+            <div class="contracts-list">
+                {% for member in contract_pending %}
+                <div class="contract-card">
+                    <div class="contract-header">
+                        <div class="member-info">
+                            <div class="member-avatar">
+                                {% if member.user.user_info.photo_avatar %}
+                                <img src="{{ member.user.user_info.photo_avatar.url }}"
+                                     alt="{{ member.user.full_name }}">
+                                {% else %}
+                                <div class="avatar-placeholder">{{ member.user.full_name.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="member-details">
+                                <h4>{{ member.user.full_name }}</h4>
+                                <p class="member-contact">{{ member.user.mobile_phone }}</p>
+                                {% if member.faculty %}
+                                <span class="faculty-badge">{{ member.faculty.name }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="contract-meta">
+                            <span class="approval-date">Одобрен {{ member.approved_at|date:"d M Y" }}</span>
+                            <span class="status-badge status-{{ member.status }}">{{ member.get_status_display }}</span>
+                        </div>
+                    </div>
+
+                    <div class="contract-content">
+                        <div class="contract-info">
+                            <h5>Статус контракта:</h5>
+                            <p>Пользователь должен подписать контракт для завершения вступления в клуб</p>
+                        </div>
+
+                        {% if member.approved_by %}
+                        <div class="approval-info">
+                            <p><strong>Одобрил:</strong> {{ member.approved_by.full_name }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="contract-actions">
+                        <a href="{% url 'contract_sign_page' club.slug %}?user={{ member.user.id }}"
+                           class="btn-view-contract">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                            </svg>
+                            Посмотреть контракт
+                        </a>
+                        <button class="btn-notify" onclick="notifyUser({{ member.user.id }})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21S18 15 18 8Z"/>
+                                <path d="M13.73 21A2 2 0 0 1 10.27 21"/>
+                            </svg>
+                            Напомнить
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                </div>
+                <h3>Нет ожидающих контракт</h3>
+                <p>Все одобренные участники подписали контракты</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Участники -->
+    <div id="members" class="tab-content">
+        <div class="members-section">
+            <h3>Активные участники</h3>
+            {% if active_members %}
+            <div class="members-grid">
+                {% for member in active_members %}
+                <div class="member-card-mgmt">
+                    <div class="member-header">
+                        <div class="member-avatar">
+                            {% if member.user.user_info.photo_avatar %}
+                            <img src="{{ member.user.user_info.photo_avatar.url }}" alt="{{ member.user.full_name }}">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ member.user.full_name.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="member-role-badge role-{{ member.role }}">
+                            {{ member.get_role_display }}
+                        </div>
+                    </div>
+                    <div class="member-info-mgmt">
+                        <h4>{{ member.user.full_name }}</h4>
+                        <p class="member-contact">{{ member.user.mobile_phone }}</p>
+                        {% if member.faculty %}
+                        <span class="faculty-badge">{{ member.faculty.name }}</span>
+                        {% endif %}
+                        <p class="join-date">Вступил {{ member.join_date|date:"d M Y" }}</p>
+                    </div>
+                    {% if member.bio %}
+                    <div class="member-bio">
+                        <p>{{ member.bio|truncatewords:15 }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                        <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                    </svg>
+                </div>
+                <h3>Нет участников</h3>
+                <p>Пока в клубе нет активных участников</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Модал отклонения заявки -->
+<div id="reject-modal" class="modal">
+    <div class="modal-content reject-modal">
+        <div class="modal-header">
+            <h3>Отклонить заявку</h3>
+            <span class="close-modal" onclick="closeRejectModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Укажите причину отклонения заявки:</p>
+            <textarea id="rejection-reason" rows="4" placeholder="Причина отклонения..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeRejectModal()">Отмена</button>
+            <button class="btn-confirm-reject" onclick="confirmRejectApplication()">Отклонить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модал деталей заявки -->
+<div id="details-modal" class="modal">
+    <div class="modal-content details-modal">
+        <div class="modal-header">
+            <h3>Детали заявки</h3>
+            <span class="close-modal" onclick="closeDetailsModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="details-content">
+            <!-- Контент загружается динамически -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentApplicationId = null;
+
+    // Переключение табов
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tabId = this.dataset.tab;
+
+            // Убираем активные классы
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            // Добавляем активные классы
+            this.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // Одобрение заявки
+    function approveApplication(applicationId) {
+        if (!confirm('Вы уверены, что хотите одобрить эту заявку?')) {
+            return;
+        }
+
+        const btn = document.querySelector(`[onclick="approveApplication(${applicationId})"]`);
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Одобрение...';
+        btn.disabled = true;
+
+        fetch(`/panel/club/{{ club.slug }}/approve/${applicationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.error || 'Произошла ошибка при одобрении заявки');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при одобрении заявки');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+    }
+
+    // Показать модал отклонения
+    function showRejectModal(applicationId) {
+        currentApplicationId = applicationId;
+        document.getElementById('reject-modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        document.getElementById('rejection-reason').value = '';
+    }
+
+    function closeRejectModal() {
+        document.getElementById('reject-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        currentApplicationId = null;
+    }
+
+    // Подтвердить отклонение
+    function confirmRejectApplication() {
+        if (!currentApplicationId) return;
+
+        const reason = document.getElementById('rejection-reason').value.trim();
+        if (!reason) {
+            alert('Укажите причину отклонения');
+            return;
+        }
+
+        const btn = document.querySelector('.btn-confirm-reject');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Отклонение...';
+        btn.disabled = true;
+
+        fetch(`/panel/club/{{ club.slug }}/reject/${currentApplicationId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reason: reason
+            })
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        closeRejectModal();
+                        location.reload();
+                    } else {
+                        alert(data.error || 'Произошла ошибка при отклонении заявки');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отклонении заявки');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+    }
+
+    // Просмотр деталей заявки
+    function viewApplicationDetails(applicationId) {
+        fetch(`/panel/club/{{ club.slug }}/application/${applicationId}/`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('details-content').innerHTML = html;
+                    document.getElementById('details-modal').style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка загрузки деталей заявки');
+                });
+    }
+
+    function closeDetailsModal() {
+        document.getElementById('details-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Напоминание пользователю
+    function notifyUser(userId) {
+        alert('Функция напоминания будет реализована позже');
+    }
+
+    // Закрытие модалов при клике вне их
+    window.addEventListener('click', function (event) {
+        const rejectModal = document.getElementById('reject-modal');
+        const detailsModal = document.getElementById('details-modal');
+
+        if (event.target === rejectModal) {
+            closeRejectModal();
+        }
+        if (event.target === detailsModal) {
+            closeDetailsModal();
+        }
+    });
+
+    // Спиннер стили
+    const spinnerCSS = `
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+
+    if (!document.getElementById('spinner-styles')) {
+        const style = document.createElement('style');
+        style.id = 'spinner-styles';
+        style.textContent = spinnerCSS;
+        document.head.appendChild(style);
+    }
+</script>
+{% endblock %}

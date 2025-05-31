@@ -1,0 +1,740 @@
+/* frontend/static/clubs/css/contract_sign.css */
+
+.contract-sign-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Заголовок контракта */
+.contract-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.contract-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.status-contract-pending {
+    background: rgba(255, 152, 0, 0.9);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+/* Основной контент */
+.contract-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.contract-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Карточки контракта */
+.contract-info-card,
+.signing-process-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #233255;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+/* Предварительный просмотр контракта */
+.contract-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contract-text {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #F6AD2B;
+    color: #666;
+    line-height: 1.6;
+}
+
+.contract-actions-preview {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-download-contract {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #233255;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-download-contract:hover {
+    background: #1a2642;
+    transform: translateY(-1px);
+}
+
+/* Процесс подписания */
+.signing-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.step.completed {
+    background: #e8f5e8;
+}
+
+.step.active {
+    background: #e3f2fd;
+    border: 2px solid #F6AD2B;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step.completed .step-icon {
+    background: #4CAF50;
+    color: white;
+}
+
+.step.active .step-icon {
+    background: #F6AD2B;
+    color: white;
+}
+
+.step .step-icon {
+    background: #e0e0e0;
+    color: #666;
+}
+
+.step-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.step-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Форма подписи */
+.signature-form h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #233255;
+}
+
+.file-upload {
+    position: relative;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+    font-weight: 500;
+}
+
+.file-upload-label:hover {
+    border-color: #F6AD2B;
+    color: #F6AD2B;
+}
+
+.file-info {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input[type="password"]:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+.form-actions {
+    text-align: center;
+}
+
+.btn-verify-signature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: #F6AD2B;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+.btn-verify-signature:hover {
+    background: #e59d1b;
+    transform: translateY(-1px);
+}
+
+/* Проверка подписи */
+.signature-verification h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+}
+
+.signature-data {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.data-item:last-child {
+    border-bottom: none;
+}
+
+.data-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.data-value {
+    font-weight: 700;
+    color: #233255;
+}
+
+.verification-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.verification-status.verified {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.verification-status.not-verified {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.verification-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-back-to-form,
+.btn-sign-contract {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-back-to-form {
+    background: #e0e0e0;
+    color: #666;
+}
+
+.btn-back-to-form:hover {
+    background: #ccc;
+    color: #333;
+}
+
+.btn-sign-contract {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-sign-contract:hover {
+    background: #45A049;
+    transform: translateY(-1px);
+}
+
+/* Боковая панель контракта */
+.contract-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1rem 0;
+}
+
+.club-stats-contract {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.stat-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #233255;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.club-description-contract p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.btn-view-club {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #F6AD2B;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-view-club:hover {
+    background: #e59d1b;
+    transform: translateY(-1px);
+}
+
+/* Информационные элементы */
+.info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.info-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.info-content h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.5rem 0;
+}
+
+.info-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Контакты помощи */
+.help-content p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.help-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contact-item svg {
+    color: #F6AD2B;
+}
+
+.contact-item a {
+    color: #233255;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.contact-item a:hover {
+    color: #F6AD2B;
+}
+
+/* Модальные окна для контракта */
+.sign-modal {
+    max-width: 500px;
+}
+
+.success-modal {
+    max-width: 600px;
+}
+
+.confirmation-icon {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #F6AD2B;
+}
+
+.signature-summary {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.summary-value {
+    font-weight: 700;
+    color: #233255;
+}
+
+.btn-confirm-sign {
+    background: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+}
+
+.btn-confirm-sign:hover {
+    background: #45A049;
+    border-color: #45A049;
+}
+
+/* Модал успеха */
+.success-header {
+    background: linear-gradient(135deg, #4CAF50, #45A049);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px 12px 0 0;
+}
+
+.success-icon {
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.success-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.success-actions .btn-primary,
+.success-actions .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.success-actions .btn-primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.success-actions .btn-primary:hover {
+    background: #45A049;
+    transform: translateY(-1px);
+}
+
+.success-actions .btn-secondary {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+}
+
+.success-actions .btn-secondary:hover {
+    border-color: #ccc;
+    color: #333;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .management-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contract-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .contract-sidebar {
+        order: -1;
+        position: static;
+        max-height: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .club-stats-contract {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .management-header,
+    .contract-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .club-info-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .management-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .test-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .application-actions,
+    .contract-actions,
+    .verification-actions {
+        flex-direction: column;
+    }
+
+    .members-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contract-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .club-stats-contract {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .club-management-container,
+    .contract-sign-container {
+        padding: 0 1rem;
+    }
+
+    .management-header,
+    .contract-header {
+        padding: 1.5rem;
+    }
+
+    .club-details-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .signing-steps {
+        gap: 0.5rem;
+    }
+
+    .step {
+        padding: 0.75rem;
+    }
+
+    .success-actions {
+        flex-direction: column;
+    }
+}

@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import QuerySet, Q, Count, Sum
+from django.template.loader import get_template
 from django.utils import timezone
 from django.views.decorators.http import require_POST, require_http_methods
 from django.urls import reverse
@@ -15,7 +16,7 @@ from authorization import UserRoles
 from school.forms import ClubApplicationForm
 from school.models import (
     Class, Faculty, ClubCategory, Club,
-    ClubApplication, ClubMember, ClubEvent, EventRegistration, Donation
+    ClubApplication, ClubMember, ClubEvent, EventRegistration, Donation, ClubMemberContract
 )
 from school.services import GetSchoolPartData
 from school.utils import CacheData
@@ -408,3 +409,373 @@ def make_donation(request, slug):
             'success': False,
             'error': 'Произошла ошибка при обработке доната'
         })
+
+
+@login_required
+def club_management(request, slug):
+    """Страница управления клубом для основателя"""
+    club = get_object_or_404(Club, slug=slug)
+
+    # Проверяем права доступа
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        role__in=['founder', 'president']
+    ).first()
+
+    if not membership:
+        messages.error(request, 'У вас нет прав для управления этим клубом')
+        return redirect('club_detail', slug=slug)
+
+    # Получаем заявки на рассмотрение
+    pending_applications = ClubMember.objects.filter(
+        club=club,
+        status='pending'
+    ).select_related('user', 'test_attempt').order_by('-created_at')
+
+    # Заявки требующие подписания контракта
+    contract_pending = ClubMember.objects.filter(
+        club=club,
+        status__in=['approved', 'contract_pending']
+    ).select_related('user').order_by('-approved_at')
+
+    # Активные участники
+    active_members = ClubMember.objects.filter(
+        club=club,
+        status='active'
+    ).select_related('user', 'faculty').order_by('-join_date')
+
+    # Статистика
+    stats = {
+        'total_members': active_members.count(),
+        'pending_applications': pending_applications.count(),
+        'contract_pending': contract_pending.count(),
+        'total_applications': ClubMember.objects.filter(club=club).count(),
+    }
+
+    context = {
+        'club': club,
+        'membership': membership,
+        'pending_applications': pending_applications,
+        'contract_pending': contract_pending,
+        'active_members': active_members,
+        'stats': stats,
+        'has_contract': hasattr(club, 'contract_template'),
+    }
+
+    return render(request, 'clubs/club_management.html', context)
+
+
+@login_required
+def application_detail(request, slug, application_id):
+    """Детальная страница заявки"""
+    club = get_object_or_404(Club, slug=slug)
+    application = get_object_or_404(ClubMember, id=application_id, club=club)
+
+    # Проверяем права доступа
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        role__in=['founder', 'president']
+    ).first()
+
+    if not membership:
+        messages.error(request, 'У вас нет прав для просмотра этой заявки')
+        return redirect('club_detail', slug=slug)
+
+    # Получаем результаты теста если есть
+    test_attempt = None
+    if application.test_attempt:
+        test_attempt = application.test_attempt
+        test_attempt.user_answers = test_attempt.user_answers.select_related('question').prefetch_related(
+            'selected_answers', 'question__answers'
+        ).order_by('question__order')
+
+    context = {
+        'club': club,
+        'application': application,
+        'test_attempt': test_attempt,
+        'membership': membership,
+    }
+
+    return render(request, 'clubs/application_detail.html', context)
+
+
+@login_required
+@require_POST
+def approve_application(request, slug, application_id):
+    """Одобрить заявку"""
+    club = get_object_or_404(Club, slug=slug)
+    application = get_object_or_404(ClubMember, id=application_id, club=club)
+
+    # Проверяем права доступа
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        role__in=['founder', 'president']
+    ).first()
+
+    if not membership:
+        return JsonResponse({'success': False, 'error': 'Нет прав доступа'})
+
+    try:
+        with transaction.atomic():
+            # Проверяем есть ли контракт у клуба
+            has_contract = hasattr(club, 'contract_template') and club.contract_template.is_active
+
+            if has_contract:
+                application.status = 'approved'
+                application.approved_at = timezone.now()
+                application.approved_by = request.user
+                application.save()
+
+                message = 'Заявка одобрена. Пользователь должен подписать контракт.'
+            else:
+                # Если нет контракта, сразу принимаем в клуб
+                application.status = 'active'
+                application.approved_at = timezone.now()
+                application.approved_by = request.user
+                application.save()
+
+                # Обновляем счетчик участников
+                club.members_count = ClubMember.objects.filter(
+                    club=club, status='active'
+                ).count()
+                club.save()
+
+                message = 'Заявка одобрена. Пользователь принят в клуб.'
+
+            return JsonResponse({
+                'success': True,
+                'message': message,
+                'new_status': application.get_status_display(),
+                'has_contract': has_contract
+            })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'Произошла ошибка при одобрении заявки'})
+
+
+@login_required
+@require_POST
+def reject_application(request, slug, application_id):
+    """Отклонить заявку"""
+    club = get_object_or_404(Club, slug=slug)
+    application = get_object_or_404(ClubMember, id=application_id, club=club)
+
+    # Проверяем права доступа
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        role__in=['founder', 'president']
+    ).first()
+
+    if not membership:
+        return JsonResponse({'success': False, 'error': 'Нет прав доступа'})
+
+    try:
+        data = json.loads(request.body)
+        reason = data.get('reason', '')
+
+        with transaction.atomic():
+            application.status = 'rejected'
+            application.rejection_reason = reason
+            application.approved_by = request.user
+            application.save()
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Заявка отклонена',
+                'new_status': application.get_status_display()
+            })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'Произошла ошибка при отклонении заявки'})
+
+
+@login_required
+def contract_sign_page(request, slug):
+    """Страница подписания контракта"""
+    club = get_object_or_404(Club, slug=slug)
+
+    # Проверяем, что у пользователя есть одобренная заявка
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        status__in=['approved', 'contract_pending']
+    ).first()
+
+    if not membership:
+        messages.error(request, 'У вас нет заявки требующей подписания контракта')
+        return redirect('club_detail', slug=slug)
+
+    # Проверяем наличие шаблона контракта
+    if not hasattr(club, 'contract_template'):
+        messages.error(request, 'Шаблон контракта не найден')
+        return redirect('club_detail', slug=slug)
+
+    contract_template = club.contract_template
+
+    # Проверяем, нет ли уже подписанного контракта
+    existing_contract = ClubMemberContract.objects.filter(
+        member=membership,
+        status='signed'
+    ).first()
+
+    if existing_contract:
+        messages.info(request, 'Контракт уже подписан')
+        return redirect('club_detail', slug=slug)
+
+    # Получаем или создаем контракт для подписания
+    pending_contract, created = ClubMemberContract.objects.get_or_create(
+        member=membership,
+        contract_template=contract_template,
+        defaults={'status': 'pending'}
+    )
+
+    context = {
+        'club': club,
+        'membership': membership,
+        'contract_template': contract_template,
+        'pending_contract': pending_contract,
+    }
+
+    return render(request, 'clubs/contract_sign.html', context)
+
+
+@login_required
+@require_POST
+def process_digital_signature(request, slug):
+    """Обработка ЭЦП"""
+    club = get_object_or_404(Club, slug=slug)
+
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        status__in=['approved', 'contract_pending']
+    ).first()
+
+    if not membership:
+        return JsonResponse({'success': False, 'error': 'Заявка не найдена'})
+
+    try:
+        # Получаем файл ЭЦП и пароль
+        signature_file = request.FILES.get('signature_file')
+        password = request.POST.get('password')
+
+        if not signature_file or not password:
+            return JsonResponse({'success': False, 'error': 'Файл ЭЦП и пароль обязательны'})
+
+        # Здесь должна быть логика проверки ЭЦП
+        # Для демо создаем фиктивные данные
+        signature_data = {
+            'full_name': request.user.full_name,
+            'iin': '123456789012',  # В реальности извлекается из сертификата
+            'valid_from': '2024-01-01',
+            'valid_to': '2025-12-31',
+            'issuer': 'НУЦ РК',
+            'serial_number': 'ABC123456789',
+            'verified': True
+        }
+
+        return JsonResponse({
+            'success': True,
+            'signature_data': signature_data,
+            'message': 'ЭЦП успешно проверена'
+        })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'Ошибка обработки ЭЦП'})
+
+
+@login_required
+@require_POST
+def sign_contract(request, slug):
+    """Подписание контракта"""
+    club = get_object_or_404(Club, slug=slug)
+
+    membership = ClubMember.objects.filter(
+        club=club,
+        user=request.user,
+        status__in=['approved', 'contract_pending']
+    ).first()
+
+    if not membership:
+        return JsonResponse({'success': False, 'error': 'Заявка не найдена'})
+
+    try:
+        data = json.loads(request.body)
+        signature_data = data.get('signature_data')
+
+        if not signature_data:
+            return JsonResponse({'success': False, 'error': 'Данные подписи не найдены'})
+
+        with transaction.atomic():
+            # Обновляем или создаем контракт
+            contract, created = ClubMemberContract.objects.get_or_create(
+                member=membership,
+                contract_template=club.contract_template,
+                defaults={'status': 'pending'}
+            )
+
+            # Подписываем контракт
+            contract.status = 'signed'
+            contract.signed_at = timezone.now()
+            contract.signature_data = signature_data
+            contract.ip_address = request.META.get('REMOTE_ADDR')
+            contract.user_agent = request.META.get('HTTP_USER_AGENT')
+            contract.save()
+
+            # Активируем участника
+            membership.status = 'active'
+            membership.save()
+
+            # Обновляем счетчик участников клуба
+            club.members_count = ClubMember.objects.filter(
+                club=club, status='active'
+            ).count()
+            club.save()
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Контракт успешно подписан! Добро пожаловать в клуб!',
+                'redirect_url': f'/panel/club/{club.slug}/'
+            })
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'Ошибка при подписании контракта'})
+
+
+@login_required
+def download_contract_pdf(request, slug):
+    """Скачивание PDF контракта"""
+    club = get_object_or_404(Club, slug=slug)
+
+    if not hasattr(club, 'contract_template'):
+        return HttpResponse('Шаблон контракта не найден', status=404)
+
+    contract_template = club.contract_template
+
+    if contract_template.pdf_template:
+        # Возвращаем готовый PDF файл
+        response = HttpResponse(
+            contract_template.pdf_template.read(),
+            content_type='application/pdf'
+        )
+        response['Content-Disposition'] = f'attachment; filename="contract_{club.slug}.pdf"'
+        return response
+    else:
+        # Генерируем PDF из HTML шаблона
+        template = get_template('clubs/contract_pdf.html')
+        context = {
+            'club': club,
+            'contract': contract_template,
+            'user': request.user,
+            'date': timezone.now().date()
+        }
+        html = template.render(context)
+
+        # Здесь должна быть логика генерации PDF из HTML
+        # Для простоты возвращаем HTML
+        response = HttpResponse(html, content_type='text/html')
+        return response

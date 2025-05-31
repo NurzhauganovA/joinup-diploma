@@ -194,9 +194,12 @@ class ClubMember(models.Model):
         ('active', 'Active'),
         ('inactive', 'Inactive'),
         ('pending', 'Pending Approval'),
-        ('test_required', 'Test Required'),  # Новый статус
-        ('test_in_progress', 'Test In Progress'),  # Новый статус
-        ('test_failed', 'Test Failed'),  # Новый статус
+        ('test_required', 'Test Required'),
+        ('test_in_progress', 'Test In Progress'),
+        ('test_failed', 'Test Failed'),
+        ('approved', 'Approved - Contract Required'),  # Новый статус
+        ('contract_pending', 'Contract Pending'),  # Новый статус
+        ('rejected', 'Rejected'),  # Новый статус
     )
 
     user = models.ForeignKey('authorization.User', on_delete=models.CASCADE, related_name='club_memberships')
@@ -210,9 +213,16 @@ class ClubMember(models.Model):
     academic_year = models.PositiveSmallIntegerField(null=True, blank=True)
     is_public = models.BooleanField(default=True, help_text="Whether this membership is visible to others")
 
-    # Новые поля для тестирования
+    # Поля для тестирования
     test_attempt = models.ForeignKey("JoinTestAttempt", on_delete=models.SET_NULL, null=True, blank=True)
     attempts_count = models.IntegerField(default=0)
+
+    # Новые поля для одобрения
+    approved_at = models.DateTimeField(blank=True, null=True)
+    approved_by = models.ForeignKey('authorization.User', on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name='approved_memberships')
+    rejection_reason = models.TextField(blank=True, null=True)
+    admin_notes = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -230,6 +240,10 @@ class ClubMember(models.Model):
             test=self.club.join_test,
             status='in_progress'
         ).first()
+
+    def needs_contract(self):
+        """Нужно ли подписать контракт"""
+        return self.status in ['approved', 'contract_pending'] and hasattr(self.club, 'contract_template')
 
     class Meta:
         verbose_name = "Club Member"
@@ -573,3 +587,60 @@ class JoinTestUserAnswer(models.Model):
         verbose_name = "Ответ пользователя"
         verbose_name_plural = "Ответы пользователей"
         db_table = 'join_test_user_answers'
+
+
+class ClubContract(models.Model):
+    """Контракт клуба для участников"""
+    club = models.OneToOneField(Club, on_delete=models.CASCADE, related_name='contract_template')
+    title = models.CharField(max_length=200, default="Контракт участника клуба")
+    content = models.TextField(help_text="Содержание контракта")
+    pdf_template = models.FileField(upload_to='club_contracts/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Контракт для {self.club.name}"
+
+    class Meta:
+        verbose_name = "Контракт клуба"
+        verbose_name_plural = "Контракты клубов"
+        db_table = 'club_contracts'
+
+
+class ClubMemberContract(models.Model):
+    """Подписанный контракт участника клуба"""
+    STATUS_CHOICES = (
+        ('pending', 'Ожидает подписания'),
+        ('signed', 'Подписан'),
+        ('expired', 'Истек'),
+        ('cancelled', 'Отменен'),
+    )
+
+    member = models.ForeignKey(ClubMember, on_delete=models.CASCADE, related_name='signed_contracts')
+    contract_template = models.ForeignKey(ClubContract, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    # Данные подписания
+    signed_at = models.DateTimeField(blank=True, null=True)
+    digital_signature = models.TextField(blank=True, null=True, help_text="Данные ЭЦП")
+    signature_data = models.JSONField(blank=True, null=True, help_text="Данные из сертификата ЭЦП")
+
+    # Файлы
+    signed_pdf = models.FileField(upload_to='signed_contracts/', blank=True, null=True)
+    signature_file = models.FileField(upload_to='signatures/', blank=True, null=True)
+
+    # Метаданные
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Контракт {self.member.user.full_name} - {self.member.club.name}"
+
+    class Meta:
+        verbose_name = "Подписанный контракт"
+        verbose_name_plural = "Подписанные контракты"
+        db_table = 'club_member_contracts'

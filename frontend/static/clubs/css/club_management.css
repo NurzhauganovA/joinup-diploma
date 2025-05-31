@@ -1,0 +1,888 @@
+/* frontend/static/clubs/css/club_management.css */
+
+.club-management-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Заголовок управления */
+.management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.club-info-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.club-logo-header {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.club-logo-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-placeholder-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.club-details-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: white;
+}
+
+.club-details-header p {
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.back-to-club {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.back-to-club:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-2px);
+}
+
+.management-role {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.role-badge {
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+
+.role-founder {
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+}
+
+.role-president {
+    background: rgba(63, 81, 181, 0.9);
+    color: white;
+}
+
+/* Статистика */
+.management-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card-mgmt {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card-mgmt:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon-mgmt {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-content h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.stat-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Навигация по разделам */
+.management-tabs {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.tab-btn:hover {
+    color: #F6AD2B;
+    background: rgba(246, 173, 43, 0.1);
+}
+
+.tab-btn.active {
+    color: white;
+    background: #F6AD2B;
+}
+
+/* Контент разделов */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.applications-section h3,
+.contracts-section h3,
+.members-section h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #233255;
+    margin: 0 0 1.5rem 0;
+}
+
+/* Карточки заявок */
+.applications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.application-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.application-card:hover {
+    border-color: #F6AD2B;
+    transform: translateY(-2px);
+}
+
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.applicant-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.applicant-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.applicant-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.applicant-details h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.applicant-contact {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.faculty-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.application-meta {
+    text-align: right;
+}
+
+.application-date {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-approved {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.status-contract_pending {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-rejected {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+/* Контент заявки */
+.application-content {
+    margin-bottom: 1.5rem;
+}
+
+.test-results h5,
+.applicant-bio h5,
+.applicant-skills h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.75rem 0;
+}
+
+.test-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.test-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #233255;
+}
+
+.stat-value.passed {
+    color: #4CAF50;
+}
+
+.stat-value.failed {
+    color: #F44336;
+}
+
+.applicant-bio p,
+.applicant-skills p {
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Действия с заявками */
+.application-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-view-details,
+.btn-approve,
+.btn-reject {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-view-details {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.btn-view-details:hover {
+    background: #bbdefb;
+    transform: translateY(-1px);
+}
+
+.btn-approve {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.btn-approve:hover {
+    background: #c8e6c9;
+    transform: translateY(-1px);
+}
+
+.btn-reject {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.btn-reject:hover {
+    background: #ffcdd2;
+    transform: translateY(-1px);
+}
+
+/* Карточки контрактов */
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contract-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.contract-card:hover {
+    border-color: #F6AD2B;
+    transform: translateY(-2px);
+}
+
+.contract-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.member-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-details h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.member-contact {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.contract-meta {
+    text-align: right;
+}
+
+.approval-date {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 0.5rem;
+}
+
+.contract-content {
+    margin-bottom: 1.5rem;
+}
+
+.contract-info h5,
+.approval-info p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.75rem 0;
+}
+
+.contract-info p {
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.approval-info p {
+    color: #666;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Действия с контрактами */
+.contract-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-view-contract,
+.btn-notify {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.btn-view-contract {
+    background: #233255;
+    color: white;
+}
+
+.btn-view-contract:hover {
+    background: #1a2642;
+    transform: translateY(-1px);
+}
+
+.btn-notify {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.btn-notify:hover {
+    background: #ffe0b2;
+    transform: translateY(-1px);
+}
+
+/* Сетка участников */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.member-card-mgmt {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.member-card-mgmt:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.member-role-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.member-info-mgmt h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.5rem 0;
+}
+
+.join-date {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0.5rem 0 0 0;
+}
+
+.member-bio {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.member-bio p {
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-icon {
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #999;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.reject-modal {
+    max-width: 400px;
+}
+
+.details-modal {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    color: white;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body p {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.modal-body textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+}
+
+.btn-cancel:hover {
+    border-color: #ccc;
+    color: #333;
+}
+
+.btn-confirm-reject {
+    background: #F44336;
+    color: white;
+    border: 2px solid #F44336;
+}
+
+.btn-confirm-reject:hover {
+    background: #d32f2f;
+    border-color: #d32f2f;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .management-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contract-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .contract-sidebar {
+        order: -1;
+        position: static;
+        max-height: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .club-stats-contract {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .management-header,
+    .contract-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .club-info-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .management-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .test-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .application-actions,
+    .contract-actions,
+    .verification-actions {
+        flex-direction: column;
+    }
+
+    .members-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contract-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .club-stats-contract {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .club-management-container,
+    .contract-sign-container {
+        padding: 0 1rem;
+    }
+
+    .management-header,
+    .contract-header {
+        padding: 1.5rem;
+    }
+
+    .club-details-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .signing-steps {
+        gap: 0.5rem;
+    }
+
+    .step {
+        padding: 0.75rem;
+    }
+
+    .success-actions {
+        flex-direction: column;
+    }
+}

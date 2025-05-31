@@ -19,6 +19,19 @@ urlpatterns = [
     # Мои клубы
     path('my-clubs/', views.my_clubs, name='my_clubs'),
 
+    # Донаты
     path('club/<slug:slug>/donations/', views.club_donations, name='club_donations'),
     path('club/<slug:slug>/donate/', views.make_donation, name='make_donation'),
+
+    # Управление клубом
+    path('club/<slug:slug>/manage/', views.club_management, name='club_management'),
+    path('club/<slug:slug>/application/<int:application_id>/', views.application_detail, name='application_detail'),
+    path('club/<slug:slug>/approve/<int:application_id>/', views.approve_application, name='approve_application'),
+    path('club/<slug:slug>/reject/<int:application_id>/', views.reject_application, name='reject_application'),
+
+    # Подписание контракта
+    path('club/<slug:slug>/contract/sign/', views.contract_sign_page, name='contract_sign_page'),
+    path('club/<slug:slug>/process-signature/', views.process_digital_signature, name='process_digital_signature'),
+    path('club/<slug:slug>/sign-contract/', views.sign_contract, name='sign_contract'),
+    path('club/<slug:slug>/contract/download/', views.download_contract_pdf, name='download_contract_pdf'),
 ]

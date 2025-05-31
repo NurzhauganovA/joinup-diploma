@@ -395,16 +395,19 @@
 }
 
 .members-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .member-card {
+    width: 200px;
+    height: 60px;
     display: flex;
     align-items: center;
-    gap: 1rem;
     padding: 1rem;
+    gap: 1rem;
     background: #f8f9fa;
     border-radius: 8px;
     transition: all 0.3s ease;
