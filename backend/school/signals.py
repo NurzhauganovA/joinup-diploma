@@ -252,28 +252,28 @@ def update_membership_after_test(sender, instance, created, **kwargs):
 
 
 # Автоматическое создание контракта при одобрении заявки
-@receiver(post_save, sender=ClubMember)
-def create_contract_on_approval(sender, instance, created, **kwargs):
-    """Создаем контракт при одобрении заявки"""
-    # Проверяем, что статус изменился на 'approved' и есть шаблон контракта
-    if (instance.status == 'approved' and
-            hasattr(instance.club, 'contract_template') and
-            instance.club.contract_template.is_active):
-
-        # Создаем контракт для подписания, если его еще нет
-        contract, contract_created = ClubMemberContract.objects.get_or_create(
-            member=instance,
-            contract_template=instance.club.contract_template,
-            defaults={'status': 'pending'}
-        )
-
-        if contract_created:
-            print(f"📄 Создан контракт для {instance.user.full_name} в клубе {instance.club.name}")
-
-        # Обновляем статус на ожидание контракта
-        if instance.status != 'contract_pending':
-            instance.status = 'contract_pending'
-            instance.save()
+# @receiver(post_save, sender=ClubMember)
+# def create_contract_on_approval(sender, instance, created, **kwargs):
+#     """Создаем контракт при одобрении заявки"""
+#     # Проверяем, что статус изменился на 'approved' и есть шаблон контракта
+#     if (instance.status == 'approved' and
+#             hasattr(instance.club, 'contract_template') and
+#             instance.club.contract_template.is_active):
+#
+#         # Создаем контракт для подписания, если его еще нет
+#         contract, contract_created = ClubMemberContract.objects.get_or_create(
+#             member=instance,
+#             contract_template=instance.club.contract_template,
+#             defaults={'status': 'pending'}
+#         )
+#
+#         if contract_created:
+#             print(f"📄 Создан контракт для {instance.user.full_name} в клубе {instance.club.name}")
+#
+#         # Обновляем статус на ожидание контракта
+#         if instance.status != 'contract_pending':
+#             instance.status = 'contract_pending'
+#             instance.save()
 
 
 # Автоматическая активация участника после подписания контракта

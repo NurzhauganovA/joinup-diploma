@@ -640,6 +640,748 @@
     color: #333;
 }
 
+.club-management-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Заголовок управления */
+.management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.club-info-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.club-logo-header {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.club-logo-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-placeholder-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.club-details-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.club-details-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    opacity: 0.9;
+}
+
+.club-details-header p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.management-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Статистика управления */
+.management-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Основной контент управления */
+.management-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.management-main {
+    padding: 0;
+}
+
+/* Навигация по разделам управления */
+.management-nav-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    overflow-x: auto;
+}
+
+.management-nav-tabs .tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+}
+
+.management-nav-tabs .tab-btn:hover {
+    background: rgba(246, 173, 43, 0.1);
+    color: #F6AD2B;
+}
+
+.management-nav-tabs .tab-btn.active {
+    color: #F6AD2B;
+    border-bottom-color: #F6AD2B;
+    background: white;
+}
+
+/* Разделы управления */
+.applications-section,
+.contracts-section,
+.members-section,
+.signed-contracts-section {
+    padding: 2rem;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #233255;
+    margin: 0 0 0.5rem 0;
+}
+
+.section-header p {
+    color: #666;
+    margin: 0;
+}
+
+/* Карточки заявок */
+.applications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.application-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.application-card:hover {
+    border-color: #F6AD2B;
+    box-shadow: 0 4px 12px rgba(246, 173, 43, 0.1);
+}
+
+.applicant-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.applicant-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.applicant-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.applicant-details h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.applicant-details p {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.faculty-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.application-date {
+    font-size: 0.8rem;
+    color: #999;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.approval-date {
+    font-size: 0.8rem;
+    color: #4CAF50;
+    display: block;
+    margin-top: 0.25rem;
+    font-weight: 600;
+}
+
+/* Результаты теста */
+.test-results {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.test-results h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1rem 0;
+}
+
+.test-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.test-stat {
+    text-align: center;
+}
+
+.test-score,
+.test-answers,
+.test-time {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.test-score.passed {
+    color: #4CAF50;
+}
+
+.test-score.failed {
+    color: #f44336;
+}
+
+.test-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.btn-view-test {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #2196F3;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-view-test:hover {
+    background: #1976D2;
+    transform: translateY(-1px);
+}
+
+/* Действия с заявками */
+.application-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.btn-approve,
+.btn-reject {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-approve {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #45A049;
+    transform: translateY(-1px);
+}
+
+.btn-reject {
+    background: #f44336;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #d32f2f;
+    transform: translateY(-1px);
+}
+
+/* Карточки контрактов */
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contract-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.contract-card:hover {
+    border-color: #FF9800;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.1);
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-details h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.member-details p {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.status-approved {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.status-contract_pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-active {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+.status-signed {
+    background: #e8f5e8;
+    color: #2d7d32;
+}
+
+/* Действия с контрактами */
+.contract-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.btn-view-contract,
+.btn-contact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.btn-view-contract {
+    background: #FF9800;
+    color: white;
+    border: none;
+}
+
+.btn-view-contract:hover {
+    background: #F57C00;
+    transform: translateY(-1px);
+}
+
+.btn-contact {
+    background: #2196F3;
+    color: white;
+    border: none;
+}
+
+.btn-contact:hover {
+    background: #1976D2;
+    transform: translateY(-1px);
+}
+
+/* Сетка участников */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.member-card-detailed {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.member-card-detailed:hover {
+    background: #e3f2fd;
+    transform: translateY(-2px);
+}
+
+.role-badge {
+    background: #233255;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.join-date {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Подписанные контракты */
+.signed-contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.signed-contract-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.signed-contract-card:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
+}
+
+.contract-member-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.contract-details h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.contract-details p {
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.contract-date {
+    font-size: 0.8rem;
+    color: #4CAF50;
+    font-weight: 600;
+    display: block;
+}
+
+.signature-info {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.contract-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.btn-download-contract {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #4CAF50;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-download-contract:hover {
+    background: #45A049;
+    transform: translateY(-1px);
+}
+
+/* Пустые состояния */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+}
+
+.empty-state svg {
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.empty-state h4 {
+    font-size: 1.2rem;
+    margin: 0 0 0.5rem 0;
+    color: #666;
+}
+
+.empty-state p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Модал отклонения */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body p {
+    margin: 0 0 1rem 0;
+    color: #666;
+}
+
+.modal-body textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #f44336;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.modal-actions .btn-secondary {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-actions .btn-secondary:hover {
+    border-color: #ccc;
+    color: #333;
+}
+
+.modal-actions .btn-reject {
+    background: #f44336;
+    color: white;
+    border: 2px solid #f44336;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-actions .btn-reject:hover {
+    background: #d32f2f;
+    border-color: #d32f2f;
+}
+
 /* Адаптивность */
 @media (max-width: 968px) {
     .management-stats {

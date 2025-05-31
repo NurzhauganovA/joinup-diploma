@@ -1,4 +1,5 @@
 import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -20,6 +21,16 @@ from school.models import (
 )
 from school.services import GetSchoolPartData
 from school.utils import CacheData
+
+import qrcode
+from xml.etree import ElementTree as ET
+from cryptography.hazmat._oid import NameOID
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+
+from cryptography.hazmat.primitives.serialization import pkcs12
+from Crypto.Hash import SHA256
+import base64
 
 
 def clubs_list(request):
@@ -111,9 +122,24 @@ def club_detail(request, slug):
     # Проверяем, является ли пользователь участником
     is_member = False
     user_membership = None
+    needs_contract_signature = False
+
     if request.user.is_authenticated:
         user_membership = ClubMember.objects.filter(club=club, user=request.user).first()
         is_member = user_membership and user_membership.status == 'active'
+
+        # Проверяем, нужно ли подписать контракт
+        if user_membership and user_membership.status in ['approved', 'contract_pending']:
+            # Проверяем, есть ли шаблон контракта
+            if hasattr(club, 'contract_template') and club.contract_template.is_active:
+                # Проверяем, нет ли уже подписанного контракта
+                existing_contract = ClubMemberContract.objects.filter(
+                    member=user_membership,
+                    status='signed'
+                ).first()
+
+                if not existing_contract:
+                    needs_contract_signature = True
 
     # Получаем новости клуба
     news = club.news.filter(is_public=True).order_by('-created_at')[:5]
@@ -121,15 +147,22 @@ def club_detail(request, slug):
     # Получаем ресурсы клуба
     resources = club.resources.filter(is_public=True).order_by('-created_at')[:5]
 
+    # Определяем, может ли пользователь присоединиться
+    can_join = (request.user.is_authenticated and
+                not user_membership and
+                club.accepting_members and
+                club.status == 'active')
+
     context = {
         'club': club,
         'members': members,
         'upcoming_events': upcoming_events,
         'is_member': is_member,
         'user_membership': user_membership,
+        'needs_contract_signature': needs_contract_signature,
         'news': news,
         'resources': resources,
-        'can_join': request.user.is_authenticated and not is_member and club.accepting_members,
+        'can_join': can_join,
     }
 
     return render(request, 'clubs/club_detail.html', context)
@@ -445,12 +478,19 @@ def club_management(request, slug):
         status='active'
     ).select_related('user', 'faculty').order_by('-join_date')
 
+    # Подписанные контракты
+    signed_contracts = ClubMemberContract.objects.filter(
+        member__club=club,
+        status='signed'
+    ).select_related('member__user').order_by('-signed_at')
+
     # Статистика
     stats = {
         'total_members': active_members.count(),
         'pending_applications': pending_applications.count(),
         'contract_pending': contract_pending.count(),
         'total_applications': ClubMember.objects.filter(club=club).count(),
+        'signed_contracts': signed_contracts.count(),
     }
 
     context = {
@@ -459,6 +499,7 @@ def club_management(request, slug):
         'pending_applications': pending_applications,
         'contract_pending': contract_pending,
         'active_members': active_members,
+        'signed_contracts': signed_contracts,
         'stats': stats,
         'has_contract': hasattr(club, 'contract_template'),
     }
@@ -598,20 +639,32 @@ def contract_sign_page(request, slug):
     """Страница подписания контракта"""
     club = get_object_or_404(Club, slug=slug)
 
-    # Проверяем, что у пользователя есть одобренная заявка
+    # Ищем членство пользователя
     membership = ClubMember.objects.filter(
         club=club,
-        user=request.user,
-        status__in=['approved', 'contract_pending']
+        user=request.user
     ).first()
 
+    # Проверяем, что пользователь имеет право подписывать контракт
     if not membership:
-        messages.error(request, 'У вас нет заявки требующей подписания контракта')
+        messages.error(request, 'Вы не подавали заявку в этот клуб')
+        return redirect('club_detail', slug=slug)
+
+    # Проверяем статус заявки
+    if membership.status not in ['approved', 'contract_pending']:
+        if membership.status == 'pending':
+            messages.warning(request, 'Ваша заявка еще рассматривается администратором клуба')
+        elif membership.status == 'active':
+            messages.info(request, 'Вы уже являетесь участником клуба')
+        elif membership.status == 'rejected':
+            messages.error(request, 'Ваша заявка была отклонена')
+        else:
+            messages.error(request, f'Текущий статус заявки: {membership.get_status_display()}')
         return redirect('club_detail', slug=slug)
 
     # Проверяем наличие шаблона контракта
-    if not hasattr(club, 'contract_template'):
-        messages.error(request, 'Шаблон контракта не найден')
+    if not hasattr(club, 'contract_template') or not club.contract_template.is_active:
+        messages.error(request, 'Шаблон контракта не найден или не активен')
         return redirect('club_detail', slug=slug)
 
     contract_template = club.contract_template
@@ -623,7 +676,7 @@ def contract_sign_page(request, slug):
     ).first()
 
     if existing_contract:
-        messages.info(request, 'Контракт уже подписан')
+        messages.success(request, 'Контракт уже подписан! Добро пожаловать в клуб!')
         return redirect('club_detail', slug=slug)
 
     # Получаем или создаем контракт для подписания
@@ -632,6 +685,11 @@ def contract_sign_page(request, slug):
         contract_template=contract_template,
         defaults={'status': 'pending'}
     )
+
+    # Обновляем статус членства на contract_pending если нужно
+    if membership.status == 'approved':
+        membership.status = 'contract_pending'
+        membership.save()
 
     context = {
         'club': club,
@@ -667,14 +725,33 @@ def process_digital_signature(request, slug):
             return JsonResponse({'success': False, 'error': 'Файл ЭЦП и пароль обязательны'})
 
         # Здесь должна быть логика проверки ЭЦП
+        print("Received signature file:", signature_file)
+        print("Received password:", password)
+        private_key = pkcs12.load_key_and_certificates(
+            signature_file.read(),
+            password.encode(),
+        )
+        print("Private Key:", private_key)
+
+        # Проверяем срок действия сертификата
+        date_today = timezone.now().date()
+        before_time = private_key[1].not_valid_before.date()
+        after_time = private_key[1].not_valid_after.date()
+        # if before_time > date_today or after_time < date_today:
+        #     return JsonResponse({'success': False, 'error': 'Срок действия сертификата истек'})
+
+        public_key = private_key[1]
+        subject = public_key.subject
+        issuer = public_key.issuer
+
         # Для демо создаем фиктивные данные
         signature_data = {
-            'full_name': request.user.full_name,
-            'iin': '123456789012',  # В реальности извлекается из сертификата
-            'valid_from': '2024-01-01',
-            'valid_to': '2025-12-31',
+            'full_name': str(subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value),
+            'iin': str(subject.get_attributes_for_oid(NameOID.SERIAL_NUMBER)[0].value),
+            'valid_from': str(before_time.strftime('%Y-%m-%d')),
+            'valid_to': str(after_time.strftime('%Y-%m-%d')),
             'issuer': 'НУЦ РК',
-            'serial_number': 'ABC123456789',
+            'serial_number': str(public_key.serial_number),
             'verified': True
         }
 
@@ -685,7 +762,7 @@ def process_digital_signature(request, slug):
         })
 
     except Exception as e:
-        return JsonResponse({'success': False, 'error': 'Ошибка обработки ЭЦП'})
+        return JsonResponse({'success': False, 'error': e})
 
 
 @login_required
