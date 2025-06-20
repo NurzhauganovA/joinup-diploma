@@ -1,0 +1,246 @@
+<!-- frontend/templates/contracts/contracts_list.html -->
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'contract/css/contracts.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Мои контракты {% endblock %}
+
+{% block page_title %} Мои контракты {% endblock %}
+
+{% block content %}
+<div class="contracts-container">
+    <!-- Заголовок -->
+    <div class="contracts-header">
+        <h1>Мои контракты</h1>
+        <p>Управляйте всеми вашими контрактами в одном месте</p>
+    </div>
+
+    <!-- Статистика -->
+    <div class="contracts-stats">
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.total_contracts }}</h3>
+                <p>Всего контрактов</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon signed">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 6L9 17L4 12"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.signed_contracts }}</h3>
+                <p>Подписанных</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon pending">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.pending_contracts }}</h3>
+                <p>Ожидают подписания</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon expired">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ stats.expired_contracts }}</h3>
+                <p>Истекших</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры и поиск -->
+    <div class="contracts-filters">
+        <form method="get" class="filters-form">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="status">Статус</label>
+                    <select name="status" id="status">
+                        <option value="">Все статусы</option>
+                        {% for status_key, status_name in status_choices %}
+                        <option value="{{ status_key }}" {% if status_filter == status_key %}selected{% endif %}>
+                            {{ status_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="search">Поиск</label>
+                    <input type="text" id="search" name="search" value="{{ search_query }}"
+                           placeholder="Поиск по названию клуба или контракта...">
+                </div>
+
+                <div class="filter-group">
+                    <button type="submit" class="btn-filter">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        Найти
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Список контрактов -->
+    <div class="contracts-list">
+        <div class="contracts-list-header">
+            <h3>Список контрактов</h3>
+        </div>
+
+        <div class="contracts-list-content">
+            {% for contract in page_obj %}
+            <div class="contract-item" onclick="window.location.href='{% url 'contracts:detail' contract.id %}'">
+                <div class="contract-club-info">
+                    <div class="contract-club-logo">
+                        {% if contract.member.club.logo %}
+                        <img src="{{ contract.member.club.logo.url }}" alt="{{ contract.member.club.name }}">
+                        {% else %}
+                        <div class="logo-placeholder">{{ contract.member.club.name.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="contract-details">
+                        <h4>{{ contract.contract_template.title }}</h4>
+                        <div class="contract-meta">
+                            <span class="contract-date">
+                                {% if contract.signed_at %}
+                                Подписан {{ contract.signed_at|date:"d M Y" }}
+                                {% else %}
+                                Создан {{ contract.created_at|date:"d M Y" }}
+                                {% endif %}
+                            </span>
+                            <span class="contract-type">{{ contract.member.club.name }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contract-status">
+                    <span class="status-badge status-{{ contract.status }}">
+                        {% if contract.status == 'signed' %}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 6L9 17L4 12"/>
+                        </svg>
+                        {% elif contract.status == 'pending' %}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        {% elif contract.status == 'expired' %}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                        </svg>
+                        {% endif %}
+                        {{ contract.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="contract-actions" onclick="event.stopPropagation()">
+                    <a href="{% url 'contracts:detail' contract.id %}" class="btn-action btn-view">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12S4 4 12 4S23 12 23 12S20 20 12 20S1 12 1 12Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Открыть
+                    </a>
+
+                    {% if contract.status == 'signed' and contract.signed_pdf %}
+                    <a href="{% url 'contracts:download' contract.id %}" class="btn-action btn-download">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Скачать
+                    </a>
+                    {% endif %}
+
+                    {% if contract.status == 'signed' %}
+                    <a href="{% url 'contracts:verify' contract.id %}" class="btn-action btn-verify">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12L11 14L15 10"/>
+                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                        </svg>
+                        Проверить
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                </svg>
+                <h3>Контракты не найдены</h3>
+                <p>У вас пока нет контрактов или они не соответствуют критериям поиска</p>
+                <a href="{% url 'clubs_list' %}" class="btn-empty-action">Найти клубы</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Пагинация -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Назад</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Вперед</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Последняя &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Автоотправка формы при изменении фильтров
+    document.getElementById('status').addEventListener('change', function() {
+        this.form.submit();
+    });
+
+    // Плавная прокрутка к результатам после фильтрации
+    if (window.location.search) {
+        setTimeout(() => {
+            document.querySelector('.contracts-list').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }, 100);
+    }
+</script>
+{% endblock %}

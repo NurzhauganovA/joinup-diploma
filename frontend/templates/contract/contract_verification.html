@@ -1,0 +1,773 @@
+<!-- frontend/templates/contracts/contract_verification.html -->
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'contract/css/contracts.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - Проверка контракта #{{ contract.id }} {% endblock %}
+
+{% block page_title %} Проверка контракта {% endblock %}
+
+{% block content %}
+<div class="contract-detail-container">
+    <!-- Заголовок -->
+    <div class="contract-detail-header">
+        <div class="contract-breadcrumb">
+            <a href="{% url 'contracts:list' %}">Мои контракты</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+            </svg>
+            <a href="{% url 'contracts:detail' contract.id %}">{{ contract.contract_template.title }}</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+            </svg>
+            <span>Проверка подлинности</span>
+        </div>
+
+        <div class="contract-title-section">
+            <h1>Проверка подлинности контракта</h1>
+            <p class="contract-subtitle">Контракт #{{ contract.id }} - {{ contract.member.club.name }}</p>
+
+            <div class="contract-status-header">
+                <span class="status-badge status-signed">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12L11 14L15 10"/>
+                        <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                    </svg>
+                    Контракт проверен
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент проверки -->
+    <div class="verification-main-content">
+        <div class="verification-left">
+            <!-- Результат проверки -->
+            <div class="verification-result-card">
+                <div class="card-header">
+                    <h3>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M9 12L11 14L15 10"/>
+                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                        </svg>
+                        Результат проверки
+                    </h3>
+                </div>
+
+                <div class="card-content">
+                    <div class="verification-status">
+                        <div class="verification-icon verified">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M22 11.08V12A10 10 0 1 1 5.93 7.69"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                        </div>
+                        <div class="verification-text">
+                            <h2>Контракт подлинный</h2>
+                            <p>Электронная подпись действительна и контракт не был изменен после подписания</p>
+                        </div>
+                    </div>
+
+                    <div class="verification-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ID контракта:</span>
+                            <span class="detail-value">#{{ verification_data.contract_id }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Хеш контракта:</span>
+                            <span class="detail-value hash-value">{{ verification_data.contract_hash }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Клуб:</span>
+                            <span class="detail-value">{{ verification_data.club_name }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Участник:</span>
+                            <span class="detail-value">{{ verification_data.member_name }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Дата подписания:</span>
+                            <span class="detail-value">{{ verification_data.signed_at|date:"d M Y в H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Данные сертификата -->
+            {% if verification_data.signer_name %}
+            <div class="certificate-info-card">
+                <div class="card-header">
+                    <h3>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <circle cx="12" cy="16" r="1"/>
+                            <path d="M7 11V7A5 5 0 0 1 17 7V11"/>
+                        </svg>
+                        Данные сертификата ЭЦП
+                    </h3>
+                </div>
+
+                <div class="card-content">
+                    <div class="certificate-grid">
+                        <div class="cert-item">
+                            <span class="cert-label">ФИО подписанта:</span>
+                            <span class="cert-value">{{ verification_data.signer_name }}</span>
+                        </div>
+
+                        <div class="cert-item">
+                            <span class="cert-label">ИИН:</span>
+                            <span class="cert-value">{{ verification_data.signer_iin }}</span>
+                        </div>
+
+                        <div class="cert-item">
+                            <span class="cert-label">Центр сертификации:</span>
+                            <span class="cert-value">{{ verification_data.certificate_issuer }}</span>
+                        </div>
+
+                        <div class="cert-item">
+                            <span class="cert-label">Действителен с:</span>
+                            <span class="cert-value">{{ verification_data.certificate_valid_from }}</span>
+                        </div>
+
+                        <div class="cert-item">
+                            <span class="cert-label">Действителен до:</span>
+                            <span class="cert-value">{{ verification_data.certificate_valid_to }}</span>
+                        </div>
+
+                        <div class="cert-item">
+                            <span class="cert-label">Статус сертификата:</span>
+                            <span class="cert-value verified">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M20 6L9 17L4 12"/>
+                                </svg>
+                                Действителен
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Технические детали -->
+            <div class="technical-details-card">
+                <div class="card-header">
+                    <h3>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15A1.65 1.65 0 0 0 21 13.35A1.65 1.65 0 0 0 19.4 11.65A1.65 1.65 0 0 0 19.4 15Z"/>
+                            <path d="M4.6 9A1.65 1.65 0 0 0 3 10.65A1.65 1.65 0 0 0 4.6 12.35A1.65 1.65 0 0 0 4.6 9Z"/>
+                            <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07"/>
+                        </svg>
+                        Технические детали
+                    </h3>
+                </div>
+
+                <div class="card-content">
+                    <div class="tech-details">
+                        <div class="tech-item">
+                            <div class="tech-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M9 12L11 14L15 10"/>
+                                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                                </svg>
+                            </div>
+                            <div class="tech-content">
+                                <h4>Целостность данных</h4>
+                                <p>Контракт не был изменен после подписания</p>
+                            </div>
+                        </div>
+
+                        <div class="tech-item">
+                            <div class="tech-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <circle cx="12" cy="16" r="1"/>
+                                    <path d="M7 11V7A5 5 0 0 1 17 7V11"/>
+                                </svg>
+                            </div>
+                            <div class="tech-content">
+                                <h4>Криптографическая подпись</h4>
+                                <p>Использован алгоритм ГОСТ Р 34.10-2012</p>
+                            </div>
+                        </div>
+
+                        <div class="tech-item">
+                            <div class="tech-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <div class="tech-content">
+                                <h4>Временная метка</h4>
+                                <p>{{ verification_data.signed_at|date:"d.m.Y H:i:s" }} (UTC+6)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Боковая панель -->
+        <div class="verification-sidebar">
+            <!-- Быстрые действия -->
+            <div class="sidebar-card">
+                <h4>Действия</h4>
+                <div class="action-buttons">
+                    <a href="{% url 'contracts:detail' contract.id %}" class="btn-sidebar secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M19 12H5M12 19L5 12L12 5"/>
+                        </svg>
+                        К деталям контракта
+                    </a>
+
+                    <a href="{% url 'contracts:download' contract.id %}" class="btn-sidebar primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Скачать PDF
+                    </a>
+
+                    <button onclick="shareVerification()" class="btn-sidebar success">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M4 12V20A2 2 0 0 0 6 22H18A2 2 0 0 0 20 20V12"/>
+                            <polyline points="16,6 12,2 8,6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        Поделиться
+                    </button>
+
+                    <button onclick="printVerification()" class="btn-sidebar secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <polyline points="6,9 6,2 18,2 18,9"/>
+                            <path d="M6 18H4A2 2 0 0 1 2 16V11A2 2 0 0 1 4 9H20A2 2 0 0 1 22 11V16A2 2 0 0 1 20 18H18"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                        Печать
+                    </button>
+                </div>
+            </div>
+
+            <!-- QR код для проверки -->
+            <div class="sidebar-card">
+                <h4>QR код проверки</h4>
+                <div class="qr-code-section">
+                    {% if qr_data.image %}
+                    <div class="qr-code-display">
+                        <div class="qr-image-wrapper">
+                            <img src="{{ qr_data.image }}" alt="QR код для проверки контракта" class="qr-code-image">
+                        </div>
+                        <div class="qr-actions">
+                            <button onclick="downloadQR()" class="btn-qr-action btn-download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
+                                    <polyline points="7,10 12,15 17,10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Скачать
+                            </button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="qr-code-fallback" id="qr-code-fallback">
+                        <div class="qr-placeholder">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1">
+                                <rect x="3" y="3" width="5" height="5"/>
+                                <rect x="3" y="16" width="5" height="5"/>
+                                <rect x="16" y="3" width="5" height="5"/>
+                                <path d="M6 11H7M9 11H10M12 11H13M15 11H16M18 11H19"/>
+                                <path d="M6 13H7M9 13H10M12 13H13M15 13H16M18 13H19"/>
+                                <path d="M11 16H12M14 16H15"/>
+                                <path d="M11 18H12M14 18H15"/>
+                            </svg>
+                            <p>QR код недоступен</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <p class="qr-description">Отсканируйте для быстрой проверки на мобильном устройстве</p>
+
+                    {% if qr_data.url %}
+                    <div class="qr-url-section">
+                        <label>Ссылка для проверки:</label>
+                        <div class="url-input-group">
+                            <input type="text" id="verification-url" value="{{ qr_data.url }}" readonly
+                                   onclick="this.select()">
+                            <button onclick="copyVerificationUrl()" class="btn-copy-url" title="Копировать ссылку">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4A2 2 0 0 1 2 13V4A2 2 0 0 1 4 2H13A2 2 0 0 1 15 4V5"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="qr-url-section">
+                        <label>Ссылка для проверки:</label>
+                        <div class="url-input-group">
+                            <input type="text" id="verification-url-current" value="{{ request.build_absolute_uri }}"
+                                   readonly onclick="this.select()">
+                            <button onclick="copyCurrentUrl()" class="btn-copy-url" title="Копировать ссылку">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4A2 2 0 0 1 2 13V4A2 2 0 0 1 4 2H13A2 2 0 0 1 15 4V5"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Справочная информация -->
+            <div class="sidebar-card">
+                <h4>О проверке</h4>
+                <div class="help-content">
+                    <div class="help-item">
+                        <h5>Что проверяется?</h5>
+                        <p>Подлинность электронной подписи, целостность документа и действительность сертификата</p>
+                    </div>
+
+                    <div class="help-item">
+                        <h5>Юридическая сила</h5>
+                        <p>Контракт с действительной ЭЦП имеет полную юридическую силу согласно законодательству РК</p>
+                    </div>
+
+                    <div class="help-item">
+                        <h5>Проблемы?</h5>
+                        <p>Если у вас есть сомнения в подлинности, обратитесь к администратору клуба</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Генерация QR кода
+    function generateQRCode() {
+        const verificationUrl = window.location.href;
+        const qrContainer = document.getElementById('qr-code');
+
+        // Здесь можно использовать библиотеку для генерации QR кода
+        // Например, qrcode.js
+        qrContainer.innerHTML = `
+            <div style="width: 120px; height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                <span style="font-size: 12px; color: #666;">QR код</span>
+            </div>
+        `;
+    }
+
+    // Поделиться результатом проверки
+    function shareVerification() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Проверка контракта #{{ contract.id }}',
+                text: 'Контракт проверен и является подлинным',
+                url: window.location.href
+            });
+        } else {
+            // Копируем ссылку в буфер обмена
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showNotification('Ссылка скопирована в буфер обмена');
+            });
+        }
+    }
+
+    // Печать страницы проверки
+    function printVerification() {
+        window.print();
+    }
+
+    // Показать уведомление
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Копирование хеша контракта
+    function copyHash() {
+        const hashElement = document.querySelector('.hash-value');
+        if (hashElement) {
+            navigator.clipboard.writeText(hashElement.textContent).then(() => {
+                showNotification('Хеш контракта скопирован');
+            });
+        }
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function () {
+        generateQRCode();
+
+        // Добавляем обработчик клика на хеш
+        const hashElement = document.querySelector('.hash-value');
+        if (hashElement) {
+            hashElement.style.cursor = 'pointer';
+            hashElement.title = 'Нажмите, чтобы скопировать';
+            hashElement.addEventListener('click', copyHash);
+        }
+    });
+
+    // Функция для скачивания QR кода
+    function downloadQR() {
+        const qrImage = document.querySelector('.qr-image-wrapper img');
+        if (qrImage) {
+            const link = document.createElement('a');
+            link.href = qrImage.src;
+            link.download = 'contract_qr_code.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            showNotification('QR код недоступен для скачивания');
+        }
+    }
+
+    // Функция для копирования ссылки проверки
+    function copyVerificationUrl() {
+        const urlInput = document.getElementById('verification-url');
+        if (urlInput) {
+            urlInput.select();
+            document.execCommand('copy');
+            showNotification('Ссылка для проверки скопирована в буфер обмена');
+        }
+    }
+</script>
+
+<style>
+    /* Дополнительные стили для страницы проверки */
+    .verification-main-content {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .verification-left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .verification-result-card,
+    .certificate-info-card,
+    .technical-details-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .verification-status {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: #e8f5e8;
+        border-radius: 8px;
+    }
+
+    .verification-icon.verified {
+        color: #4CAF50;
+    }
+
+    .verification-text h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d7d32;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .verification-text p {
+        color: #666;
+        margin: 0;
+    }
+
+    .verification-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #666;
+    }
+
+    .detail-value {
+        font-weight: 700;
+        color: #233255;
+    }
+
+    .hash-value {
+        font-family: monospace;
+        font-size: 0.8rem;
+        background: #f8f9fa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .hash-value:hover {
+        background: #e3f2fd;
+    }
+
+    .certificate-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .cert-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .cert-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #666;
+    }
+
+    .cert-value {
+        font-weight: 700;
+        color: #233255;
+    }
+
+    .cert-value.verified {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #4CAF50;
+    }
+
+    .tech-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .tech-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .tech-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #233255, #F6AD2B);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .tech-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #233255;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .tech-content p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+    }
+
+    .verification-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .qr-code-section {
+        text-align: center;
+    }
+
+    .qr-image-wrapper img {
+        width: 100%;
+    }
+
+    .qr-actions button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .qr-url-section {
+        margin-top: 1rem;
+    }
+
+    .url-input-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .url-input-group input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .url-input-group button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 0.5rem;
+        transition: background 0.3s ease;
+    }
+
+    .qr-code-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: #ccc;
+    }
+
+    .qr-code-section p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .help-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .help-item h5 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #233255;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .help-item p {
+        font-size: 0.8rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    @media (max-width: 968px) {
+        .verification-main-content {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .certificate-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .verification-status {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .detail-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+
+        .tech-item {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    /* Стили для печати */
+    @media print {
+        .verification-sidebar,
+        .contract-breadcrumb {
+            display: none;
+        }
+
+        .verification-main-content {
+            grid-template-columns: 1fr;
+        }
+
+        .verification-status {
+            background: white !important;
+            border: 2px solid #4CAF50;
+        }
+    }
+</style>
+{% endblock %}

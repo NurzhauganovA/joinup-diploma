@@ -1171,3 +1171,321 @@
         gap: 0.5rem;
     }
 }
+
+
+
+
+
+/* МОДАЛЬНЫЕ ОКНА - ИСПРАВЛЕНИЯ */
+
+/* Базовые стили модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Контент модального окна */
+.modal-content {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+    animation: slideIn 0.3s ease;
+    position: relative;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Заголовок модального окна */
+.modal-header {
+    background: linear-gradient(135deg, #233255 0%, #F6AD2B 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Кнопка закрытия */
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding: 0;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Тело модального окна */
+.modal-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.modal-body h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1rem 0;
+}
+
+.modal-body p {
+    color: #666;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+}
+
+/* Предварительный просмотр клуба в модале */
+.club-info-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.club-logo-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #e0e0e0;
+}
+
+.club-logo-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.club-info-preview h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.25rem 0;
+}
+
+.club-info-preview p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Действия модального окна */
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+.modal-actions button,
+.modal-actions .btn-secondary,
+.modal-actions .btn-primary {
+    flex: 1;
+    max-width: 140px;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #666;
+    border-color: #e0e0e0;
+}
+
+.btn-secondary:hover {
+    border-color: #ccc;
+    color: #333;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: #F6AD2B;
+    color: white;
+    border-color: #F6AD2B;
+}
+
+.btn-primary:hover {
+    background: #e59d1b;
+    border-color: #e59d1b;
+    transform: translateY(-1px);
+}
+
+/* Специфичные стили для модала вступления */
+.join-modal {
+    max-width: 450px;
+}
+
+/* Модал подтверждения теста */
+#test-confirm-modal .modal-content {
+    max-width: 500px;
+}
+
+.test-info-icon {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.test-info-icon svg {
+    color: #F6AD2B;
+}
+
+/* Иконки в модальных окнах */
+.modal-body svg {
+    margin-bottom: 1rem;
+}
+
+/* Спиннер загрузки */
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Адаптивность модальных окон */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-actions {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+    }
+
+    .modal-actions button,
+    .modal-actions .btn-secondary,
+    .modal-actions .btn-primary {
+        max-width: none;
+        flex: none;
+    }
+
+    .club-info-preview {
+        margin: 1rem 0;
+        padding: 0.75rem;
+    }
+
+    .club-logo-small {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 0.5rem;
+        max-width: calc(100vw - 1rem);
+        border-radius: 8px;
+    }
+
+    .modal-header {
+        border-radius: 8px 8px 0 0;
+    }
+
+    .close-modal {
+        width: 28px;
+        height: 28px;
+        font-size: 1.2rem;
+    }
+}

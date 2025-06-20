@@ -637,6 +637,10 @@ class ClubMemberContract(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Добавить новое поле для QR кода
+    qr_code = models.ImageField(upload_to='contract_qr_codes/', blank=True, null=True)
+    verification_url = models.URLField(blank=True, null=True, help_text="URL для проверки контракта")
+
     def __str__(self):
         return f"Контракт {self.member.user.full_name} - {self.member.club.name}"
 
@@ -644,3 +648,63 @@ class ClubMemberContract(models.Model):
         verbose_name = "Подписанный контракт"
         verbose_name_plural = "Подписанные контракты"
         db_table = 'club_member_contracts'
+
+    def generate_qr_code(self, request=None):
+        """Генерирует QR код для контракта"""
+        import qrcode
+        from io import BytesIO
+        from django.core.files.base import ContentFile
+        from django.urls import reverse
+
+        if self.status != 'signed':
+            return False
+
+        # Создаем URL для проверки
+        if request:
+            base_url = request.build_absolute_uri('/')
+        else:
+            from django.conf import settings
+            base_url = getattr(settings, 'SITE_URL', 'http://127.0.0.1:8000/')
+
+        verification_path = reverse('contracts:verify', kwargs={'contract_id': self.id})
+        verification_url = f"{base_url.rstrip('/')}{verification_path}"
+
+        # Сохраняем URL
+        self.verification_url = verification_url
+
+        # Генерируем QR код
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(verification_url)
+        qr.make(fit=True)
+
+        # Создаем изображение
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        # Сохраняем в BytesIO
+        buffer = BytesIO()
+        img.save(buffer, format='PNG')
+        buffer.seek(0)
+
+        # Создаем файл
+        filename = f"qr_contract_{self.id}_{self.signed_at.strftime('%Y%m%d')}.png"
+        self.qr_code.save(
+            filename,
+            ContentFile(buffer.getvalue()),
+            save=False  # Не сохраняем модель сразу
+        )
+
+        return True
+
+    def get_qr_code_data(self):
+        """Возвращает данные QR кода"""
+        return {
+            'url': self.verification_url,
+            'image': self.qr_code.url if self.qr_code else None,
+            'contract_id': self.id,
+            'title': f"Контракт #{self.id} - {self.member.club.name}"
+        }

@@ -420,3 +420,16 @@ def log_contract_changes(sender, instance, created, **kwargs):
 
     except Exception as e:
         print(f"❌ Ошибка логирования контракта: {e}")
+
+
+@receiver(post_save, sender=ClubMemberContract)
+def generate_qr_code_on_sign(sender, instance, created, **kwargs):
+    """Генерирует QR код при подписании контракта"""
+    if instance.status == 'signed' and not instance.qr_code:
+        try:
+            # Получаем request из threadlocal или используем базовый URL
+            instance.generate_qr_code()
+            instance.save(update_fields=['qr_code', 'verification_url'])
+            print(f"✅ QR код сгенерирован для контракта #{instance.id}")
+        except Exception as e:
+            print(f"❌ Ошибка при генерации QR кода для контракта #{instance.id}: {e}")

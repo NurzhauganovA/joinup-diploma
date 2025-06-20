@@ -1,0 +1,208 @@
+<!-- frontend/templates/clubs/contract_pdf.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Контракт участника клуба {{ club.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #233255;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: #233255;
+            margin: 0;
+        }
+        .header h2 {
+            color: #F6AD2B;
+            margin: 10px 0 0 0;
+        }
+        .contract-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .contract-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .contract-info td {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .contract-info td:first-child {
+            font-weight: bold;
+            width: 30%;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .content h3 {
+            color: #233255;
+            border-bottom: 1px solid #F6AD2B;
+            padding-bottom: 5px;
+        }
+        .content p {
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+        .signature-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-block {
+            width: 45%;
+            text-align: center;
+        }
+        .signature-line {
+            border-bottom: 1px solid #333;
+            width: 200px;
+            margin: 20px auto;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>КОНТРАКТ УЧАСТНИКА КЛУБА</h1>
+        <h2>{{ club.name }}</h2>
+    </div>
+
+    <div class="contract-info">
+        <table>
+            <tr>
+                <td>Название клуба:</td>
+                <td>{{ club.name }}</td>
+            </tr>
+            <tr>
+                <td>Категория:</td>
+                <td>{{ club.category.name }}</td>
+            </tr>
+            <tr>
+                <td>Дата составления:</td>
+                <td>{{ date|date:"d.m.Y" }}</td>
+            </tr>
+            <tr>
+                <td>Участник:</td>
+                <td>{{ user.full_name }}</td>
+            </tr>
+            <tr>
+                <td>Контактный телефон:</td>
+                <td>{{ user.mobile_phone }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="content">
+        {% if contract.content %}
+            {{ contract.content|linebreaks }}
+        {% else %}
+        <h3>1. ПРЕДМЕТ КОНТРАКТА</h3>
+        <p>
+            Настоящий контракт регулирует отношения между клубом "{{ club.name }}" (далее - Клуб)
+            и участником {{ user.full_name }} (далее - Участник) в рамках членства в клубе.
+        </p>
+
+        <h3>2. ПРАВА И ОБЯЗАННОСТИ УЧАСТНИКА</h3>
+        <p><strong>Участник имеет право:</strong></p>
+        <p>
+            - Участвовать во всех мероприятиях, организуемых Клубом;<br>
+            - Получать доступ к ресурсам и материалам Клуба;<br>
+            - Вносить предложения по улучшению деятельности Клуба;<br>
+            - Пользоваться всеми привилегиями членства в Клубе.
+        </p>
+
+        <p><strong>Участник обязуется:</strong></p>
+        <p>
+            - Соблюдать правила и регламент Клуба;<br>
+            - Активно участвовать в деятельности Клуба;<br>
+            - Поддерживать дружественную атмосферу в коллективе;<br>
+            - Бережно относиться к имуществу и ресурсам Клуба;<br>
+            - Не разглашать конфиденциальную информацию Клуба.
+        </p>
+
+        <h3>3. ПРАВА И ОБЯЗАННОСТИ КЛУБА</h3>
+        <p><strong>Клуб имеет право:</strong></p>
+        <p>
+            - Устанавливать правила участия в мероприятиях;<br>
+            - Требовать соблюдения регламента от всех участников;<br>
+            - Исключать участников за нарушение правил;<br>
+            - Изменять структуру и направления деятельности.
+        </p>
+
+        <p><strong>Клуб обязуется:</strong></p>
+        <p>
+            - Предоставлять равные возможности для всех участников;<br>
+            - Организовывать регулярные мероприятия и активности;<br>
+            - Обеспечивать доступ к ресурсам и материалам;<br>
+            - Информировать участников о предстоящих событиях.
+        </p>
+
+        <h3>4. ОТВЕТСТВЕННОСТЬ СТОРОН</h3>
+        <p>
+            За нарушение условий настоящего контракта стороны несут ответственность
+            в соответствии с внутренними правилами Клуба и действующим законодательством.
+        </p>
+
+        <h3>5. ПРЕКРАЩЕНИЕ ДЕЙСТВИЯ КОНТРАКТА</h3>
+        <p>
+            Действие контракта может быть прекращено:<br>
+            - По взаимному согласию сторон;<br>
+            - По инициативе Участника с уведомлением за 7 дней;<br>
+            - По решению администрации Клуба при нарушении правил;<br>
+            - При ликвидации или реорганизации Клуба.
+        </p>
+
+        <h3>6. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h3>
+        <p>
+            Настоящий контракт вступает в силу с момента его подписания электронной цифровой подписью
+            и действует до момента прекращения членства в Клубе.
+        </p>
+        <p>
+            Все изменения и дополнения к контракту оформляются в письменном виде и подписываются сторонами.
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="signature-section">
+        <div class="signature-block">
+            <p><strong>От имени Клуба:</strong></p>
+            <div class="signature-line"></div>
+            <p>{{ club.name }}</p>
+            <p>Дата: {{ date|date:"d.m.Y" }}</p>
+        </div>
+        <div class="signature-block">
+            <p><strong>Участник:</strong></p>
+            <div class="signature-line"></div>
+            <p>{{ user.full_name }}</p>
+            <p>Дата: {{ date|date:"d.m.Y" }}</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            Контракт подписан электронной цифровой подписью в системе JoinUP<br>
+            SDU University - {{ date.year }}
+        </p>
+    </div>
+</body>
+</html>

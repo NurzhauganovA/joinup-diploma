@@ -1,0 +1,338 @@
+<!-- frontend/templates/contracts/contract_detail.html -->
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'contract/css/contracts.css' %}">
+{% endblock %}
+
+{% block title %} JoinUP - {{ contract.contract_template.title }} {% endblock %}
+
+{% block page_title %} Детали контракта {% endblock %}
+
+{% block content %}
+<div class="contract-detail-container">
+    <!-- Заголовок -->
+    <div class="contract-detail-header">
+        <div class="contract-breadcrumb">
+            <a href="{% url 'contracts:list' %}">Мои контракты</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"/>
+            </svg>
+            <span>{{ contract.contract_template.title }}</span>
+        </div>
+
+        <div class="contract-title-section">
+            <h1>{{ contract.contract_template.title }}</h1>
+            <p class="contract-subtitle">Клуб: {{ contract.member.club.name }}</p>
+
+            <div class="contract-status-header">
+                <span class="status-badge status-{{ contract.status }}">
+                    {% if contract.status == 'signed' %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 6L9 17L4 12"/>
+                    </svg>
+                    {% elif contract.status == 'pending' %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    {% elif contract.status == 'expired' %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                    </svg>
+                    {% endif %}
+                    {{ contract.get_status_display }}
+                </span>
+
+                {% if contract.signed_at %}
+                <span style="color: rgba(255,255,255,0.8);">
+                    Подписан {{ contract.signed_at|date:"d M Y в H:i" }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="contract-main-content">
+        <div class="contract-content-card">
+            <div class="card-header">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2L20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4C4 2.89543 4.89543 2 6 2H14Z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                    Информация о контракте
+                </h3>
+            </div>
+
+            <div class="card-content">
+                <div class="contract-info-grid">
+                    <div class="info-item">
+                        <span class="info-label">ID контракта</span>
+                        <span class="info-value">#{{ contract.id }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Дата создания</span>
+                        <span class="info-value">{{ contract.created_at|date:"d M Y" }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Клуб</span>
+                        <span class="info-value">{{ contract.member.club.name }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Категория</span>
+                        <span class="info-value">{{ contract.member.club.category.name }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Роль в клубе</span>
+                        <span class="info-value">{{ contract.member.get_role_display }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Последнее обновление</span>
+                        <span class="info-value">{{ contract.updated_at|date:"d M Y H:i" }}</span>
+                    </div>
+                </div>
+
+                {% if signature_info %}
+                <div class="signature-details">
+                    <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M17 3A2.828 2.828 0 1 1 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z"/>
+                        </svg>
+                        Данные электронной подписи
+                    </h4>
+
+                    <div class="signature-item">
+                        <span class="signature-label">ФИО подписанта:</span>
+                        <span class="signature-value">{{ signature_info.full_name }}</span>
+                    </div>
+
+                    <div class="signature-item">
+                        <span class="signature-label">ИИН:</span>
+                        <span class="signature-value">{{ signature_info.iin }}</span>
+                    </div>
+
+                    <div class="signature-item">
+                        <span class="signature-label">Сертификат выдан:</span>
+                        <span class="signature-value">{{ signature_info.issuer }}</span>
+                    </div>
+
+                    <div class="signature-item">
+                        <span class="signature-label">Действителен с:</span>
+                        <span class="signature-value">{{ signature_info.valid_from }}</span>
+                    </div>
+
+                    <div class="signature-item">
+                        <span class="signature-label">Действителен до:</span>
+                        <span class="signature-value">{{ signature_info.valid_to }}</span>
+                    </div>
+
+                    <div class="signature-item">
+                        <span class="signature-label">Серийный номер:</span>
+                        <span class="signature-value">{{ signature_info.serial_number }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if contract.ip_address or contract.user_agent %}
+                <div class="signature-details" style="margin-top: 1rem;">
+                    <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                            <polyline points="2,17 12,22 22,17"/>
+                            <polyline points="2,12 12,17 22,12"/>
+                        </svg>
+                        Техническая информация
+                    </h4>
+
+                    {% if contract.ip_address %}
+                    <div class="signature-item">
+                        <span class="signature-label">IP адрес:</span>
+                        <span class="signature-value">{{ contract.ip_address }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if contract.user_agent %}
+                    <div class="signature-item">
+                        <span class="signature-label">Браузер:</span>
+                        <span class="signature-value">{{ contract.user_agent|truncatechars:60 }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Боковая панель -->
+        <div class="contract-sidebar">
+            <!-- Действия -->
+            <div class="sidebar-card">
+                <h4>Действия</h4>
+                <div class="action-buttons">
+                    {% if can_download %}
+                    <a href="{% url 'contracts:download' contract.id %}" class="btn-sidebar primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Скачать PDF
+                    </a>
+                    {% endif %}
+
+                    {% if contract.status == 'signed' %}
+                    <a href="{% url 'contracts:verify' contract.id %}" class="btn-sidebar secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M9 12L11 14L15 10"/>
+                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                        </svg>
+                        Проверить подпись
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'club_detail' contract.member.club.slug %}" class="btn-sidebar success">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21V19C22.9993 17.1137 21.765 15.4604 20 15"/>
+                            <path d="M16 3.13C17.7699 3.61006 18.9999 5.26756 18.9999 7.16919C18.9999 9.07082 17.7699 10.7283 16 11.2084"/>
+                        </svg>
+                        Перейти к клубу
+                    </a>
+
+                    {% if contract.status == 'pending' %}
+                    <a href="{% url 'contract_sign_page' contract.member.club.slug %}" class="btn-sidebar primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M17 3A2.828 2.828 0 1 1 21 7L7.5 20.5L2 22L3.5 16.5L17 3Z"/>
+                        </svg>
+                        Подписать контракт
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Информация о клубе -->
+            <div class="sidebar-card">
+                <h4>О клубе</h4>
+                <div class="club-info-sidebar">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                            {% if contract.member.club.logo %}
+                            <img src="{{ contract.member.club.logo.url }}" alt="{{ contract.member.club.name }}"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                            <div class="logo-placeholder" style="width: 100%; height: 100%; font-size: 1rem;">
+                                {{ contract.member.club.name.0 }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h5 style="margin: 0; color: #233255;">{{ contract.member.club.name }}</h5>
+                            <p style="margin: 0; color: #666; font-size: 0.9rem;">{{ contract.member.club.category.name }}</p>
+                        </div>
+                    </div>
+
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.4; margin-bottom: 1rem;">
+                        {{ contract.member.club.short_description }}
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.8rem;">
+                        <div>
+                            <strong style="color: #233255;">{{ contract.member.club.members_count }}</strong>
+                            <div style="color: #666;">Участников</div>
+                        </div>
+                        <div>
+                            <strong style="color: #233255;">{{ contract.member.club.establishment_date|date:"Y" }}</strong>
+                            <div style="color: #666;">Год основания</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Связанные контракты -->
+            {% if related_contracts %}
+            <div class="sidebar-card">
+                <h4>Другие контракты</h4>
+                <div class="related-contracts">
+                    {% for related in related_contracts %}
+                    <div class="related-contract"
+                         onclick="window.location.href='{% url 'contracts:detail' related.id %}'">
+                        <div class="related-contract-info">
+                            <h5>{{ related.contract_template.title }}</h5>
+                            <div class="related-contract-meta">
+                                <span class="status-badge status-{{ related.status }}"
+                                      style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                                    {{ related.get_status_display }}
+                                </span>
+                                <span style="margin-left: 0.5rem;">
+                                    {% if related.signed_at %}
+                                    {{ related.signed_at|date:"d M Y" }}
+                                    {% else %}
+                                    {{ related.created_at|date:"d M Y" }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Копирование ID контракта в буфер обмена
+    function copyContractId() {
+        const contractId = "{{ contract.id }}";
+        navigator.clipboard.writeText(contractId).then(() => {
+            // Показать уведомление
+            const notification = document.createElement('div');
+            notification.textContent = 'ID контракта скопирован!';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 1rem;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        });
+    }
+
+    // Добавляем обработчик клика на ID контракта
+    document.addEventListener('DOMContentLoaded', function () {
+        const contractIdElement = document.querySelector('.info-value');
+        if (contractIdElement && contractIdElement.textContent.includes('#')) {
+            contractIdElement.style.cursor = 'pointer';
+            contractIdElement.title = 'Нажмите, чтобы скопировать';
+            contractIdElement.addEventListener('click', copyContractId);
+        }
+    });
+</script>
+{% endblock %}

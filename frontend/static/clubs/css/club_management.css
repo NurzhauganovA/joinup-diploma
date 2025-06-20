@@ -886,3 +886,358 @@
         flex-direction: column;
     }
 }
+
+
+
+/* МОДАЛЬНЫЕ ОКНА УПРАВЛЕНИЯ КЛУБОМ - ИСПРАВЛЕНИЯ */
+
+/* Базовые стили модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Контент модального окна */
+.modal-content {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+    animation: slideIn 0.3s ease;
+    position: relative;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Модал отклонения */
+.reject-modal {
+    max-width: 450px;
+}
+
+/* Модал деталей */
+.details-modal {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Заголовок модального окна */
+.modal-header {
+    background: linear-gradient(135deg, #233255, #F6AD2B);
+    color: white;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+}
+
+/* Специальный заголовок для отклонения */
+.modal-header.reject-header {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Кнопка закрытия */
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding: 0;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Тело модального окна */
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 1rem 0;
+}
+
+.modal-body p {
+    color: #666;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.modal-body textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #F6AD2B;
+}
+
+.modal-body textarea::placeholder {
+    color: #999;
+}
+
+/* Действия модального окна */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+.modal-actions button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 100px;
+}
+
+.modal-actions .btn-secondary {
+    background: transparent;
+    color: #666;
+    border-color: #e0e0e0;
+}
+
+.modal-actions .btn-secondary:hover {
+    border-color: #ccc;
+    color: #333;
+    transform: translateY(-1px);
+}
+
+.modal-actions .btn-reject {
+    background: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+.modal-actions .btn-reject:hover {
+    background: #d32f2f;
+    border-color: #d32f2f;
+    transform: translateY(-1px);
+}
+
+/* Спиннер загрузки */
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для контента деталей заявки */
+.application-details {
+    padding: 1rem 0;
+}
+
+.detail-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #233255;
+    margin: 0 0 0.75rem 0;
+}
+
+.detail-section p {
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.test-results-detail {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.test-stats-detail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.test-stat-detail {
+    text-align: center;
+}
+
+.test-stat-detail .stat-value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.test-stat-detail .stat-value.passed {
+    color: #4CAF50;
+}
+
+.test-stat-detail .stat-value.failed {
+    color: #f44336;
+}
+
+.test-stat-detail .stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Адаптивность модальных окон */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .close-modal {
+        right: 0.75rem;
+        width: 28px;
+        height: 28px;
+        font-size: 1.2rem;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-actions {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+    }
+
+    .modal-actions button {
+        min-width: auto;
+    }
+
+    .test-stats-detail {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 0.5rem;
+        max-width: calc(100vw - 1rem);
+        border-radius: 8px;
+    }
+
+    .modal-header {
+        border-radius: 8px 8px 0 0;
+        padding: 1rem;
+    }
+
+    .close-modal {
+        right: 0.5rem;
+        width: 24px;
+        height: 24px;
+        font-size: 1rem;
+    }
+
+    .details-modal {
+        max-height: 95vh;
+    }
+}

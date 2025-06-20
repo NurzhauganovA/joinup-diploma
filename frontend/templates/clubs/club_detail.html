@@ -540,31 +540,33 @@
     </div>
 
     <!-- Модал подтверждения вступления -->
-    <div id="join-modal" class="modal" style="display:none;">
-        <div class="modal-content join-modal">
-            <div class="modal-header">
-                <h3>Присоединиться к клубу</h3>
-                <span class="close-modal" onclick="closeJoinModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p>Вы уверены, что хотите подать заявку на вступление в клуб "{{ club.name }}"?</p>
-                <div class="club-info-preview">
-                    <div class="club-logo-small">
-                        {% if club.logo %}
-                        <img src="{{ club.logo.url }}" alt="{{ club.name }}">
-                        {% else %}
-                        <div class="logo-placeholder-small">{{ club.name.0 }}</div>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <h4>{{ club.name }}</h4>
-                        <p>{{ club.category.name }}</p>
+    <div id="join-modal" class="modal">
+        <div class="modal-center">
+            <div class="modal-content join-modal">
+                <div class="modal-header">
+                    <h3>Присоединиться к клубу</h3>
+                    <span class="close-modal" onclick="closeJoinModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите подать заявку на вступление в клуб "{{ club.name }}"?</p>
+                    <div class="club-info-preview">
+                        <div class="club-logo-small">
+                            {% if club.logo %}
+                            <img src="{{ club.logo.url }}" alt="{{ club.name }}">
+                            {% else %}
+                            <div class="logo-placeholder-small">{{ club.name.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h4>{{ club.name }}</h4>
+                            <p>{{ club.category.name }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeJoinModal()">Отмена</button>
-                <button class="btn-primary" onclick="confirmJoinClub()">Подтвердить</button>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeJoinModal()">Отмена</button>
+                    <button class="btn-primary" onclick="confirmJoinClub()">Подтвердить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -653,23 +655,25 @@
         if (!document.getElementById('test-confirm-modal')) {
             const modalHTML = `
                     <div id="test-confirm-modal" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3>Требуется пройти тест</h3>
-                                <span class="close-modal" onclick="closeTestConfirmModal()">&times;</span>
-                            </div>
-                            <div class="modal-body">
-                                <div class="test-info-icon" style="margin-bottom: 1rem; color: #F6AD2B;">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
-                                    </svg>
+                        <div class="modal-center">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3>Требуется пройти тест</h3>
+                                    <span class="close-modal" onclick="closeTestConfirmModal()">&times;</span>
                                 </div>
-                                <h4>Для вступления в клуб нужно пройти тест</h4>
-                                <p>Клуб требует прохождения вступительного тестирования. Готовы ли вы пройти тест прямо сейчас?</p>
-                            </div>
-                            <div class="modal-actions">
-                                <button class="btn-secondary" onclick="closeTestConfirmModal()">Позже</button>
-                                <button class="btn-primary" onclick="goToTest()">Пройти тест</button>
+                                <div class="modal-body">
+                                    <div class="test-info-icon" style="margin-bottom: 1rem; color: #F6AD2B;">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
+                                        </svg>
+                                    </div>
+                                    <h4>Для вступления в клуб нужно пройти тест</h4>
+                                    <p>Клуб требует прохождения вступительного тестирования. Готовы ли вы пройти тест прямо сейчас?</p>
+                                </div>
+                                <div class="modal-actions">
+                                    <button class="btn-secondary" onclick="closeTestConfirmModal()">Позже</button>
+                                    <button class="btn-primary" onclick="goToTest()">Пройти тест</button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -768,7 +768,7 @@ def process_digital_signature(request, slug):
 @login_required
 @require_POST
 def sign_contract(request, slug):
-    """Подписание контракта"""
+    """Подписание контракта - обновленная версия"""
     club = get_object_or_404(Club, slug=slug)
 
     membership = ClubMember.objects.filter(
@@ -801,6 +801,9 @@ def sign_contract(request, slug):
             contract.signature_data = signature_data
             contract.ip_address = request.META.get('REMOTE_ADDR')
             contract.user_agent = request.META.get('HTTP_USER_AGENT')
+
+            # Генерируем QR код
+            contract.generate_qr_code(request)
             contract.save()
 
             # Активируем участника
@@ -815,8 +818,9 @@ def sign_contract(request, slug):
 
             return JsonResponse({
                 'success': True,
-                'message': 'Контракт успешно подписан! Добро пожаловать в клуб!',
-                'redirect_url': f'/panel/club/{club.slug}/'
+                'message': 'Контракт успешно подписан! QR код для проверки создан.',
+                'redirect_url': f'/panel/club/{club.slug}/',
+                'contract_id': contract.id
             })
 
     except Exception as e:

@@ -329,7 +329,11 @@ def complete_join_test(request, attempt_id):
             if attempt.status == 'passed':
                 membership.status = 'pending'  # Ожидает одобрения администратора
             else:
-                membership.status = 'test_failed'
+                # Проверить все попытки пользователя, если пользователь 3 раза не прошел тест, то статус 'test_failed'
+                if membership.attempts_count >= attempt.test.max_attempts:
+                    membership.status = 'test_failed'
+                else:
+                    membership.status = 'test_required'
             membership.save()
 
             return JsonResponse({
