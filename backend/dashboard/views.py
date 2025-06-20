@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from authorization.models import User, Student
 from dashboard.services import GetUserRegionsService, GetLastRegisteredUsersService, GetCountNewUsersThisMonthService, \
@@ -8,6 +8,8 @@ from django.http import JsonResponse
 
 
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.user.role == 'Student':
         return student_dashboard(request)
 
